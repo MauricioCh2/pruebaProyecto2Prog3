@@ -1,5 +1,5 @@
 package Protocol;
-
+//comentario ------------------------
 public interface IService {
     public void register()throws Exception ;
     //--------------TIPOS DE INTRUMENTO---------------
