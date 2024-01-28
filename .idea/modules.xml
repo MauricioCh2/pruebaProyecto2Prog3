@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Intelij_jd17_Proyecto2.iml" filepath="$PROJECT_DIR$/Intelij_jd17_Proyecto2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/labBackend/labBackend.iml" filepath="$PROJECT_DIR$/labBackend/labBackend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/labFrontend/labFrontend.iml" filepath="$PROJECT_DIR$/labFrontend/labFrontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/labProtocol/labProtocol.iml" filepath="$PROJECT_DIR$/labProtocol/labProtocol.iml" />
+    </modules>
+  </component>
+</project>
