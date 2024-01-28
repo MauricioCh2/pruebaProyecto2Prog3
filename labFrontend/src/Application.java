@@ -2,7 +2,7 @@ import labLogic.ServiceProxy;
 import labPresentation.Controller.MainController;
 
 import javax.swing.*;
-//comentario --------------------------
+//comentario ----------------------------
 public class Application {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
