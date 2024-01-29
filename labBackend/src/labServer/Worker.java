@@ -85,7 +85,7 @@ public class Worker { // es cada socket
         }
         //aca basicamente estara todo
     }
-    public void deliver(String message){
+    public void deliver(Message message){
         try {
             System.out.println("Se entro al deliver");
             out.writeInt(Protocol.DELIVER);//oiga estoyenviando un deliver

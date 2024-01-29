@@ -103,21 +103,10 @@ public class ServiceProxy implements IService {
     }
 
     public void listen(){
-        System.out.println("Ejecutando listen de front end");
-        int object;
         int method;
-        System.out.println(continuar + " switch de listen en front end");
         while (continuar) {
             try {
-//                method = in.readInt();
-//                System.out.println("DELIVERY");
-//                System.out.println("Operacion: "+method);
-
-                object = in.readInt();
-                System.out.println(object);
-                method = (Integer)object;
-
-
+                method = in.readInt();
                 System.out.println("DELIVERY");
                 System.out.println("Operacion: "+method);
                 switch(method){
@@ -125,18 +114,12 @@ public class ServiceProxy implements IService {
                         try {
                             Message message=(Message)in.readObject();
                             deliver(message);
-                        //System.out.println("Se entro al deliver en service proxy");
-                            //                            String message=(String) in.readObject();
-                            //                            //deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
-                    case Protocol.ERROR_NO_ERROR:
-                        System.out.println("Error_no_error");break;
                 }
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
-                System.out.println("Se detuvo");
             }
         }
         try {
@@ -214,16 +197,11 @@ public class ServiceProxy implements IService {
     //            throw new RuntimeException(e);
     //        }
     //    }
-
-
-
-
-
     private void deliver( final Message message ){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
                                        //se cierran solos cuando termina de pocesar (no esta en un while)
                                        public void run(){
-                                           deliver.deliver(message);
+                                           //.deliver(message);
                                        }
                                    }
         );

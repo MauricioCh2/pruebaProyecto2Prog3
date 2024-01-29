@@ -42,8 +42,6 @@ public class Server {
                 sid = skt.getRemoteSocketAddress().toString();//identificacion del socket
                 System.out.println("Socket: " + sid);
 
-
-
                 in = new ObjectInputStream(skt.getInputStream());
                 out = new ObjectOutputStream(skt.getOutputStream() );//limpiamos para que no se llenen de basura o ruido
                 System.out.println("Conexion Establecida...");
