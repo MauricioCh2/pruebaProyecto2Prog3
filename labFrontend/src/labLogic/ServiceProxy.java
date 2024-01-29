@@ -216,14 +216,28 @@ public class ServiceProxy implements IService {
 
     @Override
     public void create(TipoInstrumentoObj tipo) throws Exception {
+//        out.writeInt(Protocol.CREATETIPO);
+//        out.writeObject(tipo);
+//        out.flush();
+//        if(in.readInt()==Protocol.ERROR_NO_ERROR){
+//            System.out.println("Pase por el create de Service Proxy sin errores  \n");
+//        }
+//        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
+//        System.out.println("Termine de crear");
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-        if(in.readInt()==Protocol.ERROR_NO_ERROR){
-            System.out.println("Pase por el create de Service Proxy sin errores  \n");
+
+        int responseCode = in.readInt();
+        if (responseCode == Protocol.ERROR_NO_ERROR) {
+            System.out.println("TipoInstrumentoObj creado correctamente");
+        } else {
+            throw new Exception("Error al crear TipoInstrumentoObj en el servidor");
         }
-        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
-        System.out.println("Termine de crear");
+
+        // Cierra los flujos de salida
+        out.close();
+        in.close();
     }
 
     @Override

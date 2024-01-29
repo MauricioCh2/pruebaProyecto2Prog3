@@ -5,7 +5,7 @@ import Protocol.TipoInstrumentoObj;
 public class CRUDTiposInstrumento {
 
     public void create(TipoInstrumentoObj e) throws Exception {
-        System.out.println("Crea tipos de instrumento.. "+e.getNombre()+"\n");
+        System.out.println("/n ----Crea tipos de instrumento----  "+e.getNombre()+"\n");
         System.out.println(e.toString());
     }
 
