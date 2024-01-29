@@ -62,7 +62,8 @@ public class Worker { // es cada socket
                         try{
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
-                            //out.writeInt(Protocol.ERROR_NO_ERROR);
+                            out.writeInt(Protocol.ERROR_NO_ERROR);
+                            System.out.println("se ejecuta error no error\n");
                             out.flush();
                             //srv.deliver("mensaje");
                             //srv.deliver(  message = new Message( Message.CREATE, "TI", e.getNombre()));
