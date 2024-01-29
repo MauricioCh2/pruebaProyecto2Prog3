@@ -61,12 +61,10 @@ public class Worker { // es cada socket
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
                             out.writeInt(Protocol.ERROR_NO_ERROR);
-
-                            //srv.deliver("mensaje");
-                            message = new Message( Message.CREATE, "TI", e.getNombre());
-                           // srv.deliver( message );
+                            //message = new Message( Message.CREATE, "TI", e.getNombre());
+                            System.out.println("se ejecuta error no error\n");
                             out.flush();
-                            System.out.println("Se acaba de crear un uusario: "+ message.getMessage());
+
                         }catch (Exception ex){
                             System.out.println("erorr no error de excepcion");
                             out.writeInt(Protocol.ERROR_ERROR);
@@ -77,10 +75,9 @@ public class Worker { // es cada socket
                 }
                 out.flush();
             }catch (IOException  ex) {
-
+                srv.remove(this);
                 System.out.println(ex);
                 continuar = false;
-                srv.remove(this);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

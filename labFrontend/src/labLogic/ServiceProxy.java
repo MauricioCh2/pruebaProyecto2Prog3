@@ -37,41 +37,7 @@ public class ServiceProxy implements IService {
             System.out.println("Error al conectar con el servidor");
         }
     }
-    //vercion mauricio
-//    public void register() throws Exception {
-//        connect();
-//
-//        out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
-//        out.writeObject(null);//transmite el usuario como Object------------------esto es una prueba--------
-//        out.flush();//una vez transmito limpio y cierro
-//        int response = in.readInt();//automaticamente ahora espero la respuesta
-//        if (response==Protocol.ERROR_NO_ERROR){
-//            this.start();//una vez nos coencatmos bien a todo
-//        }else{
-//            disconnect();
-//            System.out.println("Error al conectar con el servidor");
-//        }
-//    }
 
-    //vercion Brayron
-    //public void register() throws Exception {
-    //        connect();
-    //        out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
-    //        //out.writeObject(null);
-    //        out.flush();//una vez transmito limpio y cierro
-    //        int response = in.readInt();//automaticamente ahora espero la respuesta
-    //        if (response==Protocol.ERROR_NO_ERROR){
-    //            System.out.println("Voy a ejecutar start");
-    //            this.start();//una vez nos coencatmos bien a todo
-    //        }else{
-    //            System.out.println("Error al conectar con el servidor");
-    //        }
-    //    }
-
-
-    public void setIDeliver(IDeliver d ){
-        deliver = d;
-    }
 
     Socket skt;
     private void connect() throws Exception{
@@ -92,7 +58,7 @@ public class ServiceProxy implements IService {
         System.out.println("Client worker atendiendo peticiones...");
         Thread t = new Thread(new Runnable(){
             public void run(){
-                listen();
+                /*listen();*/
             }//aca se encicla para que el hilo no se acaba
         });
         continuar = true;
@@ -103,23 +69,31 @@ public class ServiceProxy implements IService {
     }
 
     public void listen(){
+        System.out.println("Ejecutando listen de front end");
+        int object;
         int method;
         while (continuar) {
             try {
-                method = in.readInt();
+                object = in.readInt();
+                System.out.println(object);
+                method = (Integer)object;
                 System.out.println("DELIVERY");
                 System.out.println("Operacion: "+method);
                 switch(method){
                     case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         try {
+                            System.out.println("Se entro al deliver en service proxy");
                             Message message=(Message)in.readObject();
-                            deliver(message);
+                            //deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
+                    case Protocol.ERROR_NO_ERROR:
+                        System.out.println("Error_no_error");break;
                 }
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
+                System.out.println("Se detuvo");
             }
         }
         try {
@@ -129,74 +103,7 @@ public class ServiceProxy implements IService {
             throw new RuntimeException(e);
         }
     }
-//Listen mauricio
-    // public void listen(){
-//        int method;
-//        while (continuar) {
-//            try {
-//                method = in.readInt();
-//                System.out.println("DELIVERY");
-//                System.out.println("Operacion: "+method);
-//                switch(method){
-//                    case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
-//                        try {
-//                            Message message=(Message)in.readObject();
-//                            deliver(message);
-//                        } catch (ClassNotFoundException ex) {}
-//                        break;
-//                }
-//                out.flush();
-//            } catch (IOException ex) {
-//                continuar = false;
-//            }
-//        }
-//        try {
-//            disconnect();
-//        } catch (IOException e) {
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
-
-    //luisten brayron_________________
-    //public void listen(){
-    //        System.out.println("Ejecutando listen de front end");
-    //        int object;
-    //        int method;
-    //        System.out.println(continuar + " switch de listen en front end");
-    //        while (continuar) {
-    //            System.out.println("----------------------------------------------------------------------------------");
-    //            try {
-    //                object = in.readInt();
-    //                System.out.println(object);
-    //                method = (Integer)object;
-    //                System.out.println("DELIVERY");
-    //                System.out.println("Operacion: "+method);
-    //                switch(method){
-    //                    case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
-    //                        try {
-    //                            System.out.println("Se entro al deliver en service proxy");
-    //                            String message=(String) in.readObject();
-    //                            //deliver(message);
-    //                        } catch (ClassNotFoundException ex) {}
-    //                        break;
-    //                    case Protocol.ERROR_NO_ERROR:
-    //                        System.out.println("Error_no_error");break;
-    //                }
-    //                out.flush();
-    //            } catch (IOException ex) {
-    //                continuar = false;
-    //                System.out.println("Se detuvo");
-    //            }
-    //        }
-    //        try {
-    //            disconnect();
-    //        } catch (IOException e) {
-    //        } catch (Exception e) {
-    //            throw new RuntimeException(e);
-    //        }
-    //    }
     private void deliver( final Message message ){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
                                        //se cierran solos cuando termina de pocesar (no esta en un while)
@@ -216,28 +123,32 @@ public class ServiceProxy implements IService {
 
     @Override
     public void create(TipoInstrumentoObj tipo) throws Exception {
-//        out.writeInt(Protocol.CREATETIPO);
-//        out.writeObject(tipo);
-//        out.flush();
-//        if(in.readInt()==Protocol.ERROR_NO_ERROR){
-//            System.out.println("Pase por el create de Service Proxy sin errores  \n");
-//        }
-//        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
-//        System.out.println("Termine de crear");
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-
-        int responseCode = in.readInt();
-        if (responseCode == Protocol.ERROR_NO_ERROR) {
-            System.out.println("TipoInstrumentoObj creado correctamente");
-        } else {
-            throw new Exception("Error al crear TipoInstrumentoObj en el servidor");
+        int r = in.readInt();
+        System.out.println(r + " este es el valor del error no error");
+        if(r==Protocol.ERROR_NO_ERROR){
+            System.out.println("Pase por proxy \n");
         }
+        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
+        System.out.println("Termine de crear");
 
-        // Cierra los flujos de salida
-        out.close();
-        in.close();
+
+//        out.writeInt(Protocol.CREATETIPO);
+//        out.writeObject(tipo);
+//        out.flush();
+//
+//        int responseCode = in.readInt();
+//        if (responseCode == Protocol.ERROR_NO_ERROR) {
+//            System.out.println("TipoInstrumentoObj creado correctamente");
+//        } else {
+//            throw new Exception("Error al crear TipoInstrumentoObj en el servidor");
+//        }
+//
+//        // Cierra los flujos de salida
+//        out.close();
+//        in.close();
     }
 
     @Override
