@@ -57,7 +57,7 @@ public class ServiceProxy implements IService {
         System.out.println("Client worker atendiendo peticiones...");
         Thread t = new Thread(new Runnable(){
             public void run(){
-                listen();
+                /*listen();*/
             }//aca se encicla para que el hilo no se acaba
         });
         continuar = true;
@@ -127,7 +127,9 @@ public class ServiceProxy implements IService {
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-        if(in.readInt()==Protocol.ERROR_NO_ERROR){
+        int r = in.readInt();
+        System.out.println(r + " este es el valor del error no error");
+        if(r==Protocol.ERROR_NO_ERROR){
             System.out.println("Pase por proxy \n");
         }
         else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
