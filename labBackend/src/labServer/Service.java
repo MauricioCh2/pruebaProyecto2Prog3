@@ -18,7 +18,7 @@ public class Service implements IService {
 
 
    public void register(){
-
+       System.out.println("Me estoy registrando -----");
    }
 
     //--------------TIPOS DE INTRUMENTO---------------

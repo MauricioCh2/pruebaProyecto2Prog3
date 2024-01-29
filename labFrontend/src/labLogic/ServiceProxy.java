@@ -26,9 +26,11 @@ public class ServiceProxy implements IService {
     public void register() throws Exception {
         connect();
         out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
+        //out.writeObject(null);
         out.flush();//una vez transmito limpio y cierro
         int response = in.readInt();//automaticamente ahora espero la respuesta
         if (response==Protocol.ERROR_NO_ERROR){
+            System.out.println("Voy a ejecutar start");
             this.start();//una vez nos coencatmos bien a todo
         }else{
             System.out.println("Error al conectar con el servidor");
@@ -66,23 +68,33 @@ public class ServiceProxy implements IService {
     }
 
     public void listen(){
+        System.out.println("Ejecutando listen de front end");
+        int object;
         int method;
+        System.out.println(continuar + " switch de listen en front end");
         while (continuar) {
+            System.out.println("----------------------------------------------------------------------------------");
             try {
-                method = in.readInt();
+                object = in.readInt();
+                System.out.println(object);
+                method = (Integer)object;
                 System.out.println("DELIVERY");
                 System.out.println("Operacion: "+method);
                 switch(method){
                     case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         try {
-                            Message message=(Message)in.readObject();
-                            deliver(message);
+                            System.out.println("Se entro al deliver en service proxy");
+                            String message=(String) in.readObject();
+                            //deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
+                    case Protocol.ERROR_NO_ERROR:
+                        System.out.println("Error_no_error");break;
                 }
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
+                System.out.println("Se detuvo");
             }
         }
         try {
@@ -119,6 +131,7 @@ public class ServiceProxy implements IService {
             System.out.println("Pase por proxy \n");
         }
         else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
+        System.out.println("Termine de crear");
     }
 
     @Override

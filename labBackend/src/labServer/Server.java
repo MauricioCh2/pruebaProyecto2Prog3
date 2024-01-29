@@ -41,6 +41,7 @@ public class Server {
 
                 skt = srv.accept();//si entro algo y se acepto el socket tendra algo
                 sid = skt.getRemoteSocketAddress().toString();//identificacion del socket
+                System.out.println("Socket: " + sid);
                 sid = sid;
 
                 in = new ObjectInputStream(skt.getInputStream());
@@ -73,7 +74,9 @@ public class Server {
         //
         //User user=(User)in.readObject();
         service.register();
+        //Object obj = in.readObject();
         out.writeInt(Protocol.ERROR_NO_ERROR);//si si es loggin, el usuario no dio error ahora si devolvera usuario
+        //out.writeObject(null);
         // simplemente es decirle al socke que transmita este objeto(usuario)
         out.flush();
     }
@@ -84,8 +87,9 @@ public class Server {
     }
 
     //los sockets no saben lo que lo rodea, solo su padre (el server )
-    public void deliver(Message message){ //el server le dice a sus workers entregen el mensaje
+    public void deliver(String message){ //el server le dice a sus workers entregen el mensaje
         for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            System.out.println("Cantidad de workers: " + workers.size());
             wk.deliver(message);
 
         }
