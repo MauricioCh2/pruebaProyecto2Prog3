@@ -24,8 +24,9 @@ public class Service implements IService {
     //--------------TIPOS DE INTRUMENTO---------------
     @Override
     public void create(TipoInstrumentoObj e) throws Exception {
-        System.out.print("Estoy en create en service  ");
+        System.out.print("Estoy en create en service  \n");
         tiposInstrumento.create(e);
+
     }
 
     @Override

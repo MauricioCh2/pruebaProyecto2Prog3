@@ -61,6 +61,7 @@ public class Worker { // es cada socket
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
                             out.writeInt(Protocol.ERROR_NO_ERROR);
+                            System.out.println("Envio error no error en CreateTipo de listen del worker");
                             //message = new Message( Message.CREATE, "TI", e.getNombre());
                             System.out.println("se ejecuta error no error\n");
                             out.flush();

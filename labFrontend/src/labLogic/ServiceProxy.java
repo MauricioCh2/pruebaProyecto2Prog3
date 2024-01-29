@@ -52,13 +52,17 @@ public class ServiceProxy implements IService {
         skt.close();
     }
 
+    public void setIDeliver(IDeliver d){
+        deliver = d;
+    }
     //Listening funtions----------------------------------------------
     boolean continuar = true;
     public void start(){
         System.out.println("Client worker atendiendo peticiones...");
         Thread t = new Thread(new Runnable(){
             public void run(){
-                /*listen();*/
+                listen(); // poreguntar si esto puede traer consecuencias-----------------------------------
+                System.out.println("Entro al thread\n");
             }//aca se encicla para que el hilo no se acaba
         });
         continuar = true;
@@ -77,14 +81,15 @@ public class ServiceProxy implements IService {
                 object = in.readInt();
                 System.out.println(object);
                 method = (Integer)object;
-                System.out.println("DELIVERY");
+                System.out.println("DELIVERY del listen del worker ");
                 System.out.println("Operacion: "+method);
+                method = 100;
                 switch(method){
                     case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         try {
                             System.out.println("Se entro al deliver en service proxy");
                             Message message=(Message)in.readObject();
-                            //deliver(message);
+                            deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
                     case Protocol.ERROR_NO_ERROR:
@@ -108,7 +113,7 @@ public class ServiceProxy implements IService {
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
                                        //se cierran solos cuando termina de pocesar (no esta en un while)
                                        public void run(){
-                                           //.deliver(message);
+                                           //deliver.deliver(message);
                                        }
                                    }
         );
@@ -126,12 +131,12 @@ public class ServiceProxy implements IService {
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-        int r = in.readInt();
-        System.out.println(r + " este es el valor del error no error");
-        if(r==Protocol.ERROR_NO_ERROR){
-            System.out.println("Pase por proxy \n");
-        }
-        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
+        //int r = in.readInt();
+        //System.out.println(r + " este es el valor del error no error ---Service Roxy---");
+//        if(r==Protocol.ERROR_NO_ERROR){
+//            System.out.println("Pase por proxy \n");
+//        }
+//        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
         System.out.println("Termine de crear");
 
 
