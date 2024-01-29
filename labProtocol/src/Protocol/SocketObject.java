@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketObject {
+public class SocketObject {//Creo que no lo voy a usar
     public Socket skt;
     public ObjectInputStream in;
     public ObjectOutputStream out;

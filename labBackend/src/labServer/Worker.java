@@ -73,9 +73,10 @@ public class Worker { // es cada socket
                 }
                 out.flush();
             }catch (IOException  ex) {
-                srv.remove(this);
+
                 System.out.println(ex);
                 continuar = false;
+                srv.remove(this);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

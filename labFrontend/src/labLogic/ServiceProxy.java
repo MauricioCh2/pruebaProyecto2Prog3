@@ -18,23 +18,26 @@ public class ServiceProxy implements IService {
     }
     ObjectInputStream in; // obj entrada
     ObjectOutputStream out; // obj salida
-    //Controllers //estos son necesarios para las comunicaciones con el forntEnd
-//    TiposInstrumentoController tipoinscontroller;
-//    Instrumentos_Controller instrumentoController;
-//    CalibracionesController calibracionesController;
+
+    IDeliver deliver;
 
     public void register() throws Exception {
         connect();
+
         out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
+        out.writeObject(null);//transmite el usuario como Object------------------esto es una prueba--------
         out.flush();//una vez transmito limpio y cierro
         int response = in.readInt();//automaticamente ahora espero la respuesta
         if (response==Protocol.ERROR_NO_ERROR){
             this.start();//una vez nos coencatmos bien a todo
         }else{
+            disconnect();
             System.out.println("Error al conectar con el servidor");
         }
     }
-
+    public void setIDeliver(IDeliver d ){
+        deliver = d;
+    }
 
     Socket skt;
     private void connect() throws Exception{
@@ -97,7 +100,7 @@ public class ServiceProxy implements IService {
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
                                        //se cierran solos cuando termina de pocesar (no esta en un while)
                                        public void run(){
-                                           //.deliver(message);
+                                           deliver.deliver(message);
                                        }
                                    }
         );
@@ -116,7 +119,7 @@ public class ServiceProxy implements IService {
         out.writeObject(tipo);
         out.flush();
         if(in.readInt()==Protocol.ERROR_NO_ERROR){
-            System.out.println("Pase por proxy \n");
+            System.out.println("Pase por el create de Service Proxy sin errores  \n");
         }
         else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
     }
