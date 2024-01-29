@@ -5,7 +5,6 @@ package labServer;
 import Protocol.IService;
 import Protocol.Message;
 import Protocol.Protocol;
-import Protocol.SocketObject;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -32,7 +31,7 @@ public class Server {
         IService service = new Service();
         boolean continuar = true;
         String sid;
-        ObjectInputStream in=null;
+        ObjectInputStream in;
         ObjectOutputStream out=null;
         Socket skt=null;
         while (continuar) {//se encicla a propocito hasta que alguien llega, es un cilco infinito adrede
@@ -40,7 +39,7 @@ public class Server {
 
                 skt = srv.accept();//si entro algo y se acepto el socket tendra algo
                 sid = skt.getRemoteSocketAddress().toString();//identificacion del socket
-                
+
 
                 in = new ObjectInputStream(skt.getInputStream());
                 out = new ObjectOutputStream(skt.getOutputStream() );//limpiamos para que no se llenen de basura o ruido

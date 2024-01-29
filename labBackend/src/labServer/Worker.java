@@ -4,7 +4,6 @@ import Protocol.IService;
 import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
-import Protocol.SocketObject;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,8 +14,7 @@ public class Worker { // es cada socket
     ObjectInputStream in; // por donde transmte
     ObjectOutputStream out; // por quien transmite
     IService service;
-    SocketObject os; //Synchronous socket
-    SocketObject as;
+
     boolean continuar; //importante para saber cuando termina el servicio de este socket
     public Worker(Server srv, ObjectInputStream in, ObjectOutputStream out, IService service) {
         this.srv=srv;
@@ -57,7 +55,7 @@ public class Worker { // es cada socket
                         }
                         break;
                     case Protocol.CREATETIPO:
-                        Message message = null;
+                        Message message;
                         try{
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
