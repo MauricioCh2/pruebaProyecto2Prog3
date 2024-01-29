@@ -37,8 +37,11 @@ public class Server {
         while (continuar) {//se encicla a propocito hasta que alguien llega, es un cilco infinito adrede
             try {
 
+
                 skt = srv.accept();//si entro algo y se acepto el socket tendra algo
                 sid = skt.getRemoteSocketAddress().toString();//identificacion del socket
+                System.out.println("Socket: " + sid);
+
 
 
                 in = new ObjectInputStream(skt.getInputStream());
@@ -84,8 +87,9 @@ public class Server {
     //los sockets no saben lo que lo rodea, solo su padre (el server )
     public void deliver(Message message){ //el server le dice a sus workers entregen el mensaje
         for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            System.out.println("Cantidad de workers: " + workers.size());
             wk.deliver(message);
-
+//la vercion de br es con string
         }
         //todos  propagan el mensaje y todos los conocen pero solo se ve reflejado en el usuario concreto
         //ejemplo, en el poyecto si un usuario elimino un tipo de instrumento otro usuario que esta n este le
