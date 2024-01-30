@@ -37,7 +37,7 @@ public class Server {
         while (continuar) {//se encicla a propocito hasta que alguien llega, es un cilco infinito adrede
             try {
 
-                skt = srv.accept();//si entro algo y se acepto el socket tendra algo
+                skt = srv.accept(); //si entro algo y se acepto el socket tendra algo
                 sid = skt.getRemoteSocketAddress().toString();//identificacion del socket
                 System.out.println("Socket: " + sid);
 

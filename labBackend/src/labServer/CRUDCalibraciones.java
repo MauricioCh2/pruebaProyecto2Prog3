@@ -4,9 +4,9 @@ import Protocol.Calibraciones;
 
 public class CRUDCalibraciones {
 
-    public void create(Calibraciones cali) throws Exception {
+    public boolean create(Calibraciones cali) throws Exception {
         System.out.println("Crea  calibracion.. "+cali.getNumeroCalibracion()+"de instrumento: "+cali.getNo_SerieIns()+"\n");
-
+        return true;
     }
 
     public Calibraciones read(Calibraciones cali) throws Exception {

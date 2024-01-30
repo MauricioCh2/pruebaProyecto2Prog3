@@ -30,5 +30,10 @@ public class Protocol {
     public static final int READINSTRUMENTO = 201;
     public static final int UPDATEINSTRUMENTO = 202;
     public static final int DELETEINSTRUMENTO = 203;
+    //--------------CALIBRACIONES---------------
+    public static final int CREATECALIBRACION = 300;
+    public static final int READCALIBRACION = 301;
+    public static final int UPDATECALIBRACION = 302;
+    public static final int DELETECALIBRACION = 303;
 
 }

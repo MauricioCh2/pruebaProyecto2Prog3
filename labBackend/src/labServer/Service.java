@@ -76,8 +76,8 @@ public class Service implements IService {
     //-----------------CALIBRACIONES------------------
 
     @Override
-    public void create(Calibraciones cali) throws Exception {
-        calibraciones.create(cali);
+    public boolean create(Calibraciones cali) throws Exception {
+        return calibraciones.create(cali);
 
     }
 

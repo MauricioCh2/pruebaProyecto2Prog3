@@ -1,6 +1,7 @@
 package labPresentation.Model.Calibraciones;
 
 import Protocol.Calibraciones;
+import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
 import labPresentation.Model.PDF;
 import org.xml.sax.SAXException;
@@ -28,9 +29,9 @@ public class CalibracionesModel {
         tablaC = tabC;
         reporte = new PDF("calibraciones", dom);
     }
-    public void save(Calibraciones calA) {
+    public void save(Calibraciones calA) throws Exception {
         boolean guardado = false;
-        guardado = addCalibracionXML(calA);
+        guardado = ServiceProxy.instance().create(calA);
         if (guardado) {
             DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
             Object[] fila = new Object[]{calA.getNumeroCalibracion(), calA.getFecha(), calA.getNumeroMediciones()};

@@ -27,7 +27,7 @@ public interface IService {
 
 
     //-----------------CALIBRACIONES------------------
-    public void create(Calibraciones calibracion) throws Exception;
+    public boolean create(Calibraciones calibracion) throws Exception;
 
     public Calibraciones read(Calibraciones calibracion) throws Exception;
 

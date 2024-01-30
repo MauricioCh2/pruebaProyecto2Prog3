@@ -4,6 +4,7 @@ import Protocol.IService;
 import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
+import Protocol.Calibraciones;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,7 +20,7 @@ public class Worker { // es cada socket
     boolean continuar; //importante para saber cuando termina el servicio de este socket
     public Worker(Server srv, ObjectInputStream in, ObjectOutputStream out, IService service) {
         this.srv=srv;
-        this.in=in;//creo que esto no hace falta
+        this.in=in;
         this.out=out;
         this.service=service;
     }
@@ -134,6 +135,23 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+
+                        //--------------------------------------------------CALIBRACIONES--------------------------------------------------
+                    case Protocol.CREATECALIBRACION:
+                        System.out.println("Estoy en CREATE CALIBRACIONES de worker");
+                        Calibraciones cal = (Calibraciones) in.readObject();
+                        service.create(cal);
+
+                        out.writeInt(Protocol.CREATECALIBRACION);
+                        out.writeObject(cal);
+
+                        out.flush();
+
+                        message = new Message( Message.CREATE, "CA", String.valueOf(cal.getNumeroCalibracion()));
+                        srv.deliver(message);
+                        break;
+
+
                 }
                 out.flush();
             }catch (IOException  ex) {

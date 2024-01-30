@@ -105,6 +105,11 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la notificacion de que elimino!!\n");
                         break;
 
+                    //--------------------------------------------------CALIBRACIONES--------------------------------------------------
+                    case Protocol.CREATECALIBRACION:
+                        System.out.println("La calibracion se creo con existo ");
+                        Calibraciones cal = (Calibraciones) in.readObject();
+                        break;
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -216,8 +221,12 @@ public class ServiceProxy implements IService {
     }
     //-----------------------------------------------Calibraciones------------------------------------------------
     @Override
-    public void create(Calibraciones calibracion) throws Exception {
-
+    public boolean create(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.CREATECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear a el server");
+        return false;
     }
 
     @Override
