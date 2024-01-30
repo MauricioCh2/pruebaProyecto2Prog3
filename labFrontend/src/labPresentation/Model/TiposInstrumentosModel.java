@@ -77,7 +77,7 @@ public class TiposInstrumentosModel {
         //re = dom.updateTipoInstrumento(ins);
         re = ServiceProxy.instance().update(ins);
 
-        dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
+       // dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
         ;
         return re;
     }
@@ -90,7 +90,7 @@ public class TiposInstrumentosModel {
     }
 
     public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
-        dom.cargaTiposATable(tbl, comb);
+        //dom.cargaTiposATable(tbl, comb);
         ServiceProxy.instance().read(listaInstrumentos);
         //ins.agregar_categoriaCB(instrumento);
     }

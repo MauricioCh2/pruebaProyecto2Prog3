@@ -104,6 +104,7 @@ public class ServiceProxy implements IService {
                         boolean del = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino!!\n");
                         break;
+
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -131,6 +132,14 @@ public class ServiceProxy implements IService {
         );
     }
 
+    public void exit() throws Exception{ // como de deslogueo
+        out.writeInt(Protocol.DISCONNECT);
+        //out.writeObject(u);
+        out.flush();
+        System.out.println("le dije al server que se cerrara");
+        this.stop();
+        this.disconnect();
+    }
 
 
 
@@ -149,7 +158,7 @@ public class ServiceProxy implements IService {
 
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> Listipo) throws Exception {
-        out.writeInt(Protocol.CREATETIPO);
+        out.writeInt(Protocol.READTIPO);
         out.writeObject(Listipo);
         out.flush();
         System.out.println("Le estoy pasando la lista de tipos a server desde serviceProxy");

@@ -25,7 +25,7 @@ public class Protocol {
     public static final int UPDATETIPO = 102;
     public static final int DELETETIPO = 103;
 
-    //--------------TIPOS DE INTRUMENTO---------------
+    //--------------INTRUMENTO---------------
     public static final int CREATEINSTRUMENTO = 200;
     public static final int READINSTRUMENTO = 201;
     public static final int UPDATEINSTRUMENTO = 202;

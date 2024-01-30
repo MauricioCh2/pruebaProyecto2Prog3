@@ -1,9 +1,13 @@
 package labPresentation.View;
 
+import labLogic.ServiceProxy;
+
 import javax.swing.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class Aplication extends JFrame{
@@ -28,6 +32,22 @@ public class Aplication extends JFrame{
         this.setTitle("SILAB: Sistema de Laboratirio industrial");
         this.setSize(900, 450);
         this.setResizable(true);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                try {
+                    ServiceProxy.instance().exit();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                // Cierra la ventana
+                dispose();
+            }
+        });
+
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setMinimumSize(new Dimension(900, 450));

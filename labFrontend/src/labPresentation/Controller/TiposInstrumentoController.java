@@ -73,7 +73,7 @@ public class TiposInstrumentoController implements IController {
         tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
         listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
-       // tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
+        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 
 
         ServiceProxy.instance().setTController(this);
