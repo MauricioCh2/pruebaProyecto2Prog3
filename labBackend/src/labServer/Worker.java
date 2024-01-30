@@ -143,7 +143,7 @@ public class Worker { // es cada socket
                             out.flush();
 
 
-                            message = new Message( Message.CREATE, "TI", e.getDescripcion());
+                            message = new Message( Message.CREATE, "Ins", e.getDescripcion());
 
                             srv.deliver(message);
 
@@ -163,7 +163,7 @@ public class Worker { // es cada socket
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.READ, "TI", "Lista Instrumento");
+                            message = new Message( Message.READ, "Ins", "Lista Instrumento");
                             srv.deliver(message);
                         }catch (Exception ex){
                             System.out.println("Catch del read instrumento");
@@ -182,7 +182,7 @@ public class Worker { // es cada socket
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "TI", "Lista Instrumentos");
+                            message = new Message( Message.UPDATE, "Ins", e.getSerie());
                             srv.deliver(message);
 
                         }catch(Exception ex){
@@ -200,7 +200,7 @@ public class Worker { // es cada socket
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "TI", "Lista instrumentos");
+                            message = new Message( Message.DELETE, "Ins", tipoId);
                             srv.deliver(message);
 
                         }catch(Exception ex){
