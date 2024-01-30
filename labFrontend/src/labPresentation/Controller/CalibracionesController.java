@@ -40,7 +40,7 @@ public class CalibracionesController {
 
     public static void setInstru(Instrumento instru) {
         CalibracionesController.instru = instru;
-        modelo.cargarDatos(tableCalibraciones, instru.getSerie());
+        //modelo.cargarDatos(tableCalibraciones, instru.getSerie());
 
     }
 

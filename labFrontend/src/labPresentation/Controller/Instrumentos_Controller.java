@@ -2,6 +2,7 @@ package labPresentation.Controller;
 
 import Protocol.Instrumento;
 import Protocol.TipoInstrumentoObj;
+import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
 import labPresentation.View.InstrumentosView;
 import org.xml.sax.SAXException;
@@ -26,6 +27,7 @@ public class Instrumentos_Controller  {
     private static MainController mainCont;
 
     private static Instrumento instrumento;
+    ServiceProxy localService;
 
     public Instrumentos_Controller(MainController cont) throws ParserConfigurationException, IOException, TransformerException {
         super();
@@ -34,9 +36,10 @@ public class Instrumentos_Controller  {
         //this.instrumentView = view;
 
     }
-    public void init_view(InstrumentosView view) throws ParserConfigurationException, IOException, TransformerException {
+    public void init_view(InstrumentosView view) throws Exception {
         this.instrumentView = view;
         this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
+        localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
        model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos());
     }
 
@@ -45,7 +48,7 @@ public class Instrumentos_Controller  {
             instrumentView.getBtn_borrar().setEnabled(false);
            // if (validar_excepciones(Integer.parseInt(instrumentView.getTxF_Maximo().getText()), Integer.parseInt(instrumentView.getTxF_Minimo().getText()), instrumentView.getTxF_Serie().getText())) {
             if (validar_excepciones(instrumentView.getTxF_Serie().getText())){
-                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), instrumentView.getCmB_Tipo().getSelectedItem().toString(), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
+                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), "", Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
 
                 if (!EDIT) {
@@ -67,7 +70,7 @@ public class Instrumentos_Controller  {
         }
     }
 
-    public static void eliminar_elemento(String serie){
+    public static void eliminar_elemento(String serie) throws Exception {
         limpiar_pnl_ingreso_txFields();
         model.eliminar_elemento(serie);
     }
@@ -89,9 +92,9 @@ public class Instrumentos_Controller  {
 //            if (model.instrumento_existente(serie)){
 //                throw new Exception("Este ID ya existe selecciona uno distinto");
 //            }
-            if (instrumentView.getCmB_Tipo().getItemCount() == 0){
-                throw new Exception("No existen categorias de instrumentos");
-            }
+            //if (instrumentView.getCmB_Tipo().getItemCount() == 0){
+                //throw new Exception("No existen categorias de instrumentos");
+            //}
 
         }catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -134,8 +137,8 @@ public class Instrumentos_Controller  {
                     instrumentView.getTxF_Minimo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Minimo"))));
                     instrumentView.getTxF_Maximo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Maximo"))));
                     instrumentView.getTxF_Tolerancia().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Tolerancia"))));
-
-                    instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());//actualiza el combobox al estado en el que se requiere
+                    instrumentView.getCmB_Tipo().setSelectedItem("");
+                    //instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());
 
                 }
             } else {
@@ -162,7 +165,11 @@ public class Instrumentos_Controller  {
                     break;
                 }
                 case "Borrar": {
-                    eliminar_elemento(instrumentView.getTxF_Serie().getText());
+                    try {
+                        eliminar_elemento(instrumentView.getTxF_Serie().getText());
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 case "Limpiar": {

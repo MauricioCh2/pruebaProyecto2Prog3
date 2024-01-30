@@ -19,11 +19,12 @@ public interface IService {
     //-----------------INSTRUMENTOS-------------------
     public void create(Instrumento instrumento) throws Exception;
 
-    public Instrumento read(Instrumento instrumento) throws Exception;
+    public List<Instrumento> read_instrumentos(List<Instrumento> e) throws Exception;
 
-    public void update(Instrumento instrumento) throws Exception;
+    public boolean update(Instrumento instrumento) throws Exception;
 
-    public void delete(Instrumento instrumento) throws Exception;
+    public boolean delete(Instrumento instrumento) throws Exception;
+    public boolean delete_instrumento_id(String e) throws Exception;
 
 
     //-----------------CALIBRACIONES------------------

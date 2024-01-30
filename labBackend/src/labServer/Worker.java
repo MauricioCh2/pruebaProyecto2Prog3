@@ -5,6 +5,7 @@ import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import Protocol.Calibraciones;
+import Protocol.Instrumento;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -135,8 +136,162 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+                    case Protocol.CREATEINSTRUMENTO:
+                        try{
+                            Instrumento e = (Instrumento) in.readObject();
+                            service.create(e);
+                            out.writeInt(Protocol.CREATEINSTRUMENTO);
+                            out.flush();
 
-                        //--------------------------------------------------CALIBRACIONES--------------------------------------------------
+                            //System.out.println("Envio error no error en CreateTipo de listen del worker");
+                            //System.out.println("se ejecuta error no error\n");
+
+                            message = new Message( Message.CREATE, "TI", e.getDescripcion());
+                            //   System.out.println("voy a entrar al deliver en worker\n");
+                            //   System.out.println(message.getMessage());
+                            srv.deliver(message);
+                            // srv.update();
+                        }catch (Exception ex){
+                            System.out.println("Catch del create tipos");
+                            continuar = false;
+                            //out.writeInt(Protocol.ERROR_ERROR);
+                            // out.flush();
+                        }
+                        break;
+                    case Protocol.READINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en readTipo de worker");
+                            List<Instrumento> lisT = (List<Instrumento>) in.readObject();
+
+                            out.writeInt(Protocol.READINSTRUMENTO);
+                            out.writeObject(service.read_instrumentos(lisT)); // debe ser un read con name distinto
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.READ, "TI", "Lista Instrumento");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read instrumento");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATEINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en update Instrumento de worker");
+
+                            Instrumento e = (Instrumento) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATEINSTRUMENTO);
+                            out.writeObject(service.update(e));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "TI", "Lista Instrumentos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update instrumentos");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETEINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en deleteTipo de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETEINSTRUMENTO);
+                            out.writeObject(service.delete_instrumento_id(tipoId));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "TI", "Lista instrumentos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete instrumentos");
+                            continuar = false;
+                        }
+                        break;
+                    //--------------------------------------------------INSTRUMENTOS--------------------------------------------------
+                    case Protocol.CREATEINSTRUMENTO:
+                        try{
+                            Instrumento e = (Instrumento) in.readObject();
+                            service.create(e);
+                            out.writeInt(Protocol.CREATEINSTRUMENTO);
+                            out.flush();
+
+                            //System.out.println("Envio error no error en CreateTipo de listen del worker");
+                            //System.out.println("se ejecuta error no error\n");
+
+                            message = new Message( Message.CREATE, "TI", e.getDescripcion());
+                            //   System.out.println("voy a entrar al deliver en worker\n");
+                            //   System.out.println(message.getMessage());
+                            srv.deliver(message);
+                            // srv.update();
+                        }catch (Exception ex){
+                            System.out.println("Catch del create tipos");
+                            continuar = false;
+                            //out.writeInt(Protocol.ERROR_ERROR);
+                            // out.flush();
+                        }
+                        break;
+                    case Protocol.READINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en readTipo de worker");
+                            List<Instrumento> lisT = (List<Instrumento>) in.readObject();
+
+                            out.writeInt(Protocol.READINSTRUMENTO);
+                            out.writeObject(service.read_instrumentos(lisT)); // debe ser un read con name distinto
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.READ, "TI", "Lista Instrumento");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read instrumento");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATEINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en update Instrumento de worker");
+
+                            Instrumento e = (Instrumento) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATEINSTRUMENTO);
+                            out.writeObject(service.update(e));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "TI", "Lista Instrumentos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update instrumentos");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETEINSTRUMENTO:
+                        try{
+                            System.out.println("Estoy en deleteTipo de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETEINSTRUMENTO);
+                            out.writeObject(service.delete_instrumento_id(tipoId));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "TI", "Lista instrumentos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete instrumentos");
+                            continuar = false;
+                        }
+                        break;
+                    //--------------------------------------------------CALIBRACIONES--------------------------------------------------
                     case Protocol.CREATECALIBRACION:
                         System.out.println("Estoy en CREATE CALIBRACIONES de worker");
                         Calibraciones cal = (Calibraciones) in.readObject();
@@ -150,7 +305,6 @@ public class Worker { // es cada socket
                         message = new Message( Message.CREATE, "CA", String.valueOf(cal.getNumeroCalibracion()));
                         srv.deliver(message);
                         break;
-
 
                 }
                 out.flush();

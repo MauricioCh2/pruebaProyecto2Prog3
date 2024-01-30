@@ -1,6 +1,7 @@
 package labPresentation.Model;
 
 import Protocol.Instrumento;
+import labLogic.ServiceProxy;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
@@ -31,21 +32,22 @@ public class InstrumentosModel {
             return listaInstrumentos_e.obtener(serie);
         }
 
-        public void save(Instrumento ins) {
+        public void save(Instrumento ins) throws Exception {
             current = seleccionar_instrumento_Serie(ins.getSerie());
-                boolean guardado = false;
-                if (current == null) {
-                    listaInstrumentos_e.agregar(ins);
-                    guardado = createTipoXML(ins);
-                    if (guardado) {
-                        DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-                        Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
-                        modelo.addRow(fila);
-                    }
-                } //else this.actualizar(ins);
+            boolean guardado = false;
+            if (current == null) {
+                listaInstrumentos_e.agregar(ins);
+                ServiceProxy.instance().create(ins);
+                //guardado = createTipoXML(ins);
+                //if (guardado) {
+                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
+                Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
+                modelo.addRow(fila);
+                //}
+            } //else this.actualizar(ins);
         }
 
-    public boolean actualizar(Instrumento ins){
+    public boolean actualizar(Instrumento ins) throws Exception {
         boolean respuesta;
         //current = seleccionar_instrumento_Serie(ins.getSerie());
         //current.setDescripcion(ins.getDescripcion());
@@ -53,25 +55,28 @@ public class InstrumentosModel {
         //current.setMinimo(ins.getMinimo());
         //current.setTolerancia(ins.getTolerancia());
         //current.setTipo(ins.getTipo());
-        respuesta = dom.updateInstrumento(ins);
-        dom.cargaInstrumentosATable(tbl_tiposInst);//refresca la tabla
+        //respuesta = dom.updateInstrumento(ins);
+        //dom.cargaInstrumentosATable(tbl_tiposInst);//refresca la tabla
 //        DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
 //        Object[] fila = new Object[]{current.getSerie(), current.getDescripcion(), current.getMinimo(), current.getMaximo(), current.getTolerancia()};
 //        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
 //        modelo.removeRow(tbl_tiposInst.getSelectedRow());
+        respuesta = ServiceProxy.instance().update(ins);
         return respuesta;
     }
 
-    public void eliminar_elemento(String serie){
+    public void eliminar_elemento(String serie) throws Exception {
         Instrumento object = seleccionar_instrumento_Serie(serie);
         listaInstrumentos_e.getList().remove(object);
         DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
         modelo.removeRow(tbl_tiposInst.getSelectedRow());
-        dom.eliminarInstrumeto(serie);
-        dom.cargaInstrumentosATable(tbl_tiposInst);
+        //dom.eliminarInstrumeto(serie);
+        //dom.cargaInstrumentosATable(tbl_tiposInst);
+        ServiceProxy.instance().delete_instrumento_id(serie);
     }
-    public void cargarDatos(JTable tbl){
-        dom.cargaInstrumentosATable(tbl);
+    public void cargarDatos(JTable tbl) throws Exception {
+        //dom.cargaInstrumentosATable(tbl);
+        ServiceProxy.instance().read_instrumentos(listaInstrumentos_e.getList());
         //ins.agregar_categoriaCB(instrumento);
     }
     public ListaInstrumentos_E getListaInstrumentosE(){
