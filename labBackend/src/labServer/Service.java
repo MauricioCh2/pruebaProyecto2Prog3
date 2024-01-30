@@ -30,19 +30,16 @@ public class Service implements IService {
         tiposInstrumento.create(e);
 
     }
-
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
         System.out.print("Estoy en read en service  \n");
         return tiposInstrumento.read(e);
     }
-
     @Override
     public boolean update(TipoInstrumentoObj e) throws Exception {
         return tiposInstrumento.update(e);
 
     }
-
     @Override
     public boolean delete(TipoInstrumentoObj e) throws Exception {
         return tiposInstrumento.delete(e);
@@ -59,18 +56,25 @@ public class Service implements IService {
     }
 
     @Override
-    public Instrumento read(Instrumento inst) throws Exception {
-        return instrumento.read(inst);
+    public List<Instrumento> read_instrumentos(List<Instrumento> e) throws Exception {
+        System.out.print("Estoy en read de instrumentos en service  \n");
+        return instrumento.read(e);
+    }
+
+
+    @Override
+    public boolean update(Instrumento inst) throws Exception {
+        return instrumento.update(inst);
     }
 
     @Override
-    public void update(Instrumento inst) throws Exception {
-        instrumento.update(inst);
+    public boolean delete(Instrumento inst) throws Exception {
+        return instrumento.delete(inst);
     }
 
     @Override
-    public void delete(Instrumento inst) throws Exception {
-        instrumento.delete(inst);
+    public boolean delete_instrumento_id(String e) throws Exception {
+        return instrumento.delete(e);
     }
 
     //-----------------CALIBRACIONES------------------
