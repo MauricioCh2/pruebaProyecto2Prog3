@@ -59,6 +59,8 @@ public class Worker { // es cada socket
                         } catch (Exception ex) {
                         }
                         break;
+                    //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
+
                     case Protocol.CREATETIPO:
                         try{
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
