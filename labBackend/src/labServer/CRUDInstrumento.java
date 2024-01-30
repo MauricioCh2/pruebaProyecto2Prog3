@@ -10,7 +10,7 @@ public class CRUDInstrumento {
 
     }
 
-    public List<Instrumento> read(List<Instrumento> instrumento) throws Exception {
+    public List<Instrumento> read(Instrumento instrumento) throws Exception {
         System.out.println("/n ----Lee la lista de instrumentos ----  \n");
         return null;
     }

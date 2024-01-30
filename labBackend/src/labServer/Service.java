@@ -56,7 +56,7 @@ public class Service implements IService {
     }
 
     @Override
-    public List<Instrumento> read_instrumentos(List<Instrumento> e) throws Exception {
+    public List<Instrumento> read_instrumentos(Instrumento e) throws Exception {
         System.out.print("Estoy en read de instrumentos en service  \n");
         return instrumento.read(e);
     }

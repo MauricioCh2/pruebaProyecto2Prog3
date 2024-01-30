@@ -19,7 +19,7 @@ public interface IService {
     //-----------------INSTRUMENTOS-------------------
     public void create(Instrumento instrumento) throws Exception;
 
-    public List<Instrumento> read_instrumentos(List<Instrumento> e) throws Exception;
+    public List<Instrumento> read_instrumentos(Instrumento e) throws Exception;
 
     public boolean update(Instrumento instrumento) throws Exception;
 

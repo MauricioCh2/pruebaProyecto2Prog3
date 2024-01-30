@@ -222,12 +222,12 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public List<Instrumento> read_instrumentos(List<Instrumento> listInst) throws Exception {
+    public List<Instrumento> read_instrumentos(Instrumento listInst) throws Exception {
         out.writeInt(Protocol.READINSTRUMENTO);
         out.writeObject(listInst);
         out.flush();
         System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
-        return listInst;
+        return null;
     }
 
 
