@@ -60,11 +60,14 @@ public class Worker { // es cada socket
                         try{
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
-                            out.writeInt(Protocol.ERROR_NO_ERROR);
+                            out.writeInt(Protocol.CREATETIPO);
                             System.out.println("Envio error no error en CreateTipo de listen del worker");
-                            //message = new Message( Message.CREATE, "TI", e.getNombre());
                             System.out.println("se ejecuta error no error\n");
                             out.flush();
+                           message = new Message( Message.CREATE, "TI", e.getNombre());
+                         //   System.out.println("voy a entrar al deliver en worker\n");
+                         //   System.out.println(message.getMessage());
+                         //   srv.deliver(message);
 
                         }catch (Exception ex){
                             System.out.println("erorr no error de excepcion");
@@ -87,10 +90,10 @@ public class Worker { // es cada socket
     }
     public void deliver(Message message){
         try {
-            System.out.println("Se entro al deliver");
+            System.out.println("Se entro al deliver del worker");
             out.writeInt(Protocol.DELIVER);//oiga estoyenviando un deliver
             out.writeObject(message);
-            //out.flush();
+            out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
         }

@@ -19,7 +19,7 @@ public class ServiceProxy implements IService {
     ObjectInputStream in; // obj entrada
     ObjectOutputStream out; // obj salida
 
-    IDeliver deliver;
+    IController deliver;
 
     public void register() throws Exception {
         connect();
@@ -52,7 +52,7 @@ public class ServiceProxy implements IService {
         skt.close();
     }
 
-    public void setIDeliver(IDeliver d){
+    public void setIDeliver(IController d){
         deliver = d;
     }
     //Listening funtions----------------------------------------------
@@ -89,6 +89,7 @@ public class ServiceProxy implements IService {
                         try {
                             System.out.println("Se entro al deliver en service proxy");
                             Message message=(Message)in.readObject();
+                            System.out.println("Mensaje de message en Service Proxy: /Protocol deliver "+message.getMessage());
                             deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
@@ -111,11 +112,11 @@ public class ServiceProxy implements IService {
 
     private void deliver( final Message message ){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
-                                       //se cierran solos cuando termina de pocesar (no esta en un while)
-                                       public void run(){
-                                           //deliver.deliver(message);
-                                       }
-                                   }
+            // se cierran solos cuando termina de pocesar (no esta en un while)
+               public void run(){
+                   deliver.deliver(message);
+               }
+           }
         );
     }
 
@@ -131,7 +132,7 @@ public class ServiceProxy implements IService {
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-        //int r = in.readInt();
+       // int r = in.readInt();
         //System.out.println(r + " este es el valor del error no error ---Service Roxy---");
 //        if(r==Protocol.ERROR_NO_ERROR){
 //            System.out.println("Pase por proxy \n");

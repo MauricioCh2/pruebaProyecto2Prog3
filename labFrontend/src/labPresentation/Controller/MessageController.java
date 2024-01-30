@@ -1,11 +1,11 @@
 package labPresentation.Controller;
 
-import Protocol.IDeliver;
+import Protocol.IController;
 import Protocol.Message;
 import labLogic.ServiceProxy;
 import labPresentation.Model.MessageModel;
 
-public class MessageController implements IDeliver {
+public class MessageController implements IController {
     private MessageModel Mesmodel;
     public MessageController(){
         this.Mesmodel = new MessageModel();
