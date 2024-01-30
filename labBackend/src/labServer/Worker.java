@@ -7,6 +7,7 @@ import Protocol.TipoInstrumentoObj;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 
 public class Worker { // es cada socket
@@ -43,6 +44,7 @@ public class Worker { // es cada socket
     public void listen(){
         System.out.println("Ejecuntando listen de backend");
         int method;
+        Message message = new Message();
         while (continuar) {
             try{
                 method = in.readInt();// agarra el int del socket
@@ -56,26 +58,82 @@ public class Worker { // es cada socket
                         }
                         break;
                     case Protocol.CREATETIPO:
-                        Message message;
                         try{
                             TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
                             service.create(e);
                             out.writeInt(Protocol.CREATETIPO);
-                            System.out.println("Envio error no error en CreateTipo de listen del worker");
-                            System.out.println("se ejecuta error no error\n");
                             out.flush();
+
+                            //System.out.println("Envio error no error en CreateTipo de listen del worker");
+                            //System.out.println("se ejecuta error no error\n");
+
                            message = new Message( Message.CREATE, "TI", e.getNombre());
                          //   System.out.println("voy a entrar al deliver en worker\n");
                          //   System.out.println(message.getMessage());
-                         //   srv.deliver(message);
-
+                            srv.deliver(message);
+                           // srv.update();
                         }catch (Exception ex){
-                            System.out.println("erorr no error de excepcion");
-                            out.writeInt(Protocol.ERROR_ERROR);
-                            out.flush();
+                            System.out.println("Catch del create tipos");
+                            continuar = false;
+                            //out.writeInt(Protocol.ERROR_ERROR);
+                           // out.flush();
                         }
                         break;
+                    case Protocol.READTIPO:
+                        try{
+                            System.out.println("Estoy en readTipo de worker");
+                            List<TipoInstrumentoObj> lisT = (List<TipoInstrumentoObj>) in.readObject();
 
+                            out.writeInt(Protocol.READTIPO);
+                            out.writeObject(service.read(lisT));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.READ, "TI", "Lista Tipos");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATETIPO:
+                        try{
+                            System.out.println("Estoy en updateTipo de worker");
+
+                            TipoInstrumentoObj e = (TipoInstrumentoObj) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATETIPO);
+                            out.writeObject(service.update(e));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "TI", "Lista Tipos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETETIPO:
+                        try{
+                            System.out.println("Estoy en deleteTipo de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETETIPO);
+                            out.writeObject(service.delete(tipoId));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "TI", "Lista Tipos");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
                 }
                 out.flush();
             }catch (IOException  ex) {
@@ -98,4 +156,6 @@ public class Worker { // es cada socket
         } catch (IOException ex) {
         }
     }
+
+
 }

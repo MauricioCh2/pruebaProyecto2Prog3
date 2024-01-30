@@ -3,6 +3,8 @@ package labServer;
 
 import Protocol.*;
 
+import java.util.List;
+
 public class Service implements IService {
 
     private CRUDTiposInstrumento tiposInstrumento;
@@ -30,18 +32,24 @@ public class Service implements IService {
     }
 
     @Override
-    public TipoInstrumentoObj read(TipoInstrumentoObj e) throws Exception {
+    public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
+        System.out.print("Estoy en read en service  \n");
         return tiposInstrumento.read(e);
     }
 
     @Override
-    public void update(TipoInstrumentoObj e) throws Exception {
-        tiposInstrumento.update(e);
+    public boolean update(TipoInstrumentoObj e) throws Exception {
+        return tiposInstrumento.update(e);
+
     }
 
     @Override
-    public void delete(TipoInstrumentoObj e) throws Exception {
-        tiposInstrumento.delete(e);
+    public boolean delete(TipoInstrumentoObj e) throws Exception {
+        return tiposInstrumento.delete(e);
+    }
+    @Override
+    public boolean delete(String e) throws Exception {
+        return tiposInstrumento.delete(e);
     }
 
     //-----------------INSTRUMENTOS-------------------

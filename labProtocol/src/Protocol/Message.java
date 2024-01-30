@@ -13,8 +13,9 @@ public class Message implements Serializable {
     // como decir hey se hizo un update a este objeto, paraa que los demás workers hagan lo mismo
     //asi será más util que solo texto
     public static final int CREATE = 1;
-    public static final int UPDATE = 2;
-    public static final int DELETE = 3;
+    public static final int READ = 2;
+    public static final int UPDATE = 3;
+    public static final int DELETE = 4;
     public Message() {
     }
 
@@ -26,7 +27,7 @@ public class Message implements Serializable {
         this.tipo = tipo;
         this.entidad = entidad;
         this.texto = texto;
-        message = "ID: " + tipo +", Entidad:  " + "Texto: "+ texto;
+        message = "Tipo: " + tipo +", Entidad:  " + entidad + " Texto: "+ texto;
     }
 
     public String getMessage() {

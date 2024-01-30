@@ -1,15 +1,19 @@
 package Protocol;
+
+import java.util.List;
+
 //comentario -----------------------------
 public interface IService {
     public void register()throws Exception ;
     //--------------TIPOS DE INTRUMENTO---------------
     public void create(TipoInstrumentoObj e) throws Exception;
 
-    public TipoInstrumentoObj read(TipoInstrumentoObj e) throws Exception;
+    public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception;
 
-    public void update(TipoInstrumentoObj e) throws Exception;
+    public boolean update(TipoInstrumentoObj e) throws Exception;
 
-    public void delete(TipoInstrumentoObj e) throws Exception;
+    public boolean delete(TipoInstrumentoObj e) throws Exception;
+    public boolean delete(String e) throws Exception;
 
 
     //-----------------INSTRUMENTOS-------------------

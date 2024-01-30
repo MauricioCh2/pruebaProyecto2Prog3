@@ -53,8 +53,10 @@ public class TiposInstrumentosModel {
             DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
             listaInstrumentos.remove(ins);//elimina elemento de la lista
             modelo.removeRow(fila);         //elimina elemento de la tabla
-            dom.eliminarTipo(ins);
-            dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
+            //dom.eliminarTipo(ins);
+            //dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
+            ServiceProxy.instance().delete(ins);
+
 
         } catch (Exception e){
 //
@@ -62,7 +64,7 @@ public class TiposInstrumentosModel {
 
     }
 
-    public boolean update (TipoInstrumentoObj ins) {
+    public boolean update (TipoInstrumentoObj ins) throws Exception {
         boolean re;
 //        current.setCodigo(ins.getCodigo());
 //        current.setNombre(ins.getNombre());
@@ -72,7 +74,9 @@ public class TiposInstrumentosModel {
 //        Object[] fila = new Object[]{current.getCodigo(), current.getNombre(), current.getUnidad()};
 //        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
 //        modelo.removeRow(tbl_tiposInst.getSelectedRow());
-        re = dom.updateTipoInstrumento(ins);
+        //re = dom.updateTipoInstrumento(ins);
+        re = ServiceProxy.instance().update(ins);
+
         dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
         ;
         return re;
@@ -85,8 +89,9 @@ public class TiposInstrumentosModel {
         return listaInstrumentos;
     }
 
-    public void cargarDatos(JTable tbl, JComboBox comb){
+    public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
         dom.cargaTiposATable(tbl, comb);
+        ServiceProxy.instance().read(listaInstrumentos);
         //ins.agregar_categoriaCB(instrumento);
     }
 

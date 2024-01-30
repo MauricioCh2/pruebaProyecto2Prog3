@@ -1,6 +1,7 @@
 package labPresentation.Controller;
 
 
+import Protocol.IController;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.TiposInstrumentosModel;
@@ -22,7 +23,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.List;
 
-public class TiposInstrumentoController {
+public class TiposInstrumentoController implements IController {
     private static TiposInstrumentosModel tInstrumentosModel;
     private static JTextField txF_codigo;
     private static JTextField txF_nombre;
@@ -56,7 +57,7 @@ public class TiposInstrumentoController {
         EDIT = false;
 
     }
-    public void init_view(TipoInstrumentoView view) throws ParserConfigurationException, IOException, TransformerException {
+    public void init_view(TipoInstrumentoView view) throws Exception {
          tpInst = view;
          tbl_listadoTipos = tpInst.getTbl_ListadoTipos();
          btn_borrar = tpInst.getBtn_borrar();
@@ -72,10 +73,20 @@ public class TiposInstrumentoController {
         tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
         listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
-        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
+       // tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 
+
+        ServiceProxy.instance().setTController(this);
         //this.instrumentos_controller = visitor; //THIS
     }
+
+    @Override
+    public void update() {
+        System.out.println("\n llegue al update ");
+        //aqui llamamos al commit o algo asi
+        //la cosa es que le cvaiga encima a la lista y la actualice
+    }
+
     //Clases anidadas--------------------------------------------------------------------------------------------------
     public static class Btns_TipoInstrumento implements ActionListener { //controller de botones de tipo de instrumento
         public void actionPerformed(ActionEvent e) {

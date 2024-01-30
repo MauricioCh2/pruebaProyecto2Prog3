@@ -11,11 +11,13 @@ public class MainController {
     private Instrumentos_Controller instrumentosController;
     private TiposInstrumentoController tiposInstrumentoController;
     private static CalibracionesController calibracionesController;
-
+    private MessageController messageController;
     public MainController() throws Exception {
+        ServiceProxy.instance().register();
         tiposInstrumentoController = new TiposInstrumentoController();
         instrumentosController = new Instrumentos_Controller(this);
         calibracionesController = new CalibracionesController();
+
         app = new Aplication();
         app.getInstrumentoView().init_controller(tiposInstrumentoController);
         app.getInstrumentosView_items().init_controller(instrumentosController);
@@ -29,7 +31,11 @@ public class MainController {
 
         calibracionesController.init(app.getInstrumentosView_calibs());
 
-        ServiceProxy.instance().register();
+
+        messageController = new MessageController();
+
+
+
     }
     public static void selecInsCalibrar(Instrumento ins){
         app.enableCalib();

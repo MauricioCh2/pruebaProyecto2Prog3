@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class ServiceProxy implements IService {
     private static ServiceProxy theInstance;
@@ -19,13 +20,12 @@ public class ServiceProxy implements IService {
     ObjectInputStream in; // obj entrada
     ObjectOutputStream out; // obj salida
 
-    IController deliver;
+    IDeliver deliver;
+    IController controller;
 
     public void register() throws Exception {
         connect();
-
         out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
-       // out.writeObject(null);//transmite el usuario como Object------------------esto es una prueba--------
 
         out.flush();//una vez transmito limpio y cierro
         int response = in.readInt();//automaticamente ahora espero la respuesta
@@ -33,7 +33,6 @@ public class ServiceProxy implements IService {
             System.out.println("Voy a ejecutar start");
             this.start();//una vez nos coencatmos bien a todo
         }else{
-            //disconnect();
             System.out.println("Error al conectar con el servidor");
         }
     }
@@ -52,17 +51,17 @@ public class ServiceProxy implements IService {
         skt.close();
     }
 
-    public void setIDeliver(IController d){
+    public void setIDeliver(IDeliver d){
         deliver = d;
     }
+    public void setTController(IController c){controller = c;}
     //Listening funtions----------------------------------------------
     boolean continuar = true;
     public void start(){
         System.out.println("Client worker atendiendo peticiones...");
         Thread t = new Thread(new Runnable(){
             public void run(){
-                listen(); // poreguntar si esto puede traer consecuencias-----------------------------------
-                System.out.println("Entro al thread\n");
+                listen();
             }//aca se encicla para que el hilo no se acaba
         });
         continuar = true;
@@ -74,16 +73,14 @@ public class ServiceProxy implements IService {
 
     public void listen(){
         System.out.println("Ejecutando listen de front end");
-        int object;
         int method;
         while (continuar) {
             try {
-                object = in.readInt();
-                System.out.println(object);
-                method = (Integer)object;
+                method = in.readInt();
+
                 System.out.println("DELIVERY del listen del worker ");
                 System.out.println("Operacion: "+method);
-                method = 100;
+
                 switch(method){
                     case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         try {
@@ -95,11 +92,25 @@ public class ServiceProxy implements IService {
                         break;
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");break;
+                    case Protocol.READTIPO:
+                        List<TipoInstrumentoObj> lis = (List<TipoInstrumentoObj>) in.readObject();
+                        System.out.println("Me llego la lista perfectamente a Service!!\n");
+                        break;
+                    case Protocol.UPDATETIPO:
+                        boolean p = (boolean) in.readObject();
+                        System.out.println("Me llego la notificacion de que actualizo!!\n");
+                        break;
+                    case Protocol.DELETETIPO:
+                        boolean del = (boolean) in.readObject();
+                        System.out.println("Me llego la notificacion de que elimino!!\n");
+                        break;
                 }
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
-                System.out.println("Se detuvo");
+                System.out.println("Se detuvo en el catch de listen de service proxy");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
         try {
@@ -132,44 +143,45 @@ public class ServiceProxy implements IService {
         out.writeInt(Protocol.CREATETIPO);
         out.writeObject(tipo);
         out.flush();
-       // int r = in.readInt();
-        //System.out.println(r + " este es el valor del error no error ---Service Roxy---");
-//        if(r==Protocol.ERROR_NO_ERROR){
-//            System.out.println("Pase por proxy \n");
-//        }
-//        else throw new Exception("TIPO INSTRUMENTO DUPLICADO");
-        System.out.println("Termine de crear");
-
-
-//        out.writeInt(Protocol.CREATETIPO);
-//        out.writeObject(tipo);
-//        out.flush();
-//
-//        int responseCode = in.readInt();
-//        if (responseCode == Protocol.ERROR_NO_ERROR) {
-//            System.out.println("TipoInstrumentoObj creado correctamente");
-//        } else {
-//            throw new Exception("Error al crear TipoInstrumentoObj en el servidor");
-//        }
-//
-//        // Cierra los flujos de salida
-//        out.close();
-//        in.close();
-    }
-
-    @Override
-    public TipoInstrumentoObj read(TipoInstrumentoObj e) throws Exception {
-        return null;
-    }
-
-    @Override
-    public void update(TipoInstrumentoObj e) throws Exception {
+        System.out.println("Mande el mensaje de Crear a el server");
 
     }
 
     @Override
-    public void delete(TipoInstrumentoObj e) throws Exception {
+    public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> Listipo) throws Exception {
+        out.writeInt(Protocol.CREATETIPO);
+        out.writeObject(Listipo);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de tipos a server desde serviceProxy");
+        return Listipo;
+    }
 
+    @Override
+    public boolean update(TipoInstrumentoObj tipo) throws Exception {
+        out.writeInt(Protocol.UPDATETIPO);
+        out.writeObject(tipo);
+        out.flush();
+        System.out.println("Mande el mensaje de update a el server");
+        return false;
+    }
+
+    @Override
+    public boolean delete(TipoInstrumentoObj tipo) throws Exception {
+        out.writeInt(Protocol.DELETETIPO);
+        out.writeObject(tipo);
+        out.flush();
+        System.out.println("Mande el mensaje de delete a el server");
+
+        return false;
+    }
+    @Override
+    public boolean delete(String tipoID) throws Exception {
+        out.writeInt(Protocol.DELETETIPO);
+        out.writeObject(tipoID);
+        out.flush();
+        System.out.println("Mande el mensaje de delete a el server");
+
+        return false;
     }
 
     //------------------------------------------------Instrumentos------------------------------------------------
