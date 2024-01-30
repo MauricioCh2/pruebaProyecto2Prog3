@@ -230,18 +230,25 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public Calibraciones read(Calibraciones calibracion) throws Exception {
+    public List<Calibraciones> read(Calibraciones calibracion) throws Exception {
         return null;
     }
 
     @Override
-    public void update(Calibraciones calibracion) throws Exception {
+    public boolean update(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.UPDATECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de update a el server");
 
+        return false;
     }
 
     @Override
-    public void delete(Calibraciones calibracion) throws Exception {
+    public boolean delete(Calibraciones calibracion) throws Exception {
 
+
+        return false;
     }
 
     //-------------------------------------------------Mediciones-------------------------------------------------

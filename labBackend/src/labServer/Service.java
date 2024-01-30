@@ -82,18 +82,18 @@ public class Service implements IService {
     }
 
     @Override
-    public Calibraciones read(Calibraciones cali) throws Exception {
+    public List<Calibraciones> read(Calibraciones cali) throws Exception {
         return calibraciones.read(cali);
     }
 
     @Override
-    public void update(Calibraciones cali) throws Exception {
-        calibraciones.update(cali);
+    public boolean update(Calibraciones cali) throws Exception {
+        return calibraciones.update(cali);
     }
 
     @Override
-    public void delete(Calibraciones cali) throws Exception {
-        calibraciones.delete(cali);
+    public boolean delete(Calibraciones cali) throws Exception {
+        return calibraciones.delete(cali);
     }
 
     //--------------------MEDIDAS---------------------

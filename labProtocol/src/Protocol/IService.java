@@ -29,11 +29,11 @@ public interface IService {
     //-----------------CALIBRACIONES------------------
     public boolean create(Calibraciones calibracion) throws Exception;
 
-    public Calibraciones read(Calibraciones calibracion) throws Exception;
+    public List<Calibraciones> read(Calibraciones calibracion) throws Exception;
 
-    public void update(Calibraciones calibracion) throws Exception;
+    public boolean update(Calibraciones calibracion) throws Exception;
 
-    public void delete(Calibraciones calibracion) throws Exception;
+    public boolean delete(Calibraciones calibracion) throws Exception;
 
 
     //--------------------MEDIDAS---------------------
