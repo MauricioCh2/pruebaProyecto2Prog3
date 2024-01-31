@@ -73,7 +73,7 @@ public class Service implements IService {
     }
 
     @Override
-    public boolean delete_instrumento_id(String e) throws Exception {
+    public boolean deleteInstrumentoId(String e) throws Exception {
         return instrumento.delete(e);
     }
 
@@ -98,6 +98,9 @@ public class Service implements IService {
     @Override
     public boolean delete(Calibraciones cali) throws Exception {
         return calibraciones.delete(cali);
+    }
+    public boolean deleteCalibracionId(String e) throws Exception {
+        return instrumento.delete(e);
     }
 
     //--------------------MEDIDAS---------------------

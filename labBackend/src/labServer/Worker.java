@@ -198,7 +198,7 @@ public class Worker { // es cada socket
                             String tipoId = (String) in.readObject();
 
                             out.writeInt(Protocol.DELETEINSTRUMENTO);
-                            out.writeObject(service.delete_instrumento_id(tipoId));
+                            out.writeObject(service.deleteInstrumentoId(tipoId));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
@@ -225,6 +225,62 @@ public class Worker { // es cada socket
                         srv.deliver(message);
                         break;
 
+                    case Protocol.READCALIBRACION:
+                        try{
+                            System.out.println("Estoy en readCalibracion de worker");
+                            //List<Calibraciones> lisT = (List<Calibraciones>) in.readObject();
+                            Calibraciones cali = (Calibraciones) in.readObject();
+
+                            out.writeInt(Protocol.READCALIBRACION);
+                            out.writeObject(service.read(cali));
+                            System.out.println("Ya le mande de vuelta la lista de calibraciones");
+                            out.flush();
+
+                            message = new Message( Message.READ, "CA", "Lista Calibracion");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATECALIBRACION:
+                        try{
+                            System.out.println("Estoy en updateCalibracion de worker");
+
+                            Calibraciones e = (Calibraciones) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATECALIBRACION);
+                            out.writeObject(service.update(e));
+                            System.out.println("Le mando de vuelta al proxy calibracion ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "CA", String.valueOf(e.getNumeroCalibracion()));
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETECALIBRACION:
+                        try{
+                            System.out.println("Estoy en deleteCalibracion de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETECALIBRACION);
+                            out.writeObject(service.delete(tipoId));
+                            System.out.println("Le envio de vuelta el id eliminado ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "CA", tipoId);
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
                 }
                 out.flush();
             }catch (IOException  ex) {

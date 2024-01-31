@@ -72,7 +72,7 @@ public class InstrumentosModel {
         modelo.removeRow(tbl_tiposInst.getSelectedRow());
         //dom.eliminarInstrumeto(serie);
         //dom.cargaInstrumentosATable(tbl_tiposInst);
-        ServiceProxy.instance().delete_instrumento_id(serie);
+        ServiceProxy.instance().deleteInstrumentoId(serie);
     }
     public void cargarDatos(JTable tbl) throws Exception {
         //dom.cargaInstrumentosATable(tbl);

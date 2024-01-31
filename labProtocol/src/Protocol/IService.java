@@ -24,7 +24,7 @@ public interface IService {
     public boolean update(Instrumento instrumento) throws Exception;
 
     public boolean delete(Instrumento instrumento) throws Exception;
-    public boolean delete_instrumento_id(String e) throws Exception;
+    public boolean deleteInstrumentoId(String e) throws Exception;
 
 
     //-----------------CALIBRACIONES------------------
@@ -35,6 +35,7 @@ public interface IService {
     public boolean update(Calibraciones calibracion) throws Exception;
 
     public boolean delete(Calibraciones calibracion) throws Exception;
+    public boolean deleteCalibracionId(String id) throws Exception;
 
 
     //--------------------MEDIDAS---------------------

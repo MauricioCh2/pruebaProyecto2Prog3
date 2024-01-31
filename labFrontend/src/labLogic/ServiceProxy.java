@@ -251,7 +251,7 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public boolean delete_instrumento_id(String instruID) throws Exception {
+    public boolean deleteInstrumentoId(String instruID) throws Exception {
         out.writeInt(Protocol.DELETEINSTRUMENTO);
         out.writeObject(instruID);
         out.flush();
@@ -271,6 +271,10 @@ public class ServiceProxy implements IService {
 
     @Override
     public List<Calibraciones> read(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.READCALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
         return null;
     }
 
@@ -286,7 +290,19 @@ public class ServiceProxy implements IService {
 
     @Override
     public boolean delete(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.DELETECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de delete  calebracion  a el server");
 
+        return false;
+    }
+    @Override
+    public boolean deleteCalibracionId(String calibracion) throws Exception {
+        out.writeInt(Protocol.DELETECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de delete id calebracion  a el server");
 
         return false;
     }
