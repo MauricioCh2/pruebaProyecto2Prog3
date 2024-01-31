@@ -3,8 +3,10 @@ package labPresentation.Model.Calibraciones;
 
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 import com.itextpdf.text.pdf.PdfPTable;
 import labPresentation.Model.DOM;
+import labPresentation.Model.InstrumentosModel;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -105,6 +107,42 @@ public class DOM_calibraciones extends DOM {
                             Object[] newRow = {numeroCal, fecha, medicion};
 
                             modelo.addRow(newRow);
+                        }
+                    }
+                }
+
+
+            }
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void cargarCalibracionesAtList(Instrumento obj, JTable tbM) {
+        List<Calibraciones> list = obj.getListaCalibraciones();
+        String noSerie = obj.getSerie();
+        try {
+            Document doc = parseXMLFile();
+
+            // Obtener todos los elementos "vuelo"
+            NodeList lisInstrumento = (NodeList) doc.getElementsByTagName("instrumento");
+
+
+            // Iterar sobre los elementos "tipo_instrumento"
+            for (int i = 0; i < lisInstrumento.getLength(); i++) {
+                Element instrumento = (Element) lisInstrumento.item(i);// Obtener el elemento "tipo_instrumento" actual
+
+                if (noSerie.equals(instrumento.getAttribute("No_Serie"))) {
+                    NodeList lisCalibraciones = (NodeList) instrumento.getElementsByTagName("calibracion");//todas las calibraciones del elemento
+                    for (int j = 0; j < lisInstrumento.getLength(); j++) {
+                        // Obtener los datos del tipo
+                        Element calibracion = (Element) lisCalibraciones.item(j);
+                        if (calibracion != null) {
+                            String numeroCal = calibracion.getAttribute("Numero_Calibracion");
+                            String fecha = calibracion.getElementsByTagName("fecha").item(0).getTextContent();
+                            String medicion = calibracion.getElementsByTagName("mediciones").item(0).getTextContent();
+
+
+                            list.add(new Calibraciones(Integer.valueOf(numeroCal),obj, fecha, Integer.valueOf(medicion), tbM));
                         }
                     }
                 }

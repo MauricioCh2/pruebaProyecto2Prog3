@@ -5,12 +5,17 @@ import java.io.Serializable;
 public class TipoInstrumentoObj implements Serializable {
     private String codigo;
     private String nombre;
+    private UnidadMedida unidadM;
     private String unidad;
-
     public TipoInstrumentoObj(String codigo, String nombre, String unidad) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.unidad = unidad;
+    }
+    public TipoInstrumentoObj(String codigo, String nombre, UnidadMedida unidad) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.unidadM = unidad;
     }
     //setters y getters------------------------------------------------------------------------------------------------
     public String getCodigo() {
@@ -29,11 +34,19 @@ public class TipoInstrumentoObj implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getUnidad() {
-        return unidad;
+    public UnidadMedida getUnidadM() {
+        return unidadM;
     }
 
     public void setUnidad(String unidad) {
         this.unidad = unidad;
+    }
+
+    public String getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidadM(UnidadMedida unidadM) {
+        this.unidadM = unidadM;
     }
 }

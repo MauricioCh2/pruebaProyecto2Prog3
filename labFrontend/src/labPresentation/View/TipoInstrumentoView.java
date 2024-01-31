@@ -13,7 +13,6 @@ public class TipoInstrumentoView {
     private JButton btn_limpiar;
     private JButton btn_borrar;
     private JTextField txF_Codigo;
-    private JTextField txF_Unidad;
     private JTextField txF_Nombre;
     private JTable tbl_ListadoTipos;
     private JPanel pnl_tiposIstrumentos;
@@ -27,6 +26,7 @@ public class TipoInstrumentoView {
     private JLabel tx_Unidad;
     private JLabel tx_busqueda;
     private JScrollPane jscroll;
+    private JComboBox comboBoxUnidad;
     private TiposInstrumentoController tiposInstrumentoController;
 
     //Metodos----------------------------------------------------------------------------------------------------------
@@ -68,7 +68,6 @@ public class TipoInstrumentoView {
         Validaciones val = new Validaciones();
         ((AbstractDocument) txF_Codigo.getDocument()).setDocumentFilter(val.new ValidarSinEspeciales());
         ((AbstractDocument) txF_Nombre.getDocument()).setDocumentFilter(val.new ValidarSinEspecialesWSpace());
-        ((AbstractDocument) txF_Unidad.getDocument()).setDocumentFilter(val.new ValidarSinEspecialesWSpace());
         ((AbstractDocument) txF_buscarNombre.getDocument()).setDocumentFilter(val.new ValidarSinEspecialesWSpace());
     }
     private void initTable(){
@@ -118,10 +117,6 @@ public class TipoInstrumentoView {
         return txF_Codigo;
     }
 
-    public JTextField getTxF_Unidad() {
-        return txF_Unidad;
-    }
-
     public JTextField getTxF_Nombre() {
         return txF_Nombre;
     }
@@ -164,5 +159,13 @@ public class TipoInstrumentoView {
 
     public JLabel getTx_busqueda() {
         return tx_busqueda;
+    }
+
+    public JComboBox getComboBoxUnidad() {
+        return comboBoxUnidad;
+    }
+
+    public void setComboBoxUnidad(JComboBox comboBoxUnidad) {
+        this.comboBoxUnidad = comboBoxUnidad;
     }
 }

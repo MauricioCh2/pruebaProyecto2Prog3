@@ -5,6 +5,7 @@ import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import Protocol.Calibraciones;
+import Protocol.Mediciones;
 import Protocol.Instrumento;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -224,7 +225,82 @@ public class Worker { // es cada socket
                         message = new Message( Message.CREATE, "CA", String.valueOf(cal.getNumeroCalibracion()));
                         srv.deliver(message);
                         break;
+                    //--------------------------------------------------MEDICIONES--------------------------------------------------
+                    case Protocol.CREATEMEDICIONES:
+                        try{
+                        System.out.println("Estoy en CREATE MEDICIONES de worker");
+                        Mediciones medi = (Mediciones) in.readObject();
+                        service.create(medi);
 
+                        out.writeInt(Protocol.CREATEMEDICIONES);
+                        out.writeObject(medi);
+
+                        out.flush();
+
+                        message = new Message( Message.CREATE, "MED", String.valueOf(medi.getNumMedicion()));
+                        srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del create tipos");
+                            continuar = false;
+
+                        }
+                        break;
+                    case Protocol.READMEDICIONES:
+                        try{
+                            System.out.println("Estoy en readMediciones de worker");
+                            List<Mediciones> listMediciones = (List<Mediciones> ) in.readObject();
+                            service.readMediciones(listMediciones);
+
+                            out.writeInt(Protocol.READMEDICIONES);
+                            out.writeObject(service.readMediciones(listMediciones));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.READ, "MED", "Lista Mediciones");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read mediciones");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATEMEDICIONES:
+                        try{
+                            System.out.println("Estoy en updateMediciones de worker");
+
+                            Mediciones med = (Mediciones) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATEMEDICIONES);
+                            out.writeObject(service.update(med));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "MED", String.valueOf(med.getNumMedicion()));
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update mediciones");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETEMEDICIONES:
+                        try{
+                            System.out.println("Estoy en deleteMedicion de worker");
+                            Mediciones med = (Mediciones) in.readObject();
+
+                            out.writeInt(Protocol.DELETEMEDICIONES);
+                            out.writeObject(service.delete(med));
+                            System.out.println("Ya le mande la vaina a service proxy de vuelta ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "MED", String.valueOf(med.getNumMedicion()));
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete mediciones");
+                            continuar = false;
+                        }
+                        break;
                 }
                 out.flush();
             }catch (IOException  ex) {

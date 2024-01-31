@@ -123,6 +123,24 @@ public class ServiceProxy implements IService {
                         System.out.println("La calibracion se creo con existo ");
                         Calibraciones cal = (Calibraciones) in.readObject();
                         break;
+
+                    //--------------------------------------------------MEDICIONES--------------------------------------------------
+                    case Protocol.CREATEMEDICIONES:
+                        System.out.println("La medicion se creo con existo ");
+                        Mediciones med = (Mediciones) in.readObject();
+                        break;
+                    case Protocol.READMEDICIONES:
+                        List<Mediciones> listM = (List<Mediciones>) in.readObject();
+                        System.out.println("La lista de mediciones se creo con exito!!\n");
+                        break;
+                    case Protocol.UPDATEMEDICIONES:
+                        boolean medicion = (boolean) in.readObject();
+                        System.out.println("Se actualizo mediciones exitosamente!!\n");
+                        break;
+                    case Protocol.DELETEMEDICIONES:
+                        boolean mediciones = (boolean) in.readObject();
+                        System.out.println("Se elimino exitosamente las mediciones.!!\n");
+                        break;
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -293,24 +311,54 @@ public class ServiceProxy implements IService {
 
     //-------------------------------------------------Mediciones-------------------------------------------------
     @Override
-    public void create(Mediciones medida) throws Exception {
+    public void create(Mediciones mediciones) throws Exception {
+        out.writeInt(Protocol.CREATEMEDICIONES);
+        out.writeObject(mediciones);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear a el server");
+        if (in.readInt() == Protocol.ERROR_NO_ERROR) {
+        } else throw new Exception("Medidas ya encontradas en el sistema.");
+    }
+    @Override
+    public boolean delete(Mediciones mediciones) throws Exception {
+        out.writeInt(Protocol.DELETEMEDICIONES);
+        out.writeObject(mediciones);
+        out.flush();
+        if (in.readInt() == Protocol.ERROR_NO_ERROR) {
+            System.out.println("Mande el mensaje de delete instrumento a el server");
+        } else throw new Exception("Las medidas no se eliminaron.");
+        return false;
 
     }
 
-
-    public void delete(Mediciones medida) throws Exception {
-
+    @Override
+    public boolean update(Mediciones mediciones) throws Exception {
+        out.writeInt(Protocol.UPDATEMEDICIONES);
+        out.writeObject(mediciones);
+        out.flush();
+        if (in.readInt() == Protocol.ERROR_NO_ERROR) {
+            System.out.println("Mande el mensaje de update a el server");
+        } else throw new Exception("Las medidas no se pueden actualizar.");
+        return false;
     }
 
-
-    public void update(Mediciones medida) throws Exception {
-
+    @Override
+    public List<Mediciones> readMediciones(List<Mediciones> listMediciones) throws Exception {
+        out.writeInt(Protocol.READTIPO);
+        out.writeObject(listMediciones);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de mediciones al server desde serviceProxy");
+        return listMediciones;
     }
+  /*  @Override
+    public List<Mediciones> search(Mediciones medida) throws Exception {
+        out.writeInt(Protocol.Medida_search);
+        out.writeObject(medida);
+        out.flush();
+        if (in.readInt() == Protocol.ERROR_NO_ERROR) return (List<Mediciones>) in.readObject();
+        else throw new Exception("NO SE ENCONTRO NINGUNA MEDIDA");
+    }*/
 
-
-    public Mediciones read(Mediciones medida) throws Exception {
-        return null;
-    }
 
     //--------------------------------------------Setters controllers---------------------------------------------
 

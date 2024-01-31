@@ -19,11 +19,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class CalibracionesController {
     private static CalibracionesView calibracionesView;
-
-    //private Calibraciones Model;
     private static CalibracionesModel modelo;
     private static MedicionesModel modelo_mediciones;
     private static JTable tableCalibraciones;
@@ -37,15 +36,17 @@ public class CalibracionesController {
     private static  Instrumento instru =null;
     private static int numeroCalibracion;
     private static Calibraciones currentC;
+    private static List<Instrumento> listInst;
 
     public static void setInstru(Instrumento instru) {
         CalibracionesController.instru = instru;
-        //modelo.cargarDatos(tableCalibraciones, instru.getSerie());
-
+        modelo.cargarDatos(tableCalibraciones, instru.getSerie());
+        if (instru.getListaCalibraciones().isEmpty()) {
+            modelo.cargarDatosALista(instru, tableCalibraciones);
+        } else System.out.println("No cargar");
     }
 
     public static void cargarEstado() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-
        // modelo.cargarDatos(tableCalibraciones, modelo.busquedaActualizado(instru).getSerie());
     }
 
@@ -78,7 +79,7 @@ public class CalibracionesController {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
 
-                    if (num < (instru.getMaximo() + 1)) {
+                    if (num < (Math.abs(instru.getMaximo()-instru.getMinimo()) + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             LocalDate date = LocalDate.now();
@@ -86,7 +87,7 @@ public class CalibracionesController {
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
-                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
+                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM, tableMediciones);
                             modelo.save(calibraciones);
                             currentC = calibraciones;
                             limpiar();
@@ -257,7 +258,7 @@ public class CalibracionesController {
 
 public static String toStringt(){
         if(instru != null){
-            return  instru.getSerie() + " - " +  instru.getDescripcion() + "(" + instru.getMinimo()+"-"+instru.getMaximo() +" "+instru.getUnidad() +")";
+            return  instru.getSerie() + " - " +  instru.getDescripcion() + "(" + instru.getMinimo()+" a "+instru.getMaximo() +" "+instru.getUnidad() +")";
         }else{
             return "No hay instrumento cargado";
         }

@@ -1,6 +1,7 @@
 package labPresentation.Model.Calibraciones;
 
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

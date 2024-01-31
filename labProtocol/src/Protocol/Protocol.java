@@ -35,5 +35,10 @@ public class Protocol {
     public static final int READCALIBRACION = 301;
     public static final int UPDATECALIBRACION = 302;
     public static final int DELETECALIBRACION = 303;
+    //--------------MEDICIONES---------------
+    public static final int CREATEMEDICIONES = 400;
+    public static final int READMEDICIONES = 401;
+    public static final int UPDATEMEDICIONES = 402;
+    public static final int DELETEMEDICIONES = 403;
 
 }

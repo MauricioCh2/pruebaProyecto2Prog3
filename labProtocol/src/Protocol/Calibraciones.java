@@ -1,43 +1,37 @@
 package Protocol;
 
+import labPresentation.Model.Calibraciones.MedicionesModel;
+import labPresentation.Model.InstrumentosModel;
+
+import javax.swing.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calibraciones {
+public class Calibraciones implements Serializable {
     private List<Mediciones> medicionesL;
-
     private int numeroCalibracion;
     private String fecha;
-    private static int contador = 0;
     private int numeroMediciones;
     private Instrumento instrumento;
+    private MedicionesModel myModel;
 
     public int getNumeroCalibracion() {
         return numeroCalibracion;
     }
 
-    public Calibraciones() {
+    public Calibraciones(Integer integer, InstrumentosModel obj, String fecha, Integer valueOf, JTable tbM) {
         medicionesL = new ArrayList<>();
-        //numero = "000";
-        fecha = null;
+        numeroCalibracion = 0;
+        this.fecha = null;
     }
-
-
-
-    //    public Calibraciones(String num, LocalDate fech, int numM) {
-//        medicionesL = new ArrayList<>(numM);
-//        numero = num;
-//        fecha = fech;
-//        numeroMediciones = numM;
-//
-//    }
-    public Calibraciones(int numCal, Instrumento ins, String fecha, int numMediciones) {
+    public Calibraciones(int numCal, Instrumento ins, String fecha, int numMediciones, JTable tabM) {
         this.numeroCalibracion = numCal;
         this.instrumento = ins;
         this.fecha = fecha;
-        this.medicionesL = new ArrayList<>(numMediciones);
+        this.myModel = new MedicionesModel(tabM);
+        //this.medicionesL = new ArrayList<>(numMediciones);
         this.numeroMediciones = numMediciones;
-
     }
     public List<Mediciones> getMedicionesL() {
         return medicionesL;
@@ -45,14 +39,6 @@ public class Calibraciones {
 
     public void setMedicionesL(List<Mediciones> medicionesL) {
         this.medicionesL = medicionesL;
-    }
-
-
-
-
-
-    public static int getContador() {
-        return contador;
     }
 
     public String getFecha() {
@@ -79,19 +65,6 @@ public class Calibraciones {
     public void agregarMediciones(Mediciones mediciones){
         medicionesL.add(mediciones);
     }
-
-
-    /*    public void obtenerMediciones () {
-            //Rangos de mediciones
-            double valorMaximo = instrumentoCalibrado.getMaximo();  //Valor máximo.
-            double valorMinimo = instrumentoCalibrado.getMinimo();  //Valor mínimo.
-            double valorIntervalo = (valorMaximo - valorMinimo) / cantidadDeMediciones;
-
-            for (int i = 0; i < cantidadDeMediciones; i++) {
-                double valorReferencia = valorMinimo + i * valorIntervalo;
-                medicionesL.add(new Mediciones(valorReferencia, 0));
-            }
-        }*/
     public int getNumeroMediciones() {
         return numeroMediciones;
     }

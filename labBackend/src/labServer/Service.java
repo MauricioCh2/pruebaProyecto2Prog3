@@ -26,7 +26,6 @@ public class Service implements IService {
     //--------------TIPOS DE INTRUMENTO---------------
     @Override
     public void create(TipoInstrumentoObj e) throws Exception {
-        System.out.print("Estoy en create en service  \n");
         tiposInstrumento.create(e);
 
     }
@@ -52,8 +51,10 @@ public class Service implements IService {
     //-----------------INSTRUMENTOS-------------------
     @Override
     public void create(Instrumento inst) throws Exception {
+        System.out.print("Estoy en create en service  \n");
         instrumento.create(inst);
     }
+
 
     @Override
     public List<Instrumento> read_instrumentos(Instrumento e) throws Exception {
@@ -100,24 +101,28 @@ public class Service implements IService {
         return calibraciones.delete(cali);
     }
 
-    //--------------------MEDIDAS---------------------
+    //--------------------MEDICIONES---------------------
     @Override
     public void create(Mediciones medida) throws Exception {
+        System.out.print("Estoy en create en service  \n");
         mediciones.create(medida);
     }
 
     @Override
-    public void delete(Mediciones medida) throws Exception {
-        mediciones.delete(medida);
+    public boolean delete(Mediciones medida) throws Exception {
+        System.out.print("Estoy en delete en service  \n");
+        return mediciones.delete(medida);
     }
 
     @Override
-    public void update(Mediciones medida) throws Exception {
-        mediciones.update(medida);
+    public boolean update(Mediciones medida) throws Exception {
+        System.out.print("Estoy en update en service  \n");
+        return mediciones.update(medida);
     }
 
     @Override
-    public Mediciones read(Mediciones medida) throws Exception {
+    public List<Mediciones> readMediciones(List<Mediciones> medida) throws Exception {
+        System.out.print("Estoy en read en service  \n");
         return mediciones.read(medida);
     }
 }

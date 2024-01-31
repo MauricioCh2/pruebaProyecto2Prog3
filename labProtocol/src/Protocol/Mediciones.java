@@ -1,8 +1,9 @@
 package Protocol;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Mediciones {
+public class Mediciones implements Serializable {
     private double valorReferencia;  //Valor que debería ser obtenido.
     private double valorMarcado;   //Valor que marcó el instrumento.
     private int numMedicion;
@@ -16,6 +17,7 @@ public class Mediciones {
     }
 
     public Mediciones(){
+        numMedicion = 0;
         valorReferencia = 0.0;
         valorMarcado = 0.0;
     }
@@ -24,6 +26,7 @@ public class Mediciones {
         valorMarcado = vM;
     }
     public Mediciones(Mediciones med){
+        this.numMedicion = med.numMedicion;
         this.valorMarcado = med.valorMarcado;
         this.valorReferencia = med.valorMarcado;
     }

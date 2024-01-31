@@ -1,6 +1,8 @@
 package Protocol;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Instrumento implements Serializable {
     private String serie;
@@ -10,6 +12,7 @@ public class Instrumento implements Serializable {
     private int maximo;
     private int minimo;
     private double tolerancia;
+    private List<Calibraciones> listaCalibraciones;
 
     public Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia ) {
         this.serie = serie;
@@ -18,6 +21,7 @@ public class Instrumento implements Serializable {
         this.maximo = maximo;
         this.minimo = minimo;
         this.tolerancia = tolerancia;
+        listaCalibraciones = new ArrayList<Calibraciones>();
 
     }
     public Instrumento(String serie, String descripcion, String tipo, String maximo, String minimo, String tolerancia ) {
@@ -94,4 +98,8 @@ public class Instrumento implements Serializable {
     public void setTolerancia(double tolerancia) {
         this.tolerancia = tolerancia;
     }
+    public void agregarCalibracion(Calibraciones cab){  listaCalibraciones.add(cab);}
+    public Calibraciones getCalibracionXNumero(int n){  return listaCalibraciones.get(n);}
+    public List<Calibraciones> getListaCalibraciones() { return listaCalibraciones;  }
+
 }

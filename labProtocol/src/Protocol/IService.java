@@ -40,10 +40,10 @@ public interface IService {
     //--------------------MEDIDAS---------------------
     public void create(Mediciones medida) throws Exception;
 
-    public Mediciones read(Mediciones medida) throws Exception;
+    public List<Mediciones> readMediciones(List<Mediciones> medida) throws Exception;
 
-    public void update(Mediciones medida) throws Exception;
+    public boolean update(Mediciones medida) throws Exception;
 
-    public void delete(Mediciones medida) throws Exception;
+    public boolean delete(Mediciones medida) throws Exception;
 }
 
