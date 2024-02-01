@@ -36,14 +36,15 @@ public class TiposInstrumentosModel {
         //current = listaInstrumentos.get(ins.getCodigo());//busca el elemento
         boolean guardado = true;
        // if (current == null) { // en caso de no existir agregara uno nuevo
-            listaInstrumentos.add(ins);
+            //listaInstrumentos.add(ins); // mover
             //guardado = createTipoXML(ins);
             //if(guardado){
-              ServiceProxy.instance().create(ins);
+              //ServiceProxy.instance().create(ins); //mover
+                ServiceProxy.instance().send_tipos_instrumento(ins);
 
-                Object[] newRow = {ins.getCodigo(), ins.getNombre(), ins.getUnidad()};
-                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-                modelo.addRow(newRow);
+                //Object[] newRow = {ins.getCodigo(), ins.getNombre(), ins.getUnidad()}; mover
+                //DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel(); mover
+                //modelo.addRow(newRow); mover
                 //return  guardado;
            // }
        // }else{// en caso de no actualizara uno
@@ -51,6 +52,8 @@ public class TiposInstrumentosModel {
         //}
         return guardado;
     }
+
+
     public void eliminar(String ins, int fila){
         try{
             DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
@@ -93,14 +96,22 @@ public class TiposInstrumentosModel {
         return listaInstrumentos;
     }
 
+    public void setListaInstrumentos(List<TipoInstrumentoObj> listaInstrumentos) {this.listaInstrumentos = listaInstrumentos;}
+
     public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
         //dom.cargaTiposATable(tbl, comb);
-        ServiceProxy.instance().read(listaInstrumentos);
-        ServiceProxy.instance().readUnidadesMedida(new UnidadMedList ());
+
+        //ServiceProxy.instance().read(listaInstrumentos);
+        //ServiceProxy.instance().readUnidadesMedida(new UnidadMedList ());
+
 
         //System.out.println("Si estoy devolviendo la lista  mi valor es: "+UnidadMedList.getList().get(0).getNombre());
 
         //ins.agregar_categoriaCB(instrumento);
+    }
+
+    public void inicializar_lista(){
+        ServiceProxy.instance().inicializar_cliente();
     }
 
     //busqueda--------------------------------------
@@ -120,5 +131,7 @@ public class TiposInstrumentosModel {
     public void generarReporteGeneral(){
         reporte.createPDF();
     }
+
+
 
 }

@@ -39,6 +39,23 @@ public class CRUDTiposInstrumento {
         return lista;
     }
 
+
+    public List<TipoInstrumentoObj> read() throws Exception {
+        ArrayList<TipoInstrumentoObj> lista = new ArrayList<>();
+        Connection connection =  new DataBaseConn().connection();
+        String sql = "select * from tipos_instrumento";
+        Statement statement = connection.createStatement();
+        ResultSet result = statement.executeQuery(sql);
+        while (result.next()) {
+
+            TipoInstrumentoObj tipoIns = new TipoInstrumentoObj( result.getString(1), result.getString(2), result.getInt(3));
+            lista.add(tipoIns);
+            //TiposInstrumentosList.list.add(tipoIns);
+        }
+        System.out.println("/n ----Lee la lista de tipos de instrumentos  Kata 2----  \n");
+        return lista;
+    }
+
     public boolean update(TipoInstrumentoObj tipo) throws Exception {
         Connection connection =  new DataBaseConn().connection();
         String sql = "update  tipos_instrumento set nombre = ?  where id_tipo_instrumento = ?";

@@ -77,7 +77,7 @@ public class InstrumentosModel {
     }
     public void cargarDatos(JTable tbl) throws Exception {
         //dom.cargaInstrumentosATable(tbl);
-        ServiceProxy.instance().read_instrumentos(new Instrumento());
+        //ServiceProxy.instance().read_instrumentos(new Instrumento());
         //ins.agregar_categoriaCB(instrumento);
     }
     public ListaInstrumentos_E getListaInstrumentosE(){

@@ -39,4 +39,9 @@ public class Protocol {
     public static final int UPDATECALIBRACION = 302;
     public static final int DELETECALIBRACION = 303;
 
+    //---------------INICIALIZACION-----------------
+    public static final int SEND_LISTA_TIPO_INSTRUMENTOS = 400;
+    public static final int INIT_LISTA_TIPO_INSTRUMENTOS = 401;
+    public static final int SEND_TIPO_INSTRUMENTOS = 402;
+
 }
