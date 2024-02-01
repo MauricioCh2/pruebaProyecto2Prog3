@@ -1,6 +1,8 @@
 package labPresentation.Model;
 
+import Protocol.Listas.UnidadMedList;
 import Protocol.TipoInstrumentoObj;
+import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
 import org.xml.sax.SAXException;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 public class TiposInstrumentosModel {
     private List<TipoInstrumentoObj> listaInstrumentos;
+    private List<UnidadMedida> listaUnidades;
     private TipoInstrumentoObj current;
     private JTable tbl_tiposInst;
     private JComboBox cmB_tiposIns;
@@ -75,7 +78,8 @@ public class TiposInstrumentosModel {
 //        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
 //        modelo.removeRow(tbl_tiposInst.getSelectedRow());
         //re = dom.updateTipoInstrumento(ins);
-        re = ServiceProxy.instance().update(ins);
+                ServiceProxy.instance().update(ins);
+        re = true;
 
        // dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
         ;
@@ -92,6 +96,10 @@ public class TiposInstrumentosModel {
     public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
         //dom.cargaTiposATable(tbl, comb);
         ServiceProxy.instance().read(listaInstrumentos);
+        ServiceProxy.instance().readUnidadesMedida(new UnidadMedList ());
+
+        //System.out.println("Si estoy devolviendo la lista  mi valor es: "+UnidadMedList.getList().get(0).getNombre());
+
         //ins.agregar_categoriaCB(instrumento);
     }
 

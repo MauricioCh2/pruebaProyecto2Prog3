@@ -2,7 +2,7 @@ package Protocol;
 
 public class Protocol {
     public static final String SERVER = "localhost";
-    public static final int PORT = 1234;
+    public static final int PORT = 1235;
 
     public static final int REGISTER = 1;
     //Respuestas del server-------------------------------------------------------------------------------------------------
@@ -19,6 +19,9 @@ public class Protocol {
     public static final int DISCONNECT = 13;
 
     //-------------------------------------------------------CRUD-------------------------------------------------------
+    //---------------UNIDAD DE MEDIDA-----------------
+    public static final int READUNIDAD = 91;
+    public static final int FINDIDUNIDAD = 94;
     //--------------TIPOS DE INTRUMENTO---------------
     public static final int CREATETIPO = 100;
     public static final int READTIPO = 101;

@@ -42,7 +42,8 @@ public class CalibracionesModel extends Observable {
     }
     public void save(Calibraciones calA) throws Exception {
         boolean guardado = false;
-        guardado = ServiceProxy.instance().create(calA);
+        guardado = true;
+                ServiceProxy.instance().create(calA);
         if (guardado) {
             DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
             Object[] fila = new Object[]{calA.getNumeroCalibracion(), calA.getFecha(), calA.getNumeroMediciones()};

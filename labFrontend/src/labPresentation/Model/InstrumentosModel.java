@@ -61,7 +61,8 @@ public class InstrumentosModel {
 //        Object[] fila = new Object[]{current.getSerie(), current.getDescripcion(), current.getMinimo(), current.getMaximo(), current.getTolerancia()};
 //        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
 //        modelo.removeRow(tbl_tiposInst.getSelectedRow());
-        respuesta = ServiceProxy.instance().update(ins);
+        respuesta = true;
+                ServiceProxy.instance().update(ins);
         return respuesta;
     }
 
@@ -72,7 +73,7 @@ public class InstrumentosModel {
         modelo.removeRow(tbl_tiposInst.getSelectedRow());
         //dom.eliminarInstrumeto(serie);
         //dom.cargaInstrumentosATable(tbl_tiposInst);
-        ServiceProxy.instance().delete_instrumento_id(serie);
+        ServiceProxy.instance().deleteInstrumentoId(serie);
     }
     public void cargarDatos(JTable tbl) throws Exception {
         //dom.cargaInstrumentosATable(tbl);

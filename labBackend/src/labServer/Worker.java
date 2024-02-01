@@ -1,12 +1,16 @@
 package labServer;
 
 import Protocol.IService;
+import Protocol.Listas.UnidadMedList;
 import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import Protocol.Calibraciones;
 import Protocol.Mediciones;
 import Protocol.Instrumento;
+import Protocol.UnidadMedida;
+
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -60,6 +64,43 @@ public class Worker { // es cada socket
                         } catch (Exception ex) {
                         }
                         break;
+                        //--------------------------------------------------Unidad Medida--------------------------------------------------
+                    case Protocol.READUNIDAD:
+                        try{
+                            System.out.println("Estoy en READunidad de worker");
+                            UnidadMedList lisU = (UnidadMedList) in.readObject();
+                            out.writeInt(Protocol.READUNIDAD);
+                            out.writeObject(service.readUnidadesMedida(lisU));
+                            System.out.println("Le envio de vuelta la lista al service del ciente ");
+                            out.flush();
+
+                            message = new Message( Message.READ, "UM", "Lisra Unidad");
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            System.out.println(ex);
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.FINDIDUNIDAD:
+                        try{
+                            System.out.println("Estoy en FindUnidad de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.FINDIDUNIDAD);
+                           // out.writeObject(service.delete(tipoId));
+                            System.out.println("Le envio de vuelta el id encontrado ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "CA", tipoId);
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
                     //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
 
                     case Protocol.CREATETIPO:
@@ -77,6 +118,7 @@ public class Worker { // es cada socket
                         }catch (Exception ex){
                             System.out.println("Catch del create tipos");
                             continuar = false;
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
 
                         }
                         break;
@@ -114,6 +156,7 @@ public class Worker { // es cada socket
 
                         }catch(Exception ex){
                             System.out.println("Catch del update tipo");
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -225,6 +268,64 @@ public class Worker { // es cada socket
                         message = new Message( Message.CREATE, "CA", String.valueOf(cal.getNumeroCalibracion()));
                         srv.deliver(message);
                         break;
+
+                    case Protocol.READCALIBRACION:
+                        try{
+                            System.out.println("Estoy en readCalibracion de worker");
+                            //List<Calibraciones> lisT = (List<Calibraciones>) in.readObject();
+                            Calibraciones cali = (Calibraciones) in.readObject();
+
+                            out.writeInt(Protocol.READCALIBRACION);
+                            out.writeObject(service.read(cali));
+                            System.out.println("Ya le mande de vuelta la lista de calibraciones");
+                            out.flush();
+
+                            message = new Message( Message.READ, "CA", "Lista Calibracion");
+                            srv.deliver(message);
+                        }catch (Exception ex){
+                            System.out.println("Catch del read tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.UPDATECALIBRACION:
+                        try{
+                            System.out.println("Estoy en updateCalibracion de worker");
+
+                            Calibraciones e = (Calibraciones) in.readObject();
+
+
+                            out.writeInt(Protocol.UPDATECALIBRACION);
+                            //out.writeObject(service.update(e));
+                            System.out.println("Le mando de vuelta al proxy calibracion ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "CA", String.valueOf(e.getNumeroCalibracion()));
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETECALIBRACION:
+                        try{
+                            System.out.println("Estoy en deleteCalibracion de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETECALIBRACION);
+                            //out.writeObject(service.delete(tipoId));
+                            System.out.println("Le envio de vuelta el id eliminado ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "CA", tipoId);
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update tipo");
+                            continuar = false;
+                        }
+                        break;
+
                     //--------------------------------------------------MEDICIONES--------------------------------------------------
                     case Protocol.CREATEMEDICIONES:
                         try{

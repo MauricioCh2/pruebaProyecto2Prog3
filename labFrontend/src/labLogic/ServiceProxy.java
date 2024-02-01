@@ -1,6 +1,7 @@
 package labLogic;
 
 import Protocol.*;
+import Protocol.Listas.UnidadMedList;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -92,16 +93,24 @@ public class ServiceProxy implements IService {
                         break;
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");break;
+
+                    //--------------------------------------------------Unidad Medida--------------------------------------------------
+                    case Protocol.READUNIDAD:
+                        boolean res = (boolean) in.readObject();
+                        System.out.println("Me llego la lista de unidad de medida perfectamente a Service!!\n");
+                        break;
+                    //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
+
                     case Protocol.READTIPO:
                         List<TipoInstrumentoObj> lis = (List<TipoInstrumentoObj>) in.readObject();
                         System.out.println("Me llego la lista perfectamente a Service!!\n");
                         break;
                     case Protocol.UPDATETIPO:
-                        boolean p = (boolean) in.readObject();
+                        //boolean p = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que actualizo!!\n");
                         break;
                     case Protocol.DELETETIPO:
-                        boolean del = (boolean) in.readObject();
+                        //boolean del = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino!!\n");
                         break;
                     case Protocol.READINSTRUMENTO:
@@ -109,11 +118,11 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la lista de instrumentos perfectamente a Service!!\n");
                         break;
                     case Protocol.UPDATEINSTRUMENTO:
-                        boolean p_i = (boolean) in.readObject();
+                       // boolean p_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que actualizo instrumento!!\n");
                         break;
                     case Protocol.DELETEINSTRUMENTO:
-                        boolean del_i = (boolean) in.readObject();
+                       // boolean del_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino instrumento!!\n");
                         break;
 
@@ -180,7 +189,22 @@ public class ServiceProxy implements IService {
 
 
     //-------------------------------------------------------CRUD-------------------------------------------------------
-
+    @Override
+    public boolean readUnidadesMedida(UnidadMedList lis) throws Exception{
+        out.writeInt(Protocol.READUNIDAD);
+        out.writeObject(lis);
+        out.flush();
+        System.out.println("Mande el mensaje de leer UM a el server");
+        return false;
+    }
+    @Override
+    public UnidadMedida findById(int id)throws Exception{
+        out.writeInt(Protocol.FINDIDUNIDAD);
+        out.writeObject(id);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear a el server");
+        return null;
+    }
     //---------------------------------------------Tipos Instrumento----------------------------------------------
 
     @Override
@@ -202,31 +226,31 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public boolean update(TipoInstrumentoObj tipo) throws Exception {
+    public void update(TipoInstrumentoObj tipo) throws Exception {
         out.writeInt(Protocol.UPDATETIPO);
         out.writeObject(tipo);
         out.flush();
         System.out.println("Mande el mensaje de update a el server");
-        return false;
+
     }
 
     @Override
-    public boolean delete(TipoInstrumentoObj tipo) throws Exception {
+    public void delete(TipoInstrumentoObj tipo) throws Exception {
         out.writeInt(Protocol.DELETETIPO);
         out.writeObject(tipo);
         out.flush();
         System.out.println("Mande el mensaje de delete a el server");
 
-        return false;
+
     }
     @Override
-    public boolean delete(String tipoID) throws Exception {
+    public void delete(String tipoID) throws Exception {
         out.writeInt(Protocol.DELETETIPO);
         out.writeObject(tipoID);
         out.flush();
         System.out.println("Mande el mensaje de delete a el server");
 
-        return false;
+
     }
 
     //------------------------------------------------Instrumentos------------------------------------------------
@@ -250,63 +274,77 @@ public class ServiceProxy implements IService {
 
 
     @Override
-    public boolean update(Instrumento instrumento) throws Exception {
+    public void update(Instrumento instrumento) throws Exception {
         out.writeInt(Protocol.UPDATEINSTRUMENTO);
         out.writeObject(instrumento);
         out.flush();
         System.out.println("Mande el mensaje de update instrumento a el server");
-        return false;
+
     }
 
     @Override
-    public boolean delete(Instrumento instrumento) throws Exception {
+    public void delete(Instrumento instrumento) throws Exception {
         out.writeInt(Protocol.DELETEINSTRUMENTO);
         out.writeObject(instrumento);
         out.flush();
         System.out.println("Mande el mensaje de delete instrumento a el server");
 
-        return false;
+
     }
 
     @Override
-    public boolean delete_instrumento_id(String instruID) throws Exception {
+    public void deleteInstrumentoId(String instruID) throws Exception {
         out.writeInt(Protocol.DELETEINSTRUMENTO);
         out.writeObject(instruID);
         out.flush();
         System.out.println("Mande el mensaje de delete id instrumento a el server");
 
-        return false;
     }
     //-----------------------------------------------Calibraciones------------------------------------------------
     @Override
-    public boolean create(Calibraciones calibracion) throws Exception {
+    public void create(Calibraciones calibracion) throws Exception {
         out.writeInt(Protocol.CREATECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de Crear a el server");
-        return false;
+
     }
 
     @Override
     public List<Calibraciones> read(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.READCALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
         return null;
     }
 
     @Override
-    public boolean update(Calibraciones calibracion) throws Exception {
+    public void update(Calibraciones calibracion) throws Exception {
         out.writeInt(Protocol.UPDATECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de update a el server");
 
-        return false;
+
     }
 
     @Override
-    public boolean delete(Calibraciones calibracion) throws Exception {
+    public void delete(Calibraciones calibracion) throws Exception {
+        out.writeInt(Protocol.DELETECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de delete  calebracion  a el server");
 
 
-        return false;
+    }
+    @Override
+    public void deleteCalibracionId(String calibracion) throws Exception {
+        out.writeInt(Protocol.DELETECALIBRACION);
+        out.writeObject(calibracion);
+        out.flush();
+        System.out.println("Mande el mensaje de delete id calebracion  a el server");
+
     }
 
     //-------------------------------------------------Mediciones-------------------------------------------------

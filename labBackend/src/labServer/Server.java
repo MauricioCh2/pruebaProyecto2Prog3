@@ -17,7 +17,6 @@ import java.util.List;
 public class Server {
     ServerSocket srv;
     List<Worker> workers;
-
     public Server() {
         try {
             srv = new ServerSocket(Protocol.PORT);
