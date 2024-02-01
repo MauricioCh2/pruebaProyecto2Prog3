@@ -223,7 +223,7 @@ public class Worker { // es cada socket
 
 
                             out.writeInt(Protocol.UPDATEINSTRUMENTO);
-                            out.writeObject(service.update(e));
+                            //out.writeObject(service.update(e));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
@@ -241,7 +241,7 @@ public class Worker { // es cada socket
                             String tipoId = (String) in.readObject();
 
                             out.writeInt(Protocol.DELETEINSTRUMENTO);
-                            out.writeObject(service.deleteInstrumentoId(tipoId));
+                           // out.writeObject(service.deleteInstrumentoId(tipoId));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
@@ -294,7 +294,7 @@ public class Worker { // es cada socket
 
 
                             out.writeInt(Protocol.UPDATECALIBRACION);
-                            out.writeObject(service.update(e));
+                            //out.writeObject(service.update(e));
                             System.out.println("Le mando de vuelta al proxy calibracion ");
                             out.flush();
 

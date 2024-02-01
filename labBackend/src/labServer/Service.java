@@ -96,25 +96,25 @@ public class Service implements IService {
 
 
     @Override
-    public boolean update(Instrumento inst) throws Exception {
-        return instrumento.update(inst);
+    public void update(Instrumento inst) throws Exception {
+         instrumento.update(inst);
     }
 
     @Override
-    public boolean delete(Instrumento inst) throws Exception {
-        return instrumento.delete(inst);
+    public void delete(Instrumento inst) throws Exception {
+         instrumento.delete(inst);
     }
 
     @Override
-    public boolean deleteInstrumentoId(String e) throws Exception {
-        return instrumento.delete(e);
+    public void deleteInstrumentoId(String e) throws Exception {
+         instrumento.delete(e);
     }
 
     //-----------------CALIBRACIONES------------------
 
     @Override
-    public boolean create(Calibraciones cali) throws Exception {
-        return calibraciones.create(cali);
+    public void create(Calibraciones cali) throws Exception {
+         calibraciones.create(cali);
 
     }
 
@@ -124,16 +124,16 @@ public class Service implements IService {
     }
 
     @Override
-    public boolean update(Calibraciones cali) throws Exception {
-        return calibraciones.update(cali);
+    public void update(Calibraciones cali) throws Exception {
+         calibraciones.update(cali);
     }
 
     @Override
-    public boolean delete(Calibraciones cali) throws Exception {
-        return calibraciones.delete(cali);
+    public void delete(Calibraciones cali) throws Exception {
+         calibraciones.delete(cali);
     }
-    public boolean deleteCalibracionId(String e) throws Exception {
-        return instrumento.delete(e);
+    public void deleteCalibracionId(String e) throws Exception {
+         instrumento.delete(e);
     }
 
     //--------------------MEDIDAS---------------------

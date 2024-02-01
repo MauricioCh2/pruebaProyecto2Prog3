@@ -28,21 +28,21 @@ public interface IService {
 
     public List<Instrumento> read_instrumentos(Instrumento e) throws Exception;
 
-    public boolean update(Instrumento instrumento) throws Exception;
+    public void update(Instrumento instrumento) throws Exception;
 
-    public boolean delete(Instrumento instrumento) throws Exception;
-    public boolean deleteInstrumentoId(String e) throws Exception;
+    public void delete(Instrumento instrumento) throws Exception;
+    public void deleteInstrumentoId(String e) throws Exception;
 
 
     //-----------------CALIBRACIONES------------------
-    public boolean create(Calibraciones calibracion) throws Exception;
+    public void create(Calibraciones calibracion) throws Exception;
 
     public List<Calibraciones> read(Calibraciones calibracion) throws Exception;
 
-    public boolean update(Calibraciones calibracion) throws Exception;
+    public void update(Calibraciones calibracion) throws Exception;
 
-    public boolean delete(Calibraciones calibracion) throws Exception;
-    public boolean deleteCalibracionId(String id) throws Exception;
+    public void delete(Calibraciones calibracion) throws Exception;
+    public void deleteCalibracionId(String id) throws Exception;
 
 
     //--------------------MEDIDAS---------------------

@@ -256,41 +256,40 @@ public class ServiceProxy implements IService {
 
 
     @Override
-    public boolean update(Instrumento instrumento) throws Exception {
+    public void update(Instrumento instrumento) throws Exception {
         out.writeInt(Protocol.UPDATEINSTRUMENTO);
         out.writeObject(instrumento);
         out.flush();
         System.out.println("Mande el mensaje de update instrumento a el server");
-        return false;
+
     }
 
     @Override
-    public boolean delete(Instrumento instrumento) throws Exception {
+    public void delete(Instrumento instrumento) throws Exception {
         out.writeInt(Protocol.DELETEINSTRUMENTO);
         out.writeObject(instrumento);
         out.flush();
         System.out.println("Mande el mensaje de delete instrumento a el server");
 
-        return false;
+
     }
 
     @Override
-    public boolean deleteInstrumentoId(String instruID) throws Exception {
+    public void deleteInstrumentoId(String instruID) throws Exception {
         out.writeInt(Protocol.DELETEINSTRUMENTO);
         out.writeObject(instruID);
         out.flush();
         System.out.println("Mande el mensaje de delete id instrumento a el server");
 
-        return false;
     }
     //-----------------------------------------------Calibraciones------------------------------------------------
     @Override
-    public boolean create(Calibraciones calibracion) throws Exception {
+    public void create(Calibraciones calibracion) throws Exception {
         out.writeInt(Protocol.CREATECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de Crear a el server");
-        return false;
+
     }
 
     @Override
@@ -303,32 +302,31 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public boolean update(Calibraciones calibracion) throws Exception {
+    public void update(Calibraciones calibracion) throws Exception {
         out.writeInt(Protocol.UPDATECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de update a el server");
 
-        return false;
+
     }
 
     @Override
-    public boolean delete(Calibraciones calibracion) throws Exception {
+    public void delete(Calibraciones calibracion) throws Exception {
         out.writeInt(Protocol.DELETECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de delete  calebracion  a el server");
 
-        return false;
+
     }
     @Override
-    public boolean deleteCalibracionId(String calibracion) throws Exception {
+    public void deleteCalibracionId(String calibracion) throws Exception {
         out.writeInt(Protocol.DELETECALIBRACION);
         out.writeObject(calibracion);
         out.flush();
         System.out.println("Mande el mensaje de delete id calebracion  a el server");
 
-        return false;
     }
 
     //-------------------------------------------------Mediciones-------------------------------------------------
