@@ -16,12 +16,19 @@ public class Service implements IService {
     private CRUDCalibraciones calibraciones;
     private CRUDMediciones mediciones;
     private DAOUnidadMedida unidadMedida;
+    private LocalData data;
     public Service() {
         tiposInstrumento = new CRUDTiposInstrumento();
         instrumento = new CRUDInstrumento();
         calibraciones = new CRUDCalibraciones();
         mediciones = new CRUDMediciones();
         unidadMedida = new DAOUnidadMedida();
+        data = new LocalData();
+        try {
+            data.setListaTipos(this.read());
+        }catch (Exception ex){
+            System.out.println("Mensaje Excepcion: " + ex.getMessage());
+        }
     }
 
 
@@ -51,11 +58,27 @@ public class Service implements IService {
             throw new Exception("Este elemento ya existe");
         }
     }
+
+    @Override
+    public void send_tipos_instrumento(TipoInstrumentoObj obj) {}
+    @Override
+    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {
+        data.getListaTipos().add(obj);
+        data.imprimir_lista_tipos();
+    }
+
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
         System.out.print("Estoy en read en service  \n");
         return tiposInstrumento.read(e);
     }
+
+    @Override
+    public List<TipoInstrumentoObj> read() throws Exception {
+        System.out.print("Estoy en read en service Kata 2  \n");
+        return tiposInstrumento.read();
+    }
+
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
          if (tiposInstrumento.update(e)){
@@ -155,5 +178,9 @@ public class Service implements IService {
     @Override
     public Mediciones read(Mediciones medida) throws Exception {
         return mediciones.read(medida);
+    }
+
+    public List<TipoInstrumentoObj> get_lista_tipo_instrumento(){
+        return data.getListaTipos();
     }
 }

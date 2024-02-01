@@ -73,11 +73,22 @@ public class TiposInstrumentoController implements IController {
         tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
         //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
-        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
-
-
         ServiceProxy.instance().setTController(this);
+        tInstrumentosModel.inicializar_lista();
+        //tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
+
+
+
         //this.instrumentos_controller = visitor; //THIS
+    }
+
+    public void cargar_datos(List<TipoInstrumentoObj> list){
+        System.out.println("Cargando datos de lista\n");
+        for (TipoInstrumentoObj obj:list) {
+            System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
+        }
+        tInstrumentosModel.setListaInstrumentos(list);
+
     }
 
     @Override
@@ -85,6 +96,10 @@ public class TiposInstrumentoController implements IController {
         System.out.println("\n llegue al update ");
         //aqui llamamos al commit o algo asi
         //la cosa es que le cvaiga encima a la lista y la actualice
+    }
+
+    public void iniciarlizar_lista_tipos_instrumento(){
+
     }
 
     //Clases anidadas--------------------------------------------------------------------------------------------------

@@ -52,6 +52,16 @@ public class ServiceProxy implements IService {
         skt.close();
     }
 
+    public void inicializar_cliente(){
+        try {
+            out.writeInt(Protocol.SEND_LISTA_TIPO_INSTRUMENTOS);
+            out.flush();
+
+        }catch (Exception ex){
+            System.out.println("Excepcion: " + ex.getMessage());
+        }
+    }
+
     public void setIDeliver(IDeliver d){
         deliver = d;
     }
@@ -132,6 +142,17 @@ public class ServiceProxy implements IService {
                         System.out.println("La calibracion se creo con existo ");
                         Calibraciones cal = (Calibraciones) in.readObject();
                         break;
+                    //--------------------------------------------------INICIALIZACION---------------------------------------------------
+                    case Protocol.INIT_LISTA_TIPO_INSTRUMENTOS: {
+                        System.out.println("Setenado lista a mi lista propia");
+                        try {
+                            List<TipoInstrumentoObj> list = (List<TipoInstrumentoObj>) in.readObject();
+                            iniciar_lista_tipos_instrumento(list);
+                        } catch (Exception ex) {
+                            System.out.println("Excepcion: " + ex.getMessage());
+                        }
+                        break;
+                    }
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -156,6 +177,15 @@ public class ServiceProxy implements IService {
                    deliver.deliver(message);
                }
            }
+        );
+    }
+
+    private void iniciar_lista_tipos_instrumento( final List<TipoInstrumentoObj> list ){
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                controller.cargar_datos(list);
+            }
+        }
         );
     }
 
@@ -199,6 +229,20 @@ public class ServiceProxy implements IService {
     }
 
     @Override
+    public void send_tipos_instrumento(TipoInstrumentoObj obj) {
+        try {
+            out.writeInt(Protocol.SEND_TIPO_INSTRUMENTOS);
+            out.writeObject(obj);
+            out.flush();
+        } catch (IOException ex) {
+
+        }
+    }
+
+    @Override
+    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {}
+
+    @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> Listipo) throws Exception {
         out.writeInt(Protocol.READTIPO);
         out.writeObject(Listipo);
@@ -206,6 +250,8 @@ public class ServiceProxy implements IService {
         System.out.println("Le estoy pasando la lista de tipos a server desde serviceProxy");
         return Listipo;
     }
+
+
 
     @Override
     public void update(TipoInstrumentoObj tipo) throws Exception {
@@ -347,6 +393,16 @@ public class ServiceProxy implements IService {
 
 
     public Mediciones read(Mediciones medida) throws Exception {
+        return null;
+    }
+
+    //-------------------------------------------Not Used-----------------------------------------------------
+    @Override
+    public List<TipoInstrumentoObj> get_lista_tipo_instrumento() {
+        return null;
+    }
+    @Override
+    public List<TipoInstrumentoObj> read() throws Exception {
         return null;
     }
 
