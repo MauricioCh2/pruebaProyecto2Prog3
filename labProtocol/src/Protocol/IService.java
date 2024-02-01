@@ -1,10 +1,17 @@
 package Protocol;
 
+import Protocol.Listas.UnidadMedList;
+
 import java.util.List;
 
 //comentario -----------------------------
 public interface IService {
     public void register()throws Exception ;
+
+
+    //--------------Unidades de Medida---------------
+    public boolean readUnidadesMedida(UnidadMedList lis ) throws Exception;
+    public UnidadMedida findById(int id)throws Exception;
     //--------------TIPOS DE INTRUMENTO---------------
     public void create(TipoInstrumentoObj e) throws Exception;
 

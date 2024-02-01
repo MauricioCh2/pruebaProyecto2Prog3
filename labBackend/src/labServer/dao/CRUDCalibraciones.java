@@ -1,4 +1,4 @@
-package labServer;
+package labServer.dao;
 
 import Protocol.Calibraciones;
 

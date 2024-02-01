@@ -14,6 +14,8 @@ public class MainController {
     private MessageController messageController;
     public MainController() throws Exception {
         ServiceProxy.instance().register();
+        messageController = new MessageController();
+
         tiposInstrumentoController = new TiposInstrumentoController();
         instrumentosController = new Instrumentos_Controller(this);
         calibracionesController = new CalibracionesController();
@@ -32,7 +34,7 @@ public class MainController {
         calibracionesController.init(app.getInstrumentosView_calibs());
 
 
-        messageController = new MessageController();
+
 
 
 

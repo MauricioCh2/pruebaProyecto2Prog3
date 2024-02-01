@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="labProtocol" />
+    <orderEntry type="library" name="mysql.connector.java" level="project" />
   </component>
 </module>

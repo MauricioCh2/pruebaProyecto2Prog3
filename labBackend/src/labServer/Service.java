@@ -2,7 +2,10 @@
 package labServer;
 
 import Protocol.*;
+import Protocol.Listas.UnidadMedList;
+import labServer.dao.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Service implements IService {
@@ -11,24 +14,41 @@ public class Service implements IService {
     private CRUDInstrumento instrumento;
     private CRUDCalibraciones calibraciones;
     private CRUDMediciones mediciones;
+    private DAOUnidadMedida unidadMedida;
     public Service() {
         tiposInstrumento = new CRUDTiposInstrumento();
         instrumento = new CRUDInstrumento();
         calibraciones = new CRUDCalibraciones();
         mediciones = new CRUDMediciones();
+        unidadMedida = new DAOUnidadMedida();
     }
 
 
    public void register(){
        System.out.println("Me estoy registrando -----");
    }
+    //--------------Unidades de medida---------------
+    @Override
+    public boolean readUnidadesMedida(UnidadMedList list) throws SQLException {
+        System.out.println("Estoy en readUnidad en service ");
+        return unidadMedida.readUnidadesMedida(list);
+    }
+
+    @Override
+    public UnidadMedida findById(int id) throws Exception {
+        System.out.println("Estoy en readUnidad en service ");
+        return unidadMedida.findById(id);
+    }
 
     //--------------TIPOS DE INTRUMENTO---------------
     @Override
     public void create(TipoInstrumentoObj e) throws Exception {
         System.out.print("Estoy en create en service  \n");
-        tiposInstrumento.create(e);
-
+        if (tiposInstrumento.findById(e.getCodigo())== null){
+            tiposInstrumento.create(e);
+        }else{
+            throw new Exception("Este elemento ya existe");
+        }
     }
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {

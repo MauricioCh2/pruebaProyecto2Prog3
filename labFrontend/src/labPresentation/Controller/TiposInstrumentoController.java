@@ -32,7 +32,7 @@ public class TiposInstrumentoController implements IController {
     private static JButton btn_borrar;
     private static JTable tbl_listadoTipos;
     private static boolean EDIT;
-    private static List<TipoInstrumentoObj> listaInstrumentos;
+    //private static List<TipoInstrumentoObj> listaInstrumentos;
     private static TipoInstrumentoView tpInst;
     private static JCheckBox chB_busqueda;
     private static Instrumentos_Controller instrumentos_controller; //THIS
@@ -71,7 +71,7 @@ public class TiposInstrumentoController implements IController {
         //localService.setTipoinscontroller(this);
 
         tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
-        listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
+        //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
         tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 

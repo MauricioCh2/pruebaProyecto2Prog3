@@ -1,6 +1,7 @@
 package labLogic;
 
 import Protocol.*;
+import Protocol.Listas.UnidadMedList;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -92,6 +93,14 @@ public class ServiceProxy implements IService {
                         break;
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");break;
+
+                    //--------------------------------------------------Unidad Medida--------------------------------------------------
+                    case Protocol.READUNIDAD:
+                        boolean res = (boolean) in.readObject();
+                        System.out.println("Me llego la lista de unidad de medida perfectamente a Service!!\n");
+                        break;
+                    //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
+
                     case Protocol.READTIPO:
                         List<TipoInstrumentoObj> lis = (List<TipoInstrumentoObj>) in.readObject();
                         System.out.println("Me llego la lista perfectamente a Service!!\n");
@@ -162,7 +171,22 @@ public class ServiceProxy implements IService {
 
 
     //-------------------------------------------------------CRUD-------------------------------------------------------
-
+    @Override
+    public boolean readUnidadesMedida(UnidadMedList lis) throws Exception{
+        out.writeInt(Protocol.READUNIDAD);
+        out.writeObject(lis);
+        out.flush();
+        System.out.println("Mande el mensaje de leer UM a el server");
+        return false;
+    }
+    @Override
+    public UnidadMedida findById(int id)throws Exception{
+        out.writeInt(Protocol.FINDIDUNIDAD);
+        out.writeObject(id);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear a el server");
+        return null;
+    }
     //---------------------------------------------Tipos Instrumento----------------------------------------------
 
     @Override
