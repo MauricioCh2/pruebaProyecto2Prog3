@@ -11,6 +11,7 @@ public class Calibraciones {
     private static int contador = 0;
     private int numeroMediciones;
     private Instrumento instrumento;
+    private int instrumentoId;
 
     public int getNumeroCalibracion() {
         return numeroCalibracion;
@@ -37,7 +38,13 @@ public class Calibraciones {
         this.fecha = fecha;
         this.medicionesL = new ArrayList<>(numMediciones);
         this.numeroMediciones = numMediciones;
-
+    }
+    public Calibraciones(int numCal, String fecha, int numMediciones, int ins) {
+        this.numeroCalibracion = numCal;
+        this.instrumentoId = ins;
+        this.fecha = fecha;
+        this.medicionesL = new ArrayList<>(numMediciones);
+        this.numeroMediciones = numMediciones;
     }
     public List<Mediciones> getMedicionesL() {
         return medicionesL;

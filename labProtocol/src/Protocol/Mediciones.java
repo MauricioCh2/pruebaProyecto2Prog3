@@ -6,6 +6,7 @@ public class Mediciones {
     private double valorReferencia;  //Valor que debería ser obtenido.
     private double valorMarcado;   //Valor que marcó el instrumento.
     private int numMedicion;
+    private int idCalibracion;
 
     public int getNumMedicion() {
         return numMedicion;
@@ -23,6 +24,12 @@ public class Mediciones {
         valorReferencia = vR;
         valorMarcado = vM;
     }
+     public Mediciones(double vR, double vM, int cal){
+        valorReferencia = vR;
+        valorMarcado = vM;
+        idCalibracion = cal;
+    }
+
     public Mediciones(Mediciones med){
         this.valorMarcado = med.valorMarcado;
         this.valorReferencia = med.valorMarcado;
@@ -41,6 +48,10 @@ public class Mediciones {
 
     public void setValorMarcado(double valorMarcado) {
         this.valorMarcado = valorMarcado;
+    }
+
+    public int getIdCalibracion() {
+        return idCalibracion;
     }
 
     @Override

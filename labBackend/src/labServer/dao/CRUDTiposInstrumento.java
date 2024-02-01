@@ -17,7 +17,6 @@ public class CRUDTiposInstrumento {
         statement.setString(1,tipo.getCodigo());
         statement.setString(2,tipo.getNombre());
         statement.setInt(3, Integer.parseInt(tipo.getUnidad()));
-        //statement.setInt(3,tipo.getUnidad());
 
         statement.executeUpdate();
         System.out.println("/n ----Crea tipos de instrumento----  "+tipo.getNombre()+"\n");
