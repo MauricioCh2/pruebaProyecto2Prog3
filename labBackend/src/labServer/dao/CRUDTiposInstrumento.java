@@ -32,9 +32,9 @@ public class CRUDTiposInstrumento {
         ResultSet result = statement.executeQuery(sql);
         while (result.next()) {
 
-            TipoInstrumentoObj unidadMedida = new TipoInstrumentoObj( result.getString(1), result.getString(2), result.getInt(3));
-            lista.add(unidadMedida);
-            TiposInstrumentosList.list.add(unidadMedida);
+            TipoInstrumentoObj tipoIns = new TipoInstrumentoObj( result.getString(1), result.getString(2), result.getInt(3));
+            lista.add(tipoIns);
+            TiposInstrumentosList.list.add(tipoIns);
         }
         System.out.println("/n ----Lee la lista de tipos de instrumentos ----  \n");
         return lista;

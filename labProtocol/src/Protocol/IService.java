@@ -17,10 +17,10 @@ public interface IService {
 
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception;
 
-    public boolean update(TipoInstrumentoObj e) throws Exception;
+    public void update(TipoInstrumentoObj e) throws Exception;
 
-    public boolean delete(TipoInstrumentoObj e) throws Exception;
-    public boolean delete(String e) throws Exception;
+    public void delete(TipoInstrumentoObj e) throws Exception;
+    public void delete(String e) throws Exception;
 
 
     //-----------------INSTRUMENTOS-------------------

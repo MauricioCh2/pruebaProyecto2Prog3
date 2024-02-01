@@ -78,7 +78,8 @@ public class TiposInstrumentosModel {
 //        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
 //        modelo.removeRow(tbl_tiposInst.getSelectedRow());
         //re = dom.updateTipoInstrumento(ins);
-        re = ServiceProxy.instance().update(ins);
+                ServiceProxy.instance().update(ins);
+        re = true;
 
        // dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
         ;

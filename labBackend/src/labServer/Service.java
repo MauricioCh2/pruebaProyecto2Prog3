@@ -5,6 +5,7 @@ import Protocol.*;
 import Protocol.Listas.UnidadMedList;
 import labServer.dao.*;
 
+import javax.swing.*;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -56,17 +57,29 @@ public class Service implements IService {
         return tiposInstrumento.read(e);
     }
     @Override
-    public boolean update(TipoInstrumentoObj e) throws Exception {
-        return tiposInstrumento.update(e);
+    public void update(TipoInstrumentoObj e) throws Exception {
+         if (tiposInstrumento.update(e)){
+             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito");
+         }else{
+             //no se si tirar la exepcion aqui o  como ya esta en el worker
+         }
 
     }
     @Override
-    public boolean delete(TipoInstrumentoObj e) throws Exception {
-        return tiposInstrumento.delete(e);
+    public void delete(TipoInstrumentoObj e) throws Exception {
+        if (tiposInstrumento.delete(e)){
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+        }else {
+
+        }
     }
     @Override
-    public boolean delete(String e) throws Exception {
-        return tiposInstrumento.delete(e);
+    public void delete(String e) throws Exception {
+        if (tiposInstrumento.delete(e)){
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+        }else {
+
+        }
     }
 
     //-----------------INSTRUMENTOS-------------------

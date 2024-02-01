@@ -106,11 +106,11 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la lista perfectamente a Service!!\n");
                         break;
                     case Protocol.UPDATETIPO:
-                        boolean p = (boolean) in.readObject();
+                        //boolean p = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que actualizo!!\n");
                         break;
                     case Protocol.DELETETIPO:
-                        boolean del = (boolean) in.readObject();
+                        //boolean del = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino!!\n");
                         break;
                     case Protocol.READINSTRUMENTO:
@@ -118,11 +118,11 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la lista de instrumentos perfectamente a Service!!\n");
                         break;
                     case Protocol.UPDATEINSTRUMENTO:
-                        boolean p_i = (boolean) in.readObject();
+                       // boolean p_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que actualizo instrumento!!\n");
                         break;
                     case Protocol.DELETEINSTRUMENTO:
-                        boolean del_i = (boolean) in.readObject();
+                       // boolean del_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino instrumento!!\n");
                         break;
 
@@ -208,31 +208,31 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public boolean update(TipoInstrumentoObj tipo) throws Exception {
+    public void update(TipoInstrumentoObj tipo) throws Exception {
         out.writeInt(Protocol.UPDATETIPO);
         out.writeObject(tipo);
         out.flush();
         System.out.println("Mande el mensaje de update a el server");
-        return false;
+
     }
 
     @Override
-    public boolean delete(TipoInstrumentoObj tipo) throws Exception {
+    public void delete(TipoInstrumentoObj tipo) throws Exception {
         out.writeInt(Protocol.DELETETIPO);
         out.writeObject(tipo);
         out.flush();
         System.out.println("Mande el mensaje de delete a el server");
 
-        return false;
+
     }
     @Override
-    public boolean delete(String tipoID) throws Exception {
+    public void delete(String tipoID) throws Exception {
         out.writeInt(Protocol.DELETETIPO);
         out.writeObject(tipoID);
         out.flush();
         System.out.println("Mande el mensaje de delete a el server");
 
-        return false;
+
     }
 
     //------------------------------------------------Instrumentos------------------------------------------------
