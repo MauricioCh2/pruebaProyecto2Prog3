@@ -4,6 +4,7 @@ import Protocol.Listas.UnidadMedList;
 import Protocol.TipoInstrumentoObj;
 import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
+import labServer.dao.DAOUnidadMedida;
 import org.xml.sax.SAXException;
 
 import javax.swing.*;
@@ -23,10 +24,13 @@ public class TiposInstrumentosModel {
     private JComboBox cmB_tiposIns;
     private DOM_tiposInstrumento dom;
     private PDF reporte;
+    DAOUnidadMedida daoMedidas;
 
     //Metodos----------------------------------------------------------------------------------------------------------
     public TiposInstrumentosModel(JTable table, JComboBox comb) throws ParserConfigurationException, IOException, TransformerException {
         listaInstrumentos = new ArrayList<>();
+        listaUnidades = new ArrayList<>();
+
         cmB_tiposIns = comb;
         tbl_tiposInst = table;
         dom = new DOM_tiposInstrumento();
@@ -37,6 +41,7 @@ public class TiposInstrumentosModel {
         boolean guardado = true;
        // if (current == null) { // en caso de no existir agregara uno nuevo
             listaInstrumentos.add(ins);
+        //    listaUnidades.add(unM);
             //guardado = createTipoXML(ins);
             //if(guardado){
               ServiceProxy.instance().create(ins);
@@ -66,7 +71,13 @@ public class TiposInstrumentosModel {
         }
 
     }
+    public List<UnidadMedida> getListaUnidades() {
+        return listaUnidades;
+    }
 
+    public void setListaUnidades(List<UnidadMedida> listaUnidades) {
+        this.listaUnidades = listaUnidades;
+    }
     public boolean update (TipoInstrumentoObj ins) throws Exception {
         boolean re;
 //        current.setCodigo(ins.getCodigo());
@@ -96,7 +107,7 @@ public class TiposInstrumentosModel {
     public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
         //dom.cargaTiposATable(tbl, comb);
         ServiceProxy.instance().read(listaInstrumentos);
-        ServiceProxy.instance().readUnidadesMedida(new UnidadMedList ());
+        ServiceProxy.instance().readUnidadesMedida(new UnidadMedList());
 
         //System.out.println("Si estoy devolviendo la lista  mi valor es: "+UnidadMedList.getList().get(0).getNombre());
 

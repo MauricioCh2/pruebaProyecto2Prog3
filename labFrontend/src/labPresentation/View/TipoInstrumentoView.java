@@ -1,5 +1,6 @@
 package labPresentation.View;
 
+import Protocol.UnidadMedida;
 import labPresentation.Controller.TiposInstrumentoController;
 
 import javax.swing.*;
@@ -7,6 +8,8 @@ import javax.swing.text.AbstractDocument;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TipoInstrumentoView {
     private JButton btn_guardar;
@@ -26,7 +29,7 @@ public class TipoInstrumentoView {
     private JLabel tx_Unidad;
     private JLabel tx_busqueda;
     private JScrollPane jscroll;
-    private JComboBox comboBoxUnidad;
+    private JComboBox<String> comboBoxUnidad;
     private TiposInstrumentoController tiposInstrumentoController;
 
     //Metodos----------------------------------------------------------------------------------------------------------
@@ -165,7 +168,4 @@ public class TipoInstrumentoView {
         return comboBoxUnidad;
     }
 
-    public void setComboBoxUnidad(JComboBox comboBoxUnidad) {
-        this.comboBoxUnidad = comboBoxUnidad;
-    }
 }

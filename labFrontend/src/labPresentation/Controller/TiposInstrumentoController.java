@@ -2,10 +2,13 @@ package labPresentation.Controller;
 
 
 import Protocol.IController;
+import Protocol.Listas.UnidadMedList;
 import Protocol.TipoInstrumentoObj;
+import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
 import labPresentation.Model.TiposInstrumentosModel;
 import labPresentation.View.TipoInstrumentoView;
+import labServer.dao.DAOUnidadMedida;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -21,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TiposInstrumentoController implements IController {
@@ -63,7 +68,7 @@ public class TiposInstrumentoController implements IController {
          btn_borrar = tpInst.getBtn_borrar();
          txF_codigo = tpInst.getTxF_Codigo();
          txF_nombre = tpInst.getTxF_Nombre();
-         txF_unidad = tpInst.getTxF_Unidad();
+       //  txF_unidad = tpInst.getTxF_Unidad();
          txF_busqueda = tpInst.getTxF_buscarNombre();
          chB_busqueda = tpInst.getChB_busqueda();
 
@@ -79,7 +84,17 @@ public class TiposInstrumentoController implements IController {
         ServiceProxy.instance().setTController(this);
         //this.instrumentos_controller = visitor; //THIS
     }
+    public static void agregar_categoriaUM(UnidadMedida unM, List<UnidadMedida>list) throws SQLException {
+        DAOUnidadMedida dao = new DAOUnidadMedida();
+        dao.readUnidadesMedida((UnidadMedList) list);
 
+        for (UnidadMedida unidadMedida : list) {
+
+            tpInst.getComboBoxUnidad().addItem("Kelvin");
+            tpInst.getComboBoxUnidad().addItem(unidadMedida.getNombre());
+        }
+        tpInst.getComboBoxUnidad().addItem(unM.getNombre());
+    }
     @Override
     public void update() {
         System.out.println("\n llegue al update ");
@@ -125,6 +140,9 @@ public class TiposInstrumentoController implements IController {
         }
 
     }
+
+
+
     //Metodos----------------------------------------------------------------------------------------------------------
     static private void borrar (){
 
@@ -150,11 +168,13 @@ public class TiposInstrumentoController implements IController {
                 throw new Exception("Hay campos vacios, por favor revisar");
             }else{
                 TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), txF_unidad.getText());
+
                 if(EDIT){
                     str_forUptade = instrumento.getNombre();
                     if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
                         JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
                         instrumentos_controller.agregar_categoriaCB(instrumento);
+
                         resetGui();
                     }else {
                         throw new Exception("a habido un error");
@@ -255,10 +275,10 @@ public class TiposInstrumentoController implements IController {
             isEmpty = true;
         }
 
-        if(tpInst.getTxF_Unidad().getText().isEmpty()){
+   /*     if(tpInst.getTxF_Unidad().getText().isEmpty()){
             tpInst.getTx_Unidad().setBorder(border);
             isEmpty = true;
-        }
+        }*/
 
 
         return isEmpty;
