@@ -41,19 +41,6 @@ public class TiposInstrumentoController implements IController {
     public TiposInstrumentoController() throws ParserConfigurationException, IOException, TransformerException {
         super();
 
-        //tpInst = view;
-       // tbl_listadoTipos = tpInst.getTbl_ListadoTipos();
-        //btn_borrar = tpInst.getBtn_borrar();
-       // txF_codigo = tpInst.getTxF_Codigo();
-       // txF_nombre = tpInst.getTxF_Nombre();
-       // txF_unidad = tpInst.getTxF_Unidad();
-       // txF_busqueda = tpInst.getTxF_buscarNombre();
-       // chB_busqueda = tpInst.getChB_busqueda();
-
-        //tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos());
-        //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
-
-       // tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos());
         EDIT = false;
 
     }
@@ -82,12 +69,9 @@ public class TiposInstrumentoController implements IController {
         //this.instrumentos_controller = visitor; //THIS
     }
 
-    public void cargar_datos(List<TipoInstrumentoObj> list){
-        System.out.println("Cargando datos de lista\n");
-        for (TipoInstrumentoObj obj:list) {
-            System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
-        }
-        tInstrumentosModel.setListaInstrumentos(list);
+    public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
+
+        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, null);
 
     }
 

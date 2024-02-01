@@ -183,7 +183,11 @@ public class ServiceProxy implements IService {
     private void iniciar_lista_tipos_instrumento( final List<TipoInstrumentoObj> list ){
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-                controller.cargar_datos(list);
+                try {
+                    controller.cargar_datos(list);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
         );

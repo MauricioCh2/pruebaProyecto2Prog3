@@ -35,21 +35,9 @@ public class TiposInstrumentosModel {
     public boolean save(TipoInstrumentoObj ins) throws Exception {
         //current = listaInstrumentos.get(ins.getCodigo());//busca el elemento
         boolean guardado = true;
-       // if (current == null) { // en caso de no existir agregara uno nuevo
-            //listaInstrumentos.add(ins); // mover
-            //guardado = createTipoXML(ins);
-            //if(guardado){
-              //ServiceProxy.instance().create(ins); //mover
+
                 ServiceProxy.instance().send_tipos_instrumento(ins);
 
-                //Object[] newRow = {ins.getCodigo(), ins.getNombre(), ins.getUnidad()}; mover
-                //DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel(); mover
-                //modelo.addRow(newRow); mover
-                //return  guardado;
-           // }
-       // }else{// en caso de no actualizara uno
-            //this.update(ins);
-        //}
         return guardado;
     }
 
@@ -72,20 +60,10 @@ public class TiposInstrumentosModel {
 
     public boolean update (TipoInstrumentoObj ins) throws Exception {
         boolean re;
-//        current.setCodigo(ins.getCodigo());
-//        current.setNombre(ins.getNombre());
-//        current.setUnidad(ins.getUnidad());
-        //actualizar con lista
-//        DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-//        Object[] fila = new Object[]{current.getCodigo(), current.getNombre(), current.getUnidad()};
-//        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
-//        modelo.removeRow(tbl_tiposInst.getSelectedRow());
-        //re = dom.updateTipoInstrumento(ins);
+
                 ServiceProxy.instance().update(ins);
         re = true;
 
-       // dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
-        ;
         return re;
     }
     private boolean createTipoXML(TipoInstrumentoObj tIns){
@@ -98,16 +76,18 @@ public class TiposInstrumentosModel {
 
     public void setListaInstrumentos(List<TipoInstrumentoObj> listaInstrumentos) {this.listaInstrumentos = listaInstrumentos;}
 
-    public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
-        //dom.cargaTiposATable(tbl, comb);
+    public void cargarDatos(JTable tbl, List<TipoInstrumentoObj>list,JComboBox comb) throws Exception {
+        System.out.println("Cargando datos de lista\n");
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        for (TipoInstrumentoObj obj:list) {
+            System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
 
-        //ServiceProxy.instance().read(listaInstrumentos);
-        //ServiceProxy.instance().readUnidadesMedida(new UnidadMedList ());
 
+            Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidadId()};
 
-        //System.out.println("Si estoy devolviendo la lista  mi valor es: "+UnidadMedList.getList().get(0).getNombre());
-
-        //ins.agregar_categoriaCB(instrumento);
+            modelo.addRow(newRow);
+        }
+        setListaInstrumentos(list);
     }
 
     public void inicializar_lista(){
