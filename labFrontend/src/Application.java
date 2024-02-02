@@ -22,6 +22,7 @@ public class Application {
              new MainController();
         }catch (Exception ex) {
             JOptionPane.showMessageDialog(null,"Error al conectar con el servidor, Por favor revice si esta en funcionamiento");
+            System.out.println("Error en application wtf"+ex.getMessage());
             ServiceProxy.instance().stop();//en caso de que el servidopr no este iniciado se cerrara
             System.exit(0);
         }

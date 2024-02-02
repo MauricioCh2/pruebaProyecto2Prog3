@@ -30,7 +30,7 @@ public class TiposInstrumentoController implements IController {
     private static Instrumentos_Controller instrumentos_controller; //THIS
     private static JTextField txF_codigo;
     private static JTextField txF_nombre;
-    private static JTextField txF_unidad;
+    private static JComboBox cB_unidad;
     private static JTextField txF_busqueda;
     private static JButton btn_borrar;
     private static JTable tbl_listadoTipos;
@@ -53,14 +53,14 @@ public class TiposInstrumentoController implements IController {
          btn_borrar = tpInst.getBtn_borrar();
          txF_codigo = tpInst.getTxF_Codigo();
          txF_nombre = tpInst.getTxF_Nombre();
-         txF_unidad = tpInst.getTxF_Unidad();
+         cB_unidad = tpInst.getcB_unidadMedida();
          txF_busqueda = tpInst.getTxF_buscarNombre();
          chB_busqueda = tpInst.getChB_busqueda();
 
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         //localService.setTipoinscontroller(this);
 
-        tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
+        tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad);
         //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
         ServiceProxy.instance().setTController(this);
@@ -72,7 +72,7 @@ public class TiposInstrumentoController implements IController {
         //this.instrumentos_controller = visitor; //THIS
     }
 
-    public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
+    public void cargarDatos(List<TipoInstrumentoObj> list) throws Exception {
         tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, instrumentos_controller.getCB_categoria());
     }
 
@@ -82,15 +82,20 @@ public class TiposInstrumentoController implements IController {
         if(pro == Protocol.RELOAD_UM){
             tInstrumentosModel.setListaUnidades((List<UnidadMedida>) o);
 
+            cargarDatosUnidades((List<UnidadMedida>) o);
         }
         if(pro == Protocol.RELOAD_TIP_INS){
             tInstrumentosModel.setListaInstrumentos((List<TipoInstrumentoObj> ) o );
 
-            cargar_datos((List<TipoInstrumentoObj> ) o);
+            cargarDatos((List<TipoInstrumentoObj> ) o);
         }
 
         //aqui llamamos al commit o algo asi
         //la cosa es que le cvaiga encima a la lista y la actualice
+    }
+
+    private void cargarDatosUnidades(List<UnidadMedida> lis) throws Exception {
+        tInstrumentosModel.cargarDatosUnidad(lis, cB_unidad);
     }
 
     public void iniciarlizar_lista_tipos_instrumento(){
@@ -159,7 +164,8 @@ public class TiposInstrumentoController implements IController {
             if(isTxFEmpty()){
                 throw new Exception("Hay campos vacios, por favor revisar");
             }else{
-                TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), txF_unidad.getText());
+                //cB_unidad.getSelectedItem().toString();
+                TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
                 if(EDIT){
                     str_forUptade = instrumento.getNombre();
                     if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
@@ -189,11 +195,11 @@ public class TiposInstrumentoController implements IController {
     }
     static private void limpiar(){
         txF_nombre.setText("");
-        txF_unidad.setText("");
+        cB_unidad.setSelectedIndex(0);
         if (!EDIT){
             txF_codigo.setText("");
             btn_borrar.setEnabled(false);
-            txF_unidad.setEnabled(true);
+            cB_unidad.setEnabled(true);
         }
     }
     static private  void rellenearTextFields(MouseEvent e){
@@ -206,7 +212,8 @@ public class TiposInstrumentoController implements IController {
                     DefaultTableModel modelo = (DefaultTableModel) tbl_listadoTipos.getModel();
                     txF_codigo.setText(String.valueOf(tbl_listadoTipos.getValueAt(tbl_listadoTipos.getSelectedRow(), modelo.findColumn("Codigo"))));
                     txF_nombre.setText(String.valueOf(tbl_listadoTipos.getValueAt(tbl_listadoTipos.getSelectedRow(), modelo.findColumn("Nombre"))));
-                    txF_unidad.setText(String.valueOf(tbl_listadoTipos.getValueAt(tbl_listadoTipos.getSelectedRow(), modelo.findColumn("Unidad"))));
+                    //cB_unidad.setSelectedIndex(String.valueOf(tbl_listadoTipos.getValueAt(tbl_listadoTipos.getSelectedRow(), modelo.findColumn("Unidad"))));
+                    cB_unidad.setSelectedItem(tbl_listadoTipos.getValueAt(tbl_listadoTipos.getSelectedRow(),modelo.findColumn("Unidad")));
 
                 }
             } else {
@@ -268,7 +275,7 @@ public class TiposInstrumentoController implements IController {
             isEmpty = true;
         }
 
-        if(tpInst.getTxF_Unidad().getText().isEmpty()){
+        if(tpInst.getcB_unidadMedida().getItemCount()== 0){
             tpInst.getTx_Unidad().setBorder(border);
             isEmpty = true;
         }

@@ -180,7 +180,7 @@ public class ServiceProxy implements IService {
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
-                System.out.println("Se detuvo en el catch de listen de service proxy");
+                System.out.println("Se detuvo en el catch de listen de service proxy: "+ex.getMessage());
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }

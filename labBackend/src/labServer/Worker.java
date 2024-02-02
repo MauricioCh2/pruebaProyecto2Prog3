@@ -25,9 +25,7 @@ public class Worker { // es cada socket
 
     boolean continuar; //importante para saber cuando termina el servicio de este socket
 
-    public int getNumeroWorker() {
-        return numeroWorker;
-    }
+
 
     public Worker(Server srv, ObjectInputStream in,  ObjectOutputStream out,int numW, IService service) {
         this.srv=srv;

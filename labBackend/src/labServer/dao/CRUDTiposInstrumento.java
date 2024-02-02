@@ -16,7 +16,7 @@ public class CRUDTiposInstrumento {
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,tipo.getCodigo());
         statement.setString(2,tipo.getNombre());
-        statement.setInt(3, Integer.parseInt(tipo.getUnidad()));
+        statement.setInt(3, (tipo.getUnidadId()));
 
         statement.executeUpdate();
         System.out.println("/n ----Crea tipos de instrumento----  "+tipo.getNombre()+"\n");
@@ -55,7 +55,7 @@ public class CRUDTiposInstrumento {
         return lista;
     }
 
-    public boolean update(TipoInstrumentoObj tipo) throws Exception {
+    public boolean update(TipoInstrumentoObj tipo) throws Exception {//en mi opinion es mas facil eliminar y caer encima en este tipo de casos, pero por el proyecto se hacce asi
         Connection connection =  new DataBaseConn().connection();
         String sql = "update  tipos_instrumento set nombre = ?  where id_tipo_instrumento = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
@@ -63,13 +63,13 @@ public class CRUDTiposInstrumento {
         statement.setString(2,tipo.getCodigo());
         statement.executeUpdate();
 
-//        if(){
-//            String sql2 = "update  tipos_instrumento set nombre = ?  where id = ?";
-//            PreparedStatement statement2 = connection.prepareStatement(sql);
-//            statement2.setString(1,tipo.getNombre());
-//            statement2.setString(2,tipo.getCodigo());
-//            statement2.executeUpdate();
-//        }
+
+        String sql2 = "update  tipos_instrumento set id_unidad_medida = ?  where id_tipo_instrumento = ?";
+        PreparedStatement statement2 = connection.prepareStatement(sql2);
+        statement2.setInt(1,tipo.getUnidadId());
+        statement2.setString(2,tipo.getCodigo());
+        statement2.executeUpdate();
+
 
 
 

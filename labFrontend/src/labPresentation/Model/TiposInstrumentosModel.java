@@ -1,6 +1,5 @@
 package labPresentation.Model;
 
-import Protocol.Listas.UnidadMedList;
 import Protocol.TipoInstrumentoObj;
 import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
@@ -11,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +21,15 @@ public class TiposInstrumentosModel {
     private TipoInstrumentoObj current;
     private JTable tbl_tiposInst;
     private JComboBox cmB_tiposIns;
+    private JComboBox cmB_UnidadMed;
     private DOM_tiposInstrumento dom;
     private PDF reporte;
 
     //Metodos----------------------------------------------------------------------------------------------------------
-    public TiposInstrumentosModel(JTable table, JComboBox comb) throws ParserConfigurationException, IOException, TransformerException {
+    public TiposInstrumentosModel(JTable table, JComboBox comb, JComboBox combUnidad) throws ParserConfigurationException, IOException, TransformerException {
         listaInstrumentos = new ArrayList<>();
         cmB_tiposIns = comb;
+        cmB_UnidadMed = combUnidad;
         tbl_tiposInst = table;
         dom = new DOM_tiposInstrumento();
         reporte = new PDF("tipos de instrumentos", dom);
@@ -35,10 +37,12 @@ public class TiposInstrumentosModel {
     public void save(TipoInstrumentoObj ins) throws Exception {
         DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
        // boolean guardado = true;
+                ins.setUnidad(getUnidadNom(ins.getUnidadId()));
                 ServiceProxy.instance().create(ins);
                 ServiceProxy.instance().send_tipos_instrumento(ins);
-                Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidadId()};
+                Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidad()};
                 model.addRow(newRow);
+                inicializar_lista();
        // return guardado;
     }
 
@@ -49,6 +53,7 @@ public class TiposInstrumentosModel {
             DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
             listaInstrumentos.remove(ins);//elimina elemento de la lista
             modelo.removeRow(fila);         //elimina elemento de la tabla
+            inicializar_lista();
             //dom.eliminarTipo(ins);
             //dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
 
@@ -64,6 +69,7 @@ public class TiposInstrumentosModel {
         boolean re;
 
                 ServiceProxy.instance().update(ins);
+                inicializar_lista();
         re = true;
 
         return re;
@@ -86,29 +92,82 @@ public class TiposInstrumentosModel {
         modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
         for (TipoInstrumentoObj obj:list) {
             System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
-
-            Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidadId()};
+            obj.setUnidad(getUnidadNom(obj.getUnidadId()));
+            Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidad()};
 
             modelo.addRow(newRow);
             ServiceProxy.instance().findById(obj.getUnidadId());
-            //comb.addItem(ServiceProxy.instance().getPrueba());
+            comb.addItem(obj.getNombre());
+
         }
        // setListaInstrumentos(list);
+    }
+    public void cargarDatosUnidad(List<UnidadMedida>list, JComboBox combU) throws Exception {
+
+        System.out.println("Cargando datos de lista unidad\n");
+
+        for (UnidadMedida obj:list) {
+            System.out.println("Recupere esta unidad: " + obj.getNombre());
+            combU.addItem(obj.getNombre());
+            //ServiceProxy.instance().findById(obj.getUnidadId());
+            //comb.addItem(ServiceProxy.instance().getPrueba());
+        }
+        // setListaInstrumentos(list);
     }
 
     public void inicializar_lista() throws Exception {
         //ServiceProxy.instance().inicializar_cliente();
         ServiceProxy.instance().readUnidadesMedida(listaUnidades);
         ServiceProxy.instance().read(listaInstrumentos);
+
     }
 
     //busqueda--------------------------------------
-    public boolean busquedaPorNombre(String nom, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        return dom.buscarTiposInsPorNom(nom, tbl);
+    public boolean busquedaPorNombre(String buscar, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        //return dom.buscarTiposInsPorNom(nom, tbl);
+        boolean alguno = false;
+        String buscarLower = buscar.toLowerCase();
+        for(TipoInstrumentoObj obj: listaInstrumentos){
+            String nombreActLower= obj.getNombre().toLowerCase();
+            String unidadActLower= obj.getUnidad().toLowerCase();
+            if (nombreActLower.contains(buscarLower)|unidadActLower.contains(buscarLower)){
+                Object[] newRow = {obj.getCodigo(), obj.getNombre(), obj.getUnidad()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                if (!alguno) {
+                    modelo.setRowCount(0);
+                }
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                alguno = true;
+            }
+        }
+        return alguno;
     }
 
     public boolean busquedaPorCodigo(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        return dom.buscarTiposInsPorCod(cod, tbl);
+        //return dom.buscarTiposInsPorCod(cod, tbl);
+        boolean alguno = false;
+        for(TipoInstrumentoObj obj: listaInstrumentos) {
+            String codigoActual = obj.getCodigo();
+            if (codigoActual.equals(cod)) {
+
+                Object[] newRow = {cod, obj.getCodigo(), obj.getUnidad()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                modelo.setRowCount(0);
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                alguno = true;
+            }
+        }
+        return alguno;
     }
 
 
@@ -121,5 +180,20 @@ public class TiposInstrumentosModel {
     }
 
 
-
+    public int getUnidadID(String selectedItem) {
+        for(UnidadMedida u: listaUnidades){
+            if(u.getNombre().equals(selectedItem)){
+                return u.getIdUnidadMedida();
+            }
+        }
+        return 0;
+    }
+    public String getUnidadNom(int selectedItem) {
+        for(UnidadMedida u: listaUnidades){
+            if(u.getIdUnidadMedida()==(selectedItem)){
+                return u.getNombre();
+            }
+        }
+        return "-";
+    }
 }
