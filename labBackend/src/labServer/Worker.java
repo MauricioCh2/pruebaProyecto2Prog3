@@ -32,7 +32,7 @@ public class Worker { // es cada socket
         this.in=in;
         this.out=out;
         this.service=service;
-        this.numeroWorker = numW+1;
+        this.numeroWorker = numW;
     }
     public void start(){
         try {
@@ -119,7 +119,7 @@ public class Worker { // es cada socket
 
                            message = new Message( Message.CREATE, " tipo instrumento", e.getNombre(), numeroWorker);
 
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch (Exception ex){
                             System.out.println("Catch del create tipos");
@@ -161,7 +161,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.UPDATE, " tipo instrumento", e.getNombre(), numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del update tipo: "+ ex.getMessage());
@@ -181,7 +181,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.DELETE, " tipo instrumento", tipoId, numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del delete tipo"+ ex.getMessage());
@@ -201,7 +201,7 @@ public class Worker { // es cada socket
 
                             message = new Message( Message.CREATE, " instrumento", e.getSerie(), numeroWorker);
 
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch (Exception ex){
                             System.out.println("Catch del create instrumentos: "+ ex.getMessage());
@@ -240,7 +240,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.UPDATE, " instrumento", e.getSerie(), numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del update instrumentos: "+ ex.getMessage());
@@ -258,7 +258,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.DELETE, " instrumento", tipoId, numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del delete instrumentos: "+ ex.getMessage());
@@ -277,7 +277,7 @@ public class Worker { // es cada socket
                         out.flush();
 
                         message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
-                        srv.deliver(message, numeroWorker);
+                        srv.deliver(message);
                         break;
 
                     case Protocol.READCALIBRACION:
@@ -311,7 +311,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.UPDATE, "a calibracion", String.valueOf(e.getNumeroCalibracion()), numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del update tipo");
@@ -329,7 +329,7 @@ public class Worker { // es cada socket
                             out.flush();
 
                             message = new Message( Message.DELETE, "a calibracion", tipoId, numeroWorker);
-                            srv.deliver(message, numeroWorker);
+                            srv.deliver(message);
 
                         }catch(Exception ex){
                             System.out.println("Catch del update tipo");
@@ -372,7 +372,7 @@ public class Worker { // es cada socket
         }
         //aca basicamente estara todo
     }
-    public void deliver(Message message, int numeroWorker){
+    public void deliver(Message message){
         try {
             System.out.println("Se entro al deliver del worker");
             out.writeInt(Protocol.DELIVER);//oiga estoyenviando un deliver

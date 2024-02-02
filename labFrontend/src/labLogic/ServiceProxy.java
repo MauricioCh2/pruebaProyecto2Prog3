@@ -113,7 +113,7 @@ public class ServiceProxy implements IService {
                             Message message=(Message)in.readObject();
                             int numeroWorker = in.readInt();
                             System.out.println("Mensaje de message en Service Proxy: /Protocol deliver "+message.getMessage());
-                            deliver(message, numeroWorker);
+                            deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
                     case Protocol.RELOAD_UM://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
@@ -224,11 +224,11 @@ public class ServiceProxy implements IService {
         }
     }
 
-    private void deliver( final Message message, final int num ){
+    private void deliver( final Message message){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
             // se cierran solos cuando termina de pocesar (no esta en un while)
                public void run(){
-                   deliver.deliver(message, num);
+                   deliver.deliver(message);
                }
            }
         );

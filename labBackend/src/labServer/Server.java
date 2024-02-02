@@ -18,11 +18,13 @@ import java.util.List;
 public class Server {
     ServerSocket srv;
     List<Worker> workers;
+    int current_num_worker;
     public Server() {
         try {
             srv = new ServerSocket(Protocol.PORT);
             workers =  Collections.synchronizedList(new ArrayList<Worker>());
             System.out.println("Servidor iniciado..."); //el server se inicio
+            current_num_worker = 0;
         } catch (IOException ex) {
             System.out.println(ex);
         }
@@ -45,8 +47,10 @@ public class Server {
                 out = new ObjectOutputStream(skt.getOutputStream());//limpiamos para que no se llenen de basura o ruido
                 System.out.println("Conexion Establecida...");
                 register(in,out, service);
-
-                Worker worker = new Worker(this,in,out,workers.size(), service); //crea nuevo worker
+                current_num_worker+=1;
+                System.out.println("Worker a agregar es : " + current_num_worker + "\n\n\n\n\n\n\n\n\n");
+                //current_num_worker = workers.size();
+                Worker worker = new Worker(this,in,out,current_num_worker, service); //crea nuevo worker
                 workers.add(worker);             // lo agrego (aun no sirve)
                 worker.start();                  //ahora si ya esta iniciando
 
@@ -78,10 +82,10 @@ public class Server {
     }
 
     //los sockets no saben lo que lo rodea, solo su padre (el server )
-    public void deliver(Message message, int numeroWorker){ //el server le dice a sus workers entregen el mensaje
+    public void deliver(Message message){ //el server le dice a sus workers entregen el mensaje
         for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
             System.out.println("Cantidad de workers: " + workers.size());
-            wk.deliver(message, numeroWorker);
+            wk.deliver(message);
         }
     }
 
