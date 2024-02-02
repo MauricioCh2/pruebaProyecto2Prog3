@@ -78,10 +78,17 @@ public class Server {
     }
 
     //los sockets no saben lo que lo rodea, solo su padre (el server )
-    public void deliver(Message message){ //el server le dice a sus workers entregen el mensaje
+    public void deliver(Message message, int numeroWorker){ //el server le dice a sus workers entregen el mensaje
         for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
             System.out.println("Cantidad de workers: " + workers.size());
-            wk.deliver(message);
+            wk.deliver(message, numeroWorker);
+        }
+    }
+
+    //los sockets no saben lo que lo rodea, solo su padre (el server )
+    public void send_numero_worker(int numeroWorker){ //el server le dice a sus workers entregen el mensaje
+        for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            wk.send_numero_worker( numeroWorker);
         }
     }
 

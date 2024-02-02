@@ -62,6 +62,15 @@ public class ServiceProxy implements IService {
             System.out.println("Excepcion: " + ex.getMessage());
         }
     }
+    public void solicitar_numero_worker(){
+        try {
+            out.writeInt(Protocol.REQUEST_NUMERO_WORKER);
+            out.flush();
+
+        }catch (Exception ex){
+            System.out.println("Excepcion: " + ex.getMessage());
+        }
+    }
 
     public void setIDeliver(IDeliver d){
         deliver = d;
@@ -102,8 +111,9 @@ public class ServiceProxy implements IService {
                         try {
                             System.out.println("Se entro al deliver en service proxy");
                             Message message=(Message)in.readObject();
+                            int numeroWorker = in.readInt();
                             System.out.println("Mensaje de message en Service Proxy: /Protocol deliver "+message.getMessage());
-                            deliver(message);
+                            deliver(message, numeroWorker);
                         } catch (ClassNotFoundException ex) {}
                         break;
                     case Protocol.RELOAD_UM://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
@@ -187,6 +197,16 @@ public class ServiceProxy implements IService {
                         }
                         break;
                     }
+                    case Protocol.SEND_NUMERO_WORKER: {
+                        try {
+                            System.out.println("Seteando worker\n\n\n\n\n\n\n");
+                            int numeroWorker = (int) in.readInt();
+                            set_numero_worker(numeroWorker);
+                        } catch (Exception ex) {
+                            System.out.println("Excepcion: " + ex.getMessage());
+                        }
+                        break;
+                    }
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -204,15 +224,25 @@ public class ServiceProxy implements IService {
         }
     }
 
-    private void deliver( final Message message ){
+    private void deliver( final Message message, final int num ){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
             // se cierran solos cuando termina de pocesar (no esta en un while)
                public void run(){
-                   deliver.deliver(message);
+                   deliver.deliver(message, num);
                }
            }
         );
     }
+    private void set_numero_worker(final int num ){
+        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run(){
+                                           deliver.set_numero_worker(num);
+                                       }
+                                   }
+        );
+    }
+
     private void update (Object ob, final int pro){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
                                        // se cierran solos cuando termina de pocesar (no esta en un while)
