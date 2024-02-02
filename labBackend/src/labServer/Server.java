@@ -46,7 +46,7 @@ public class Server {
                 System.out.println("Conexion Establecida...");
                 register(in,out, service);
 
-                Worker worker = new Worker(this,in,out, service); //crea nuevo worker
+                Worker worker = new Worker(this,in,out,workers.size(), service); //crea nuevo worker
                 workers.add(worker);             // lo agrego (aun no sirve)
                 worker.start();                  //ahora si ya esta iniciando
 

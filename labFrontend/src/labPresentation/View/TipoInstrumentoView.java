@@ -27,6 +27,7 @@ public class TipoInstrumentoView {
     private JLabel tx_Unidad;
     private JLabel tx_busqueda;
     private JScrollPane jscroll;
+    private JPanel pnl_mensajes;
     private TiposInstrumentoController tiposInstrumentoController;
 
     //Metodos----------------------------------------------------------------------------------------------------------
