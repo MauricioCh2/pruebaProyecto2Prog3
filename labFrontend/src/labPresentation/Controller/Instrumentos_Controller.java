@@ -68,7 +68,7 @@ public class Instrumentos_Controller implements IController {
             instrumentView.getBtn_borrar().setEnabled(false);
            // if (validar_excepciones(Integer.parseInt(instrumentView.getTxF_Maximo().getText()), Integer.parseInt(instrumentView.getTxF_Minimo().getText()), instrumentView.getTxF_Serie().getText())) {
             if (validar_excepciones(instrumentView.getTxF_Serie().getText())){
-                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), "", Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
+                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
 
                 if (!EDIT) {

@@ -97,7 +97,7 @@ public class TiposInstrumentosModel {
 
             modelo.addRow(newRow);
             //ServiceProxy.instance().findById(obj.getUnidadId());
-            comb.addItem(obj.getNombre());
+            comb.addItem(obj.getCodigo());
 
         }
        // setListaInstrumentos(list);

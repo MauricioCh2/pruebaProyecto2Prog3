@@ -11,18 +11,17 @@ import java.util.List;
 public class CRUDInstrumento {
     public void create(Instrumento instrumento) throws Exception {
         Connection connection =  new DataBaseConn().connection();
-        String sql = "insert into tipos_instrumento values (?,?,?,?,?,?)";
+        String sql = "INSERT INTO instrumentos (id_instrumentos, id_tipo_instrumento, descripcion, min, max, tolerancia) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, Integer.parseInt(instrumento.getSerie()));
-        statement.setString(2,instrumento.getTipo());
-        statement.setString(3,instrumento.getDescripcion());
-        statement.setInt(4,instrumento.getMinimo());
-        statement.setInt(5,instrumento.getMaximo());
-        statement.setDouble(6,instrumento.getTolerancia());
+        statement.setString(2, instrumento.getTipo());
+        statement.setString(3, instrumento.getDescripcion());
+        statement.setInt(4, instrumento.getMinimo());
+        statement.setInt(5, instrumento.getMaximo());
+        statement.setDouble(6, instrumento.getTolerancia());
 
         statement.executeUpdate();
-        System.out.println("Crea  instrumento.. "+ instrumento.getDescripcion()+"\n");
-
+        System.out.println("Crea instrumento: " + instrumento.getDescripcion() + "\n");
     }
 
     public List<Instrumento> read() throws Exception {
