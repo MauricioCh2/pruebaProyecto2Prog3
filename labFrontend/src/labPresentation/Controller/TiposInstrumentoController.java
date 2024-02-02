@@ -2,10 +2,13 @@ package labPresentation.Controller;
 
 
 import Protocol.IController;
+import Protocol.Listas.UnidadMedList;
 import Protocol.TipoInstrumentoObj;
+import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
 import labPresentation.Model.TiposInstrumentosModel;
 import labPresentation.View.TipoInstrumentoView;
+import labServer.dao.DAOUnidadMedida;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -21,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 public class TiposInstrumentoController implements IController {
@@ -71,6 +75,15 @@ public class TiposInstrumentoController implements IController {
 
     public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
         tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, null);
+    }
+    public static void agregar_categoriaUM(UnidadMedida unM, List<UnidadMedida>list) throws SQLException {
+        DAOUnidadMedida dao = new DAOUnidadMedida();
+        dao.readUnidadesMedida((UnidadMedList) list);
+
+        for (UnidadMedida unidadMedida : list) {
+            tpInst.getComboBoxUM().addItem(unidadMedida.getNombre());
+        }
+        tpInst.getComboBoxUM().addItem(unM.getNombre());
     }
 
     @Override

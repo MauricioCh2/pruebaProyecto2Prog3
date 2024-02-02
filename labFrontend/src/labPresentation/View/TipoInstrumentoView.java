@@ -27,6 +27,16 @@ public class TipoInstrumentoView {
     private JLabel tx_Unidad;
     private JLabel tx_busqueda;
     private JScrollPane jscroll;
+
+    public JComboBox getComboBoxUM() {
+        return comboBoxUM;
+    }
+
+    public void setComboBoxUM(JComboBox comboBoxUM) {
+        this.comboBoxUM = comboBoxUM;
+    }
+
+    private JComboBox comboBoxUM;
     private TiposInstrumentoController tiposInstrumentoController;
 
     //Metodos----------------------------------------------------------------------------------------------------------
