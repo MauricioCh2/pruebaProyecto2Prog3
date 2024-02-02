@@ -32,14 +32,14 @@ public class TiposInstrumentosModel {
         dom = new DOM_tiposInstrumento();
         reporte = new PDF("tipos de instrumentos", dom);
     }
-    public boolean save(TipoInstrumentoObj ins) throws Exception {
+    public void save(TipoInstrumentoObj ins) throws Exception {
         DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
-        boolean guardado = true;
+       // boolean guardado = true;
                 ServiceProxy.instance().create(ins);
                 ServiceProxy.instance().send_tipos_instrumento(ins);
                 Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidadId()};
                 model.addRow(newRow);
-        return guardado;
+       // return guardado;
     }
 
 
@@ -76,8 +76,10 @@ public class TiposInstrumentosModel {
     }
 
     public void setListaInstrumentos(List<TipoInstrumentoObj> listaInstrumentos) {this.listaInstrumentos = listaInstrumentos;}
+    public void setListaUnidades(List<UnidadMedida> listaUnidades) {this.listaUnidades = listaUnidades;}
 
     public void cargarDatos(JTable tbl, List<TipoInstrumentoObj>list,JComboBox comb) throws Exception {
+
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
         modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
@@ -87,12 +89,16 @@ public class TiposInstrumentosModel {
             Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidadId()};
 
             modelo.addRow(newRow);
+            ServiceProxy.instance().findById(obj.getUnidadId());
+            //comb.addItem(ServiceProxy.instance().getPrueba());
         }
        // setListaInstrumentos(list);
     }
 
-    public void inicializar_lista(){
-        ServiceProxy.instance().inicializar_cliente();
+    public void inicializar_lista() throws Exception {
+        //ServiceProxy.instance().inicializar_cliente();
+        ServiceProxy.instance().readUnidadesMedida(listaUnidades);
+        ServiceProxy.instance().read(listaInstrumentos);
     }
 
     //busqueda--------------------------------------

@@ -2,7 +2,9 @@ package labPresentation.Controller;
 
 
 import Protocol.IController;
+import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
+import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
 import labPresentation.Model.TiposInstrumentosModel;
 import labPresentation.View.TipoInstrumentoView;
@@ -25,6 +27,7 @@ import java.util.List;
 
 public class TiposInstrumentoController implements IController {
     private static TiposInstrumentosModel tInstrumentosModel;
+    private static Instrumentos_Controller instrumentos_controller; //THIS
     private static JTextField txF_codigo;
     private static JTextField txF_nombre;
     private static JTextField txF_unidad;
@@ -35,7 +38,7 @@ public class TiposInstrumentoController implements IController {
     //private static List<TipoInstrumentoObj> listaInstrumentos;
     private static TipoInstrumentoView tpInst;
     private static JCheckBox chB_busqueda;
-    private static Instrumentos_Controller instrumentos_controller; //THIS
+
     ServiceProxy localService;
     //Constructor------------------------------------------------------------------------------------------------------
     public TiposInstrumentoController() throws ParserConfigurationException, IOException, TransformerException {
@@ -70,12 +73,23 @@ public class TiposInstrumentoController implements IController {
     }
 
     public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
-        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, null);
+        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, instrumentos_controller.getCB_categoria());
     }
 
     @Override
-    public void update() {
+    public void update(Object o, int pro) throws Exception {
         System.out.println("\n llegue al update ");
+        if(pro == Protocol.RELOAD_UM){
+            tInstrumentosModel.setListaUnidades((List<UnidadMedida>) o);
+            System.out.println("GRACIAS SEÑOR JESUCRISTOPOOOOOO");
+        }
+        if(pro == Protocol.RELOAD_TIP_INS){
+            tInstrumentosModel.setListaInstrumentos((List<TipoInstrumentoObj> ) o );
+            System.out.println("agarre la lista##################################");
+
+            cargar_datos((List<TipoInstrumentoObj> ) o);
+        }
+
         //aqui llamamos al commit o algo asi
         //la cosa es que le cvaiga encima a la lista y la actualice
     }
@@ -157,14 +171,17 @@ public class TiposInstrumentoController implements IController {
                         throw new Exception("a habido un error");
                     }
                 } else {
-                    if (tInstrumentosModel.save(instrumento)) { //guarda elemento en la lista y en la tabla
+                    try {
+                        tInstrumentosModel.save(instrumento);
                         JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
                         instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
                         resetGui();
+                    }  //guarda elemento en la lista y en la tabla
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "si entro aquiiiiii");
+                        throw new Exception(e);
                     }
-                    else {
-                        throw new Exception("a habido un error");
-                    }
+
                 }
             }
         }catch(Exception ex ){

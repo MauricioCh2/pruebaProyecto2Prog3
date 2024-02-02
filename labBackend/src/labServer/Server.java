@@ -92,9 +92,9 @@ public class Server {
     }
 
 
-    public void update() {
-//        for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
-//            wk.update();
-//        }
+    public void update(Object abs, int protocol) {
+        for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            wk.update(abs, protocol);
+        }
     }
 }

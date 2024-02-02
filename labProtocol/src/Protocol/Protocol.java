@@ -5,6 +5,13 @@ public class Protocol {
     public static final int PORT = 1235;
 
     public static final int REGISTER = 1;
+    //protocolo de listas-------------------------------
+    public static final int RELOAD_ABS = 20;
+    public static final int RELOAD_UM = 21;
+    public static final int RELOAD_TIP_INS = 22;
+    public static final int RELOAD_INSTRUMENTO = 23;
+    public static final int RELOAD_CALIBRACION = 24;
+    public static final int  RELOAD_MEDICIONES = 25;
     //Respuestas del server-------------------------------------------------------------------------------------------------
     public static final int ERROR_NO_ERROR = 0;
     public static final int ERROR_LOGIN=1;

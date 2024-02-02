@@ -67,7 +67,7 @@ public class Worker { // es cada socket
                     case Protocol.READUNIDAD:
                         try{
                             System.out.println("Estoy en READunidad de worker");
-                            UnidadMedList lisU = (UnidadMedList) in.readObject();
+                            List<UnidadMedida> lisU = (List<UnidadMedida>) in.readObject();
                             out.writeInt(Protocol.READUNIDAD);
                             out.writeObject(service.readUnidadesMedida(lisU));
                             System.out.println("Le envio de vuelta la lista al service del ciente ");
@@ -75,9 +75,10 @@ public class Worker { // es cada socket
 
                             message = new Message( Message.READ, "UM", "Lisra Unidad");
                             srv.deliver(message);
+                            srv.update(lisU, Protocol.RELOAD_UM);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del read unidad: "+ ex.getMessage());
                             System.out.println(ex);
                             continuar = false;
                         }
@@ -85,18 +86,18 @@ public class Worker { // es cada socket
                     case Protocol.FINDIDUNIDAD:
                         try{
                             System.out.println("Estoy en FindUnidad de worker");
-                            String tipoId = (String) in.readObject();
+                            int idUn = (int) in.readObject();
 
                             out.writeInt(Protocol.FINDIDUNIDAD);
-                           // out.writeObject(service.delete(tipoId));
-                            System.out.println("Le envio de vuelta el id encontrado ");
+                            out.writeObject(service.findById(idUn));
+                            System.out.println("Le envio de vuelta el elemento encontrado "+service.findById(idUn).getNombre() );
                             out.flush();
 
-                            message = new Message( Message.DELETE, "CA", tipoId);
-                            srv.deliver(message);
+                           // message = new Message( Message.FIND, "CA", tipoId);
+                            //srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del find unidad: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -133,6 +134,7 @@ public class Worker { // es cada socket
 
                             message = new Message( Message.READ, "TI", "Lista Tipos");
                             srv.deliver(message);
+                            srv.update(lisT, Protocol.RELOAD_TIP_INS);
                         }catch (Exception ex){
                             System.out.println("Catch del read tipo");
                             continuar = false;
@@ -359,6 +361,16 @@ public class Worker { // es cada socket
             System.out.println("Se entro al deliver del worker");
             out.writeInt(Protocol.DELIVER);//oiga estoyenviando un deliver
             out.writeObject(message);
+            out.flush();
+            //aqui entrega solo a su propio cliente sin tener que propagar a todos
+        } catch (IOException ex) {
+        }
+    }
+    public void update(Object abs, int protocol){
+        try {
+            System.out.println("Se entro al deliver del worker");
+            out.writeInt(protocol);//oiga estoyenviando un deliver
+            out.writeObject(abs);
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {

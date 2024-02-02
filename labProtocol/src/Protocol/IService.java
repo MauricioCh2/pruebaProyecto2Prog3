@@ -11,7 +11,7 @@ public interface IService {
 
 
     //--------------Unidades de Medida---------------
-    public boolean readUnidadesMedida(UnidadMedList lis ) throws Exception;
+    public boolean readUnidadesMedida(List<UnidadMedida> lis ) throws Exception;
     public UnidadMedida findById(int id)throws Exception;
     //--------------TIPOS DE INTRUMENTO---------------
     public void create(TipoInstrumentoObj e) throws Exception;

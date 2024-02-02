@@ -37,7 +37,7 @@ public class Service implements IService {
    }
     //--------------Unidades de medida---------------
     @Override
-    public boolean readUnidadesMedida(UnidadMedList list) throws SQLException {
+    public boolean readUnidadesMedida(List<UnidadMedida> list) throws SQLException {
         System.out.println("Estoy en readUnidad en service ");
         return unidadMedida.readUnidadesMedida(list);
     }

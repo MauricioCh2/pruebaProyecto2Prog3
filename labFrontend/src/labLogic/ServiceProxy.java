@@ -24,6 +24,7 @@ public class ServiceProxy implements IService {
     IDeliver deliver;
     IController controller;
 
+
     public void register() throws Exception {
         connect();
         out.writeInt(Protocol.REGISTER);//le estoy diciendo que hacer
@@ -82,6 +83,7 @@ public class ServiceProxy implements IService {
         continuar=false;
     }
 
+
     public void listen(){
         System.out.println("Ejecutando listen de front end");
         int method;
@@ -101,6 +103,23 @@ public class ServiceProxy implements IService {
                             deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
+                    case Protocol.RELOAD_UM://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
+                        try {
+                            System.out.println("Se entro al deliver en service proxy");
+                            Object object=in.readObject();
+                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                            update(object,Protocol.RELOAD_UM);
+                        } catch (ClassNotFoundException ex) {}
+                        break;
+                    case Protocol.RELOAD_TIP_INS://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
+                        try {
+                            System.out.println("Se entro al deliver en service proxy");
+                            Object object=in.readObject();
+                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                            update(object,Protocol.RELOAD_TIP_INS);
+                        } catch (ClassNotFoundException ex) {}
+                        break;
+
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");break;
 
@@ -108,6 +127,10 @@ public class ServiceProxy implements IService {
                     case Protocol.READUNIDAD:
                         boolean res = (boolean) in.readObject();
                         System.out.println("Me llego la lista de unidad de medida perfectamente a Service!!\n");
+                        break;
+                    case Protocol.FINDIDUNIDAD:
+                         UnidadMedida med  = (UnidadMedida) in.readObject();
+                        System.out.println("Me llego el elemento buscado  de unidad de medida perfectamente a Service!!\n");
                         break;
                     //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
 
@@ -179,12 +202,25 @@ public class ServiceProxy implements IService {
            }
         );
     }
+    private void update (Object ob, final int pro){
+        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run(){
+                                           try {
+                                               controller.update(ob,pro);
+                                           } catch (Exception e) {
+                                               JOptionPane.showMessageDialog (null, e.getMessage());
+                                           }
+                                       }
+                                   }
+        );
+    }
 
     private void iniciar_lista_tipos_instrumento( final List<TipoInstrumentoObj> list ){
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 try {
-                    controller.cargar_datos(list);
+                    //controller.cargar_datos(list);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -206,7 +242,7 @@ public class ServiceProxy implements IService {
 
     //-------------------------------------------------------CRUD-------------------------------------------------------
     @Override
-    public boolean readUnidadesMedida(UnidadMedList lis) throws Exception{
+    public boolean readUnidadesMedida(List<UnidadMedida> lis) throws Exception{
         out.writeInt(Protocol.READUNIDAD);
         out.writeObject(lis);
         out.flush();
@@ -219,6 +255,7 @@ public class ServiceProxy implements IService {
         out.writeObject(id);
         out.flush();
         System.out.println("Mande el mensaje de Crear a el server");
+
         return null;
     }
     //---------------------------------------------Tipos Instrumento----------------------------------------------
