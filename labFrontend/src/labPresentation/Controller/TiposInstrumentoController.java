@@ -282,7 +282,7 @@ public class TiposInstrumentoController implements IController {
 
 
         return isEmpty;
-    }
+    }///
     private static void desmarcar(){
         tpInst.getTx_Nombre().setBorder(null);
         tpInst.getTx_Unidad().setBorder(null);
