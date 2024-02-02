@@ -25,6 +25,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TiposInstrumentoController implements IController {
@@ -76,7 +77,10 @@ public class TiposInstrumentoController implements IController {
     public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
         tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, null);
     }
-    public static void agregar_categoriaUM(UnidadMedida unM, List<UnidadMedida>list) throws SQLException {
+    public static void agregar_categoriaUM() throws SQLException {
+        List<UnidadMedida> list = new ArrayList<>();
+        UnidadMedida unM = new UnidadMedida();
+
         DAOUnidadMedida dao = new DAOUnidadMedida();
         dao.readUnidadesMedida((UnidadMedList) list);
 
@@ -165,6 +169,7 @@ public class TiposInstrumentoController implements IController {
                     if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
                         JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
                         instrumentos_controller.agregar_categoriaCB(instrumento);
+                        agregar_categoriaUM();
                         resetGui();
                     }else {
                         throw new Exception("a habido un error");

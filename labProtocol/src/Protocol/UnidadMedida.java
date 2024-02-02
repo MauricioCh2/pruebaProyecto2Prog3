@@ -13,6 +13,12 @@ public class UnidadMedida implements Serializable {
         simbolo = simbolo;
     }
 
+    public UnidadMedida() {
+        idUnidadMedida = 0;
+        nombre = "";
+        simbolo = "";
+    }
+
     public int getIdUnidadMedida() {
         return idUnidadMedida;
     }
