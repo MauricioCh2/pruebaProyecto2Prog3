@@ -70,9 +70,7 @@ public class TiposInstrumentoController implements IController {
     }
 
     public void cargar_datos(List<TipoInstrumentoObj> list) throws Exception {
-
         tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),list, null);
-
     }
 
     @Override

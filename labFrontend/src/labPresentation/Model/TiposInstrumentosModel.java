@@ -33,11 +33,12 @@ public class TiposInstrumentosModel {
         reporte = new PDF("tipos de instrumentos", dom);
     }
     public boolean save(TipoInstrumentoObj ins) throws Exception {
-        //current = listaInstrumentos.get(ins.getCodigo());//busca el elemento
+        DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
         boolean guardado = true;
-
+                ServiceProxy.instance().create(ins);
                 ServiceProxy.instance().send_tipos_instrumento(ins);
-
+                Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidadId()};
+                model.addRow(newRow);
         return guardado;
     }
 
@@ -79,15 +80,15 @@ public class TiposInstrumentosModel {
     public void cargarDatos(JTable tbl, List<TipoInstrumentoObj>list,JComboBox comb) throws Exception {
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
         for (TipoInstrumentoObj obj:list) {
             System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
-
 
             Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidadId()};
 
             modelo.addRow(newRow);
         }
-        setListaInstrumentos(list);
+       // setListaInstrumentos(list);
     }
 
     public void inicializar_lista(){
