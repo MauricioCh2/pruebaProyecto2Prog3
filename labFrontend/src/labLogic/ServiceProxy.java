@@ -1,7 +1,6 @@
 package labLogic;
 
 import Protocol.*;
-import Protocol.Listas.UnidadMedList;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -22,7 +21,8 @@ public class ServiceProxy implements IService {
     ObjectOutputStream out; // obj salida
 
     IDeliver deliver;
-    IController controller;
+    IController controllerTipo;
+    IController controllerInst;
 
 
     public void register() throws Exception {
@@ -66,7 +66,10 @@ public class ServiceProxy implements IService {
     public void setIDeliver(IDeliver d){
         deliver = d;
     }
-    public void setTController(IController c){controller = c;}
+    public void setTControllerTipo(IController c){
+        controllerTipo = c;}
+    public void setTControllerInstrumento(IController c){
+        controllerInst = c;}
     //Listening funtions----------------------------------------------
     boolean continuar = true;
     public void start(){
@@ -117,6 +120,14 @@ public class ServiceProxy implements IService {
                             Object object=in.readObject();
                             System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
                             update(object,Protocol.RELOAD_TIP_INS);
+                        } catch (ClassNotFoundException ex) {}
+                        break;
+                    case Protocol.RELOAD_INSTRUMENTO://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
+                        try {
+                            System.out.println("Se entro al deliver en service proxy");
+                            Object object=in.readObject();
+                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                            update(object,Protocol.RELOAD_INSTRUMENTO);
                         } catch (ClassNotFoundException ex) {}
                         break;
 
@@ -207,7 +218,8 @@ public class ServiceProxy implements IService {
                                        // se cierran solos cuando termina de pocesar (no esta en un while)
                                        public void run(){
                                            try {
-                                               controller.update(ob,pro);
+                                               controllerTipo.update(ob,pro);
+                                               controllerInst.update(ob,pro);
                                            } catch (Exception e) {
                                                JOptionPane.showMessageDialog (null, e.getMessage());
                                            }
@@ -333,9 +345,9 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public List<Instrumento> read_instrumentos(Instrumento listInst) throws Exception {
+    public List<Instrumento> read_instrumentos( ) throws Exception {
         out.writeInt(Protocol.READINSTRUMENTO);
-        out.writeObject(listInst);
+        //out.writeObject(listInst);
         out.flush();
         System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
         return null;

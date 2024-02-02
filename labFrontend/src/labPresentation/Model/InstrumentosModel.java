@@ -1,6 +1,7 @@
 package labPresentation.Model;
 
 import Protocol.Instrumento;
+import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import org.xml.sax.SAXException;
 
@@ -10,10 +11,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstrumentosModel {
 
         private ListaInstrumentos_E listaInstrumentos_e = new ListaInstrumentos_E();
+        private List<Instrumento> listaInstrumento;
         Instrumento current;
         JTable tbl_tiposInst;
         private DOM_Instrumento dom;
@@ -22,8 +26,18 @@ public class InstrumentosModel {
             tbl_tiposInst = table;
             dom = new DOM_Instrumento();
             reporte = new PDF("instrumentos", dom);
+            listaInstrumento = new ArrayList<>();
         }
-        public boolean instrumento_existente(String serie){
+
+    public List<Instrumento> getListaInstrumento() {
+        return listaInstrumento;
+    }
+
+    public void setListaInstrumento(List<Instrumento> listaInstrumento) {
+        this.listaInstrumento = listaInstrumento;
+    }
+
+    public boolean instrumento_existente(String serie){
             Instrumento ins = seleccionar_instrumento_Serie(serie);
             return ins != null;
         }
@@ -75,10 +89,16 @@ public class InstrumentosModel {
         //dom.cargaInstrumentosATable(tbl_tiposInst);
         ServiceProxy.instance().deleteInstrumentoId(serie);
     }
-    public void cargarDatos(JTable tbl) throws Exception {
-        //dom.cargaInstrumentosATable(tbl);
-        //ServiceProxy.instance().read_instrumentos(new Instrumento());
-        //ins.agregar_categoriaCB(instrumento);
+    public void cargarDatos(JTable tbl, List<Instrumento> list ) throws Exception {
+        System.out.println("Cargando datos de lista\n");
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
+        for (Instrumento obj:list) {
+            System.out.println("Recupere este  instrumento " + obj.getSerie());
+            Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
+            modelo.addRow(newRow);
+
+        }
     }
     public ListaInstrumentos_E getListaInstrumentosE(){
         return listaInstrumentos_e;
@@ -101,6 +121,9 @@ public class InstrumentosModel {
         reporte.createPDF();
     }
 
+    public void updateLista() throws Exception {
+        ServiceProxy.instance().read_instrumentos();
+    }
 }
 
 //}

@@ -42,7 +42,7 @@ public class TiposInstrumentosModel {
                 ServiceProxy.instance().send_tipos_instrumento(ins);
                 Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidad()};
                 model.addRow(newRow);
-                inicializar_lista();
+                updateLista();
        // return guardado;
     }
 
@@ -53,7 +53,7 @@ public class TiposInstrumentosModel {
             DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
             listaInstrumentos.remove(ins);//elimina elemento de la lista
             modelo.removeRow(fila);         //elimina elemento de la tabla
-            inicializar_lista();
+            updateLista();
             //dom.eliminarTipo(ins);
             //dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
 
@@ -69,7 +69,7 @@ public class TiposInstrumentosModel {
         boolean re;
 
                 ServiceProxy.instance().update(ins);
-                inicializar_lista();
+                updateLista();
         re = true;
 
         return re;
@@ -96,7 +96,7 @@ public class TiposInstrumentosModel {
             Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidad()};
 
             modelo.addRow(newRow);
-            ServiceProxy.instance().findById(obj.getUnidadId());
+            //ServiceProxy.instance().findById(obj.getUnidadId());
             comb.addItem(obj.getNombre());
 
         }
@@ -115,7 +115,7 @@ public class TiposInstrumentosModel {
         // setListaInstrumentos(list);
     }
 
-    public void inicializar_lista() throws Exception {
+    public void updateLista() throws Exception {
         //ServiceProxy.instance().inicializar_cliente();
         ServiceProxy.instance().readUnidadesMedida(listaUnidades);
         ServiceProxy.instance().read(listaInstrumentos);
@@ -152,8 +152,8 @@ public class TiposInstrumentosModel {
         //return dom.buscarTiposInsPorCod(cod, tbl);
         boolean alguno = false;
         for(TipoInstrumentoObj obj: listaInstrumentos) {
-            String codigoActual = obj.getCodigo();
-            if (codigoActual.equals(cod)) {
+            String codigoActual = obj.getCodigo().toLowerCase();
+            if (codigoActual.contains(cod.toLowerCase())) {
 
                 Object[] newRow = {cod, obj.getCodigo(), obj.getUnidad()};
                 DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();

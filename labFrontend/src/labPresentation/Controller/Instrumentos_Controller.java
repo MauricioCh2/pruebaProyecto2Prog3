@@ -1,6 +1,8 @@
 package labPresentation.Controller;
 
+import Protocol.IController;
 import Protocol.Instrumento;
+import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
@@ -17,8 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.List;
 
-public class Instrumentos_Controller  {
+public class Instrumentos_Controller implements IController {
     //private static InstrumentosView view;
 
     private  static InstrumentosModel model;
@@ -40,9 +43,26 @@ public class Instrumentos_Controller  {
         this.instrumentView = view;
         this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
-       model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos());
+        ServiceProxy.instance().setTControllerInstrumento(this);
+        //model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos());
+        model.updateLista();
+    }
+    @Override
+    public void update(Object o, int pro) throws Exception {
+        System.out.println("\n llegue al update ");
+        if(pro == Protocol.RELOAD_INSTRUMENTO){
+            model.setListaInstrumento((List<Instrumento>) o);
+            cargarDatos((List<Instrumento>) o);
+        }
+
+
+        //aqui llamamos al commit o algo asi
+        //la cosa es que le cvaiga encima a la lista y la actualice
     }
 
+    public void cargarDatos(List<Instrumento> list) throws Exception {
+        model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos(),list);
+    }
     public static void guardar_instrumento() {
         try {
             instrumentView.getBtn_borrar().setEnabled(false);
@@ -111,7 +131,7 @@ public class Instrumentos_Controller  {
     }
 
 
-    public static void limpiar_pnl_ingreso_txFields() {
+    public static void limpiar_pnl_ingreso_txFields() throws Exception {
         EDIT = false;
         instrumentView.getTxF_Serie().setEnabled(true);
         instrumentView.getBtn_borrar().setEnabled(false);
@@ -121,7 +141,7 @@ public class Instrumentos_Controller  {
         instrumentView.getTxF_Maximo().setText("");
         instrumentView.getTxF_Tolerancia().setText("");
         MainController.deselect();
-
+        model.updateLista();
     }
 
     public static void rellenar_textfields(MouseEvent e){
@@ -173,7 +193,11 @@ public class Instrumentos_Controller  {
                     break;
                 }
                 case "Limpiar": {
-                    limpiar_pnl_ingreso_txFields();
+                    try {
+                        limpiar_pnl_ingreso_txFields();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 case "Buscar": {

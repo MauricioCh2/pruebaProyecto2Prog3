@@ -13,7 +13,7 @@ public class CRUDInstrumento {
         Connection connection =  new DataBaseConn().connection();
         String sql = "insert into tipos_instrumento values (?,?,?,?,?,?)";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1,instrumento.getSerie());
+        statement.setInt(1, Integer.parseInt(instrumento.getSerie()));
         statement.setString(2,instrumento.getTipo());
         statement.setString(3,instrumento.getDescripcion());
         statement.setInt(4,instrumento.getMinimo());
@@ -25,7 +25,7 @@ public class CRUDInstrumento {
 
     }
 
-    public List<Instrumento> read(Instrumento ins) throws Exception {
+    public List<Instrumento> read() throws Exception {
         ArrayList<Instrumento> lista = new ArrayList<>();
         Connection connection =  new DataBaseConn().connection();
         String sql = "select * from instrumentos";

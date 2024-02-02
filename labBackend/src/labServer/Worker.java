@@ -143,7 +143,7 @@ public class Worker { // es cada socket
 //                            srv.deliver(message);
                             srv.update(lisT2, Protocol.RELOAD_TIP_INS);
                         }catch (Exception ex){
-                            System.out.println("Catch del read tipo");
+                            System.out.println("Catch del read tipo: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -164,7 +164,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del update tipo: "+ ex.getMessage());
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                             continuar = false;
                         }
@@ -184,7 +184,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del delete tipo"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -204,7 +204,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create tipos");
+                            System.out.println("Catch del create instrumentos: "+ ex.getMessage());
                             continuar = false;
 
                         }
@@ -212,17 +212,18 @@ public class Worker { // es cada socket
                     case Protocol.READINSTRUMENTO:
                         try{
                             System.out.println("Estoy en readTipo de worker");
-                            Instrumento ins = (Instrumento) in.readObject();
-
-                            out.writeInt(Protocol.READINSTRUMENTO);
-                            out.writeObject(service.read_instrumentos(ins)); // debe ser un read con name distinto
+                            //Instrumento ins = (Instrumento) in.readObject();
+                            List<Instrumento> lis = service.read_instrumentos();
+                            out.writeInt(Protocol.RELOAD_INSTRUMENTO);
+                            out.writeObject(lis); // debe ser un read con name distinto
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
                             //message = new Message( Message.READ, "Ins", "Lista Instrumento");
                             //srv.deliver(message);
+                            srv.update(lis, Protocol.RELOAD_INSTRUMENTO);
                         }catch (Exception ex){
-                            System.out.println("Catch del read instrumento");
+                            System.out.println("Catch del read instrumentos:"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -242,7 +243,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update instrumentos");
+                            System.out.println("Catch del update instrumentos: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -260,7 +261,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete instrumentos");
+                            System.out.println("Catch del delete instrumentos: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;

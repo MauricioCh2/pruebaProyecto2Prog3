@@ -63,8 +63,8 @@ public class TiposInstrumentoController implements IController {
         tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad);
         //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
-        ServiceProxy.instance().setTController(this);
-        tInstrumentosModel.inicializar_lista();
+        ServiceProxy.instance().setTControllerTipo(this);
+        tInstrumentosModel.updateLista();
         //tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 
 
@@ -107,11 +107,24 @@ public class TiposInstrumentoController implements IController {
         public void actionPerformed(ActionEvent e) {
             switch(e.getActionCommand()){
                 case "Guardar":{guardar(); break;}
-                case "Borrar":{borrar(); break;}
-                case "Limpiar":{limpiar(); break;}
+                case "Borrar":{
+                    try {
+                        borrar();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    break;}
+                case "Limpiar":{
+                    try {
+                        resetGui();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    break;}
             }
 
         }
+
     }
     public static class Tbl_tabla implements MouseListener { //se tiene que implementar todo aunque no se utilice en el caso del mouseListener
         @Override
@@ -141,7 +154,7 @@ public class TiposInstrumentoController implements IController {
 
     }
     //Metodos----------------------------------------------------------------------------------------------------------
-    static private void borrar (){
+    static private void borrar () throws Exception {
 
         int respuesta = JOptionPane.showConfirmDialog(
                 null,
@@ -202,6 +215,7 @@ public class TiposInstrumentoController implements IController {
             cB_unidad.setEnabled(true);
         }
     }
+
     static private  void rellenearTextFields(MouseEvent e){
         EDIT = true;
         txF_codigo.setEnabled(false);
@@ -296,13 +310,14 @@ public class TiposInstrumentoController implements IController {
         tInstrumentosModel.generarReporteGeneral();
     }
 
-    static private void resetGui(){ //limpia los textField y activa y desactiva lo necesario
+    static private void resetGui() throws Exception { //limpia los textField y activa y desactiva lo necesario
         limpiar();
         desmarcar();
         txF_codigo.setEnabled(true);
         txF_codigo.setText("");
         btn_borrar.setEnabled(false);
         EDIT = false;
+        tInstrumentosModel.updateLista();
     }
     public void add_visitor(Instrumentos_Controller ctl){
         this.instrumentos_controller = ctl; //THIS
