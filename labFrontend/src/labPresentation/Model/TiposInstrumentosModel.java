@@ -22,6 +22,7 @@ public class TiposInstrumentosModel {
     private TipoInstrumentoObj current;
     private JTable tbl_tiposInst;
     private JComboBox cmB_tiposIns;
+    private JComboBox cmBUnidadesMedidas;
     private DOM_tiposInstrumento dom;
     private PDF reporte;
     DAOUnidadMedida daoMedidas;
@@ -104,7 +105,7 @@ public class TiposInstrumentosModel {
         return listaInstrumentos;
     }
 
-    public void cargarDatos(JTable tbl, JComboBox comb) throws Exception {
+    public void cargarDatos(JTable tbl) throws Exception {
         //dom.cargaTiposATable(tbl, comb);
         ServiceProxy.instance().read(listaInstrumentos);
         ServiceProxy.instance().readUnidadesMedida(new UnidadMedList());

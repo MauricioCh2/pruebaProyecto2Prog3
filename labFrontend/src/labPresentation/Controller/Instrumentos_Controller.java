@@ -228,10 +228,11 @@ public class Instrumentos_Controller  {
         }
 
     }
-
-    public JComboBox getCB_categoria(){
+    public JComboBox getCBUnidadMedidas(){
         return  instrumentView.getCmB_Tipo();
     }
+
+
 
     public static void buscar() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
         try {

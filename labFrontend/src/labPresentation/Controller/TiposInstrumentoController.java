@@ -75,10 +75,10 @@ public class TiposInstrumentoController implements IController {
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         //localService.setTipoinscontroller(this);
 
-        tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), instrumentos_controller.getCB_categoria());
+        tInstrumentosModel = new TiposInstrumentosModel(tpInst.getTbl_ListadoTipos(), tpInst.getComboBoxUnidad());
         //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
-        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
+        tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos());
 
 
         ServiceProxy.instance().setTController(this);
