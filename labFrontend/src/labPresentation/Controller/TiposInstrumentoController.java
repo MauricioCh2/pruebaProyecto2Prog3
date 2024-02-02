@@ -81,11 +81,10 @@ public class TiposInstrumentoController implements IController {
         System.out.println("\n llegue al update ");
         if(pro == Protocol.RELOAD_UM){
             tInstrumentosModel.setListaUnidades((List<UnidadMedida>) o);
-            System.out.println("GRACIAS SEÑOR JESUCRISTOPOOOOOO");
+
         }
         if(pro == Protocol.RELOAD_TIP_INS){
             tInstrumentosModel.setListaInstrumentos((List<TipoInstrumentoObj> ) o );
-            System.out.println("agarre la lista##################################");
 
             cargar_datos((List<TipoInstrumentoObj> ) o);
         }

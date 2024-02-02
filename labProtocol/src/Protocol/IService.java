@@ -11,14 +11,14 @@ public interface IService {
 
 
     //--------------Unidades de Medida---------------
-    public boolean readUnidadesMedida(List<UnidadMedida> lis ) throws Exception;
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis ) throws Exception;
     public UnidadMedida findById(int id)throws Exception;
     //--------------TIPOS DE INTRUMENTO---------------
     public void create(TipoInstrumentoObj e) throws Exception;
 
-    public void send_tipos_instrumento(TipoInstrumentoObj obj);
+    public void send_tipos_instrumento(TipoInstrumentoObj obj);//borrar
 
-    public void agregar_tipo_instrumento(TipoInstrumentoObj obj);
+    public void agregar_tipo_instrumento(TipoInstrumentoObj obj);//borrar
 
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception;
 

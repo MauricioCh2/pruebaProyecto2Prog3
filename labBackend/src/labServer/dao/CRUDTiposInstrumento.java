@@ -30,7 +30,6 @@ public class CRUDTiposInstrumento {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(sql);
         while (result.next()) {
-
             TipoInstrumentoObj tipoIns = new TipoInstrumentoObj( result.getString(1), result.getString(2), result.getInt(3));
             lista.add(tipoIns);
             TiposInstrumentosList.list.add(tipoIns);
@@ -52,7 +51,7 @@ public class CRUDTiposInstrumento {
             lista.add(tipoIns);
             //TiposInstrumentosList.list.add(tipoIns);
         }
-        System.out.println("/n ----Lee la lista de tipos de instrumentos  Kata 2----  \n");
+        System.out.println("/n ----Lee la lista de tipos de instrumentos ----  \n");
         return lista;
     }
 

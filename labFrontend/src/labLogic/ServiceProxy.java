@@ -125,7 +125,7 @@ public class ServiceProxy implements IService {
 
                     //--------------------------------------------------Unidad Medida--------------------------------------------------
                     case Protocol.READUNIDAD:
-                        boolean res = (boolean) in.readObject();
+                        List<UnidadMedida> res = (List<UnidadMedida>) in.readObject();
                         System.out.println("Me llego la lista de unidad de medida perfectamente a Service!!\n");
                         break;
                     case Protocol.FINDIDUNIDAD:
@@ -242,12 +242,12 @@ public class ServiceProxy implements IService {
 
     //-------------------------------------------------------CRUD-------------------------------------------------------
     @Override
-    public boolean readUnidadesMedida(List<UnidadMedida> lis) throws Exception{
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis) throws Exception{
         out.writeInt(Protocol.READUNIDAD);
         out.writeObject(lis);
         out.flush();
         System.out.println("Mande el mensaje de leer UM a el server");
-        return false;
+        return lis;
     }
     @Override
     public UnidadMedida findById(int id)throws Exception{

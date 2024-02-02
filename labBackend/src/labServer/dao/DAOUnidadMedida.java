@@ -20,7 +20,7 @@ public class DAOUnidadMedida {
         return null;
 
     }
-    public boolean readUnidadesMedida(List<UnidadMedida> lis) throws SQLException{
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis) throws SQLException{
         System.out.println("estoy antes de la conexion");
 
         ArrayList<UnidadMedida> unidadMedidas = new ArrayList<>();
@@ -31,17 +31,15 @@ public class DAOUnidadMedida {
         String sql = "select * from unidades_medida";
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(sql);
-
+        lis = new ArrayList<>();
         //UnidadMedList list = new UnidadMedList();
         while (result.next()) {
 
             UnidadMedida unidadMedida = new UnidadMedida( result.getInt(1), result.getString(2), result.getString(3));
-            unidadMedidas.add(unidadMedida);
+            lis.add(unidadMedida);
 
-            //UnidadMedList.addObj(unidadMedida);
-            UnidadMedList.addObj(unidadMedida);
         }
         //UnidadMedList.updateList(unidadMedidas);
-        return true;
+        return lis;
     }
 }

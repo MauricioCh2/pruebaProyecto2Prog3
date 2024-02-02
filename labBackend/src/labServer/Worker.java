@@ -68,14 +68,15 @@ public class Worker { // es cada socket
                         try{
                             System.out.println("Estoy en READunidad de worker");
                             List<UnidadMedida> lisU = (List<UnidadMedida>) in.readObject();
+                            List<UnidadMedida> lisU2 = service.readUnidadesMedida(lisU);
                             out.writeInt(Protocol.READUNIDAD);
-                            out.writeObject(service.readUnidadesMedida(lisU));
+                            out.writeObject(lisU2);
                             System.out.println("Le envio de vuelta la lista al service del ciente ");
                             out.flush();
 
-                            message = new Message( Message.READ, "UM", "Lisra Unidad");
+                            message = new Message( Message.READ, "UM", "Lista Unidad");
                             srv.deliver(message);
-                            srv.update(lisU, Protocol.RELOAD_UM);
+                            srv.update(lisU2, Protocol.RELOAD_UM);
 
                         }catch(Exception ex){
                             System.out.println("Catch del read unidad: "+ ex.getMessage());
@@ -126,15 +127,16 @@ public class Worker { // es cada socket
                         try{
                             System.out.println("Estoy en readTipo de worker");
                             List<TipoInstrumentoObj> lisT = (List<TipoInstrumentoObj>) in.readObject();
+                            List<TipoInstrumentoObj> lisT2 = service.read(lisT);
 
                             out.writeInt(Protocol.READTIPO);
-                            out.writeObject(service.read(lisT));
+                            out.writeObject(lisT2);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
                             message = new Message( Message.READ, "TI", "Lista Tipos");
                             srv.deliver(message);
-                            srv.update(lisT, Protocol.RELOAD_TIP_INS);
+                            srv.update(lisT2, Protocol.RELOAD_TIP_INS);
                         }catch (Exception ex){
                             System.out.println("Catch del read tipo");
                             continuar = false;
@@ -149,10 +151,11 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.UPDATETIPO);
                             //out.writeObject(service.update(e));
+                            service.update(e);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "TI", "Lista Tipos");
+                            message = new Message( Message.UPDATE, "TI", e.getNombre());
                             srv.deliver(message);
 
                         }catch(Exception ex){
@@ -168,10 +171,11 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.DELETETIPO);
                             //out.writeObject(service.delete(tipoId));
+                            service.delete(tipoId);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "TI", "Lista Tipos");
+                            message = new Message( Message.DELETE, "TI", tipoId);
                             srv.deliver(message);
 
                         }catch(Exception ex){

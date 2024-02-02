@@ -45,12 +45,13 @@ public class TiposInstrumentosModel {
 
     public void eliminar(String ins, int fila){
         try{
+            ServiceProxy.instance().delete(ins);
             DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
             listaInstrumentos.remove(ins);//elimina elemento de la lista
             modelo.removeRow(fila);         //elimina elemento de la tabla
             //dom.eliminarTipo(ins);
             //dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
-            ServiceProxy.instance().delete(ins);
+
 
 
         } catch (Exception e){

@@ -23,12 +23,8 @@ public class Service implements IService {
         calibraciones = new CRUDCalibraciones();
         mediciones = new CRUDMediciones();
         unidadMedida = new DAOUnidadMedida();
-        data = new LocalData();
-        try {
-            data.setListaTipos(this.read());
-        }catch (Exception ex){
-            System.out.println("Mensaje Excepcion: " + ex.getMessage());
-        }
+        //data = new LocalData();
+
     }
 
 
@@ -37,7 +33,7 @@ public class Service implements IService {
    }
     //--------------Unidades de medida---------------
     @Override
-    public boolean readUnidadesMedida(List<UnidadMedida> list) throws SQLException {
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> list) throws SQLException {
         System.out.println("Estoy en readUnidad en service ");
         return unidadMedida.readUnidadesMedida(list);
     }
