@@ -78,7 +78,7 @@ public class CalibracionesController {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
 
-                    if (num < (instru.getMaximo() + 1)) {
+                    if (num < Math.abs((instru.getMaximo()-instru.getMinimo()) + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             LocalDate date = LocalDate.now();
