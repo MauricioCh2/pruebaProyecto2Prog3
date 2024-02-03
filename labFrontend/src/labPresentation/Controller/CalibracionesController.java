@@ -81,6 +81,7 @@ public class CalibracionesController implements IController {
             num = 0;
             try {
                 if (textMediciones.getText().isEmpty()) {
+                    calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
                     num = Integer.parseInt(textMediciones.getText());
@@ -134,6 +135,7 @@ public class CalibracionesController implements IController {
     public static  void buscarCalibraciones(){
         try {
             if(textNumeroB.getText().isEmpty() ){
+               calibracionesView.getNumeroLabelBusqueda().setText("<html><u><font color='red'>Numero:</font></u></html>");
                 throw new Exception("El campo de número de búsqueda de la calibración, se encuentra vacío. Por favor, complete el espacio.");
             }else{
                     if(!modelo.busquedaCalibracion(instru.getSerie(),textNumeroB.getText(),tableCalibraciones)){//este buscara por numero con un equal

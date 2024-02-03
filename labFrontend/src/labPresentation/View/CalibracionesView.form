@@ -98,7 +98,7 @@
                         </constraints>
                         <properties/>
                       </component>
-                      <component id="91134" class="javax.swing.JLabel">
+                      <component id="91134" class="javax.swing.JLabel" binding="MedicionesLabel">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -223,7 +223,7 @@
               <title-color color="-16777216"/>
             </border>
             <children>
-              <component id="e3313" class="javax.swing.JLabel">
+              <component id="e3313" class="javax.swing.JLabel" binding="NumeroLabelBusqueda">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
