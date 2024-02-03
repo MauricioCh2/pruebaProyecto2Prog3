@@ -22,13 +22,25 @@ public class JDOM {
     private static String FILENAME;
 
     public JDOM() {
-
+        this.int_user_logs_folder();
     }
     private void generarRutaArchivo(int numeroWorker) {
         String idUsuario = String.valueOf(numeroWorker);
         String dir = "labFrontend\\user_logs\\";
         FILENAME = dir + "data_usuario_" + idUsuario + ".xml";
         System.out.println("ruta: " + FILENAME);
+    }
+
+    private void int_user_logs_folder() {
+        String dir = "labFrontend\\user_logs\\";
+        File logsFolder = new File(dir);
+        if (!logsFolder.exists()) {
+            if (logsFolder.mkdirs()) {
+                System.out.println("Carpeta 'user_logs' creada");
+            } else {
+                System.out.println("Error al crear la carpeta 'user_logs'");
+            }
+        }
     }
 
 
