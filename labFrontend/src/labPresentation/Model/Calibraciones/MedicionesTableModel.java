@@ -1,5 +1,6 @@
 package labPresentation.Model.Calibraciones;
 
+import Protocol.Mediciones;
 import labPresentation.Model.TableModel;
 
 import java.util.List;

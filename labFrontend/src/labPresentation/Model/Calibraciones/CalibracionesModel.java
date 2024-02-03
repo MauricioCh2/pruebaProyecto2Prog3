@@ -2,6 +2,7 @@ package labPresentation.Model.Calibraciones;
 
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
