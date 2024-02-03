@@ -136,7 +136,7 @@ public class Instrumentos_Controller implements IController {
         instrumentView.getTxF_Minimo().setText("");
         instrumentView.getTxF_Maximo().setText("");
         instrumentView.getTxF_Tolerancia().setText("");
-        instrumentView.getCmB_Tipo().setSelectedItem(0);
+        instrumentView.getCmB_Tipo().setSelectedIndex(0);
         MainController.deselect();
         model.updateLista();
     }

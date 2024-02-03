@@ -1,8 +1,6 @@
-package labServer.dao;
+package data;
 
 import Protocol.Instrumento;
-import Protocol.Listas.TiposInstrumentosList;
-import Protocol.TipoInstrumentoObj;
 import Protocol.UnidadMedida;
 
 import java.sql.*;

@@ -1,8 +1,6 @@
-package labServer.dao;
+package data;
 
-import Protocol.Listas.TiposInstrumentosList;
 import Protocol.Mediciones;
-import Protocol.TipoInstrumentoObj;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,6 +1,5 @@
-package labServer.dao;
+package data;
 
-import Protocol.Listas.UnidadMedList;
 import Protocol.UnidadMedida;
 import java.sql.*;
 import java.util.ArrayList;

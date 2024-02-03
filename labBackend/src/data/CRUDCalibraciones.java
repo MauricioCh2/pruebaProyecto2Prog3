@@ -1,8 +1,6 @@
-package labServer.dao;
+package data;
 
 import Protocol.Calibraciones;
-import Protocol.Listas.TiposInstrumentosList;
-import Protocol.TipoInstrumentoObj;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
