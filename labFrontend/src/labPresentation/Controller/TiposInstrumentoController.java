@@ -178,7 +178,7 @@ public class TiposInstrumentoController implements IController {
                 throw new Exception("Hay campos vacios, por favor revisar");
             }else{
                 //cB_unidad.getSelectedItem().toString();
-                if(tpInst.getTx_Codigo().getText().length()<=4) {
+                if(tpInst.getTxF_Codigo().getText().length()<=4) {
                     TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
                     if (EDIT) {
                         str_forUptade = instrumento.getNombre();

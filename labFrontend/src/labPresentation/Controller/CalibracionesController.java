@@ -254,7 +254,7 @@ public class CalibracionesController implements IController {
         private void cargar_tablaMediciones() {
             //System.out.println("Valor: " + Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
             int med = Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
-
+            
             modelo_mediciones.cargar_tablaMediciones(instru, med);
             EDITAR_MEDICIONES = true;// I needed it
             calibracionesView.getTextMediciones().setEnabled(false);// I needed it
