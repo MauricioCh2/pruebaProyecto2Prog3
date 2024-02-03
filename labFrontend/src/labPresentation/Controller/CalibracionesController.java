@@ -86,7 +86,7 @@ public class CalibracionesController implements IController {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
 
-                    if (num < (instru.getMaximo() + 1)) {
+                    if (num <= (Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             LocalDate date = LocalDate.now();
@@ -252,14 +252,14 @@ public class CalibracionesController implements IController {
             }
         }
         private void cargar_tablaMediciones() {
-            //System.out.println("Valor: " + Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
-            int med = Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
-            
-            modelo_mediciones.cargar_tablaMediciones(instru, med);
-            EDITAR_MEDICIONES = true;// I needed it
-            calibracionesView.getTextMediciones().setEnabled(false);// I needed it
-
-
+            if (tableCalibraciones.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
+            }else {
+                int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
+                modelo_mediciones.cargar_tablaMediciones(instru, med);
+                EDITAR_MEDICIONES = true;
+                calibracionesView.getTextMediciones().setEnabled(false);
+            }
         }
 
         @Override
@@ -275,7 +275,7 @@ public class CalibracionesController implements IController {
 
 public static String toStringt(){
         if(instru != null){
-            return  instru.getSerie() + " - " +  instru.getDescripcion() + "(" + instru.getMinimo()+"-"+instru.getMaximo() +" "+instru.getUnidad() +")";
+            return  instru.getSerie() + " - " +  instru.getDescripcion() + "(" + instru.getMinimo()+" a "+instru.getMaximo() +" "+instru.getUnidad() +")";
         }else{
             return "No hay instrumento cargado";
         }
