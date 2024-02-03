@@ -182,8 +182,8 @@ public class TiposInstrumentoController implements IController {
                 if(EDIT){
                     str_forUptade = instrumento.getNombre();
                     if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
-                        JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
-                        instrumentos_controller.agregar_categoriaCB(instrumento);
+                        //JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
+                        //instrumentos_controller.agregar_categoriaCB(instrumento);
                         resetGui();
                     }else {
                         throw new Exception("a habido un error");
@@ -191,8 +191,8 @@ public class TiposInstrumentoController implements IController {
                 } else {
                     try {
                         tInstrumentosModel.save(instrumento);
-                        JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
-                        instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
+                        //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+                        //instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
                         resetGui();
                     }  //guarda elemento en la lista y en la tabla
                     catch (Exception e) {

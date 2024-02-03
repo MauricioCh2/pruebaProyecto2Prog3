@@ -90,6 +90,7 @@ public class TiposInstrumentosModel {
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
         modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
+        comb.removeAllItems();
         for (TipoInstrumentoObj obj:list) {
             System.out.println("Recupere este tipo de instrumento " + obj.getNombre());
             obj.setUnidad(getUnidadNom(obj.getUnidadId()));
@@ -105,7 +106,7 @@ public class TiposInstrumentosModel {
     public void cargarDatosUnidad(List<UnidadMedida>list, JComboBox combU) throws Exception {
 
         System.out.println("Cargando datos de lista unidad\n");
-
+        combU.removeAllItems();
         for (UnidadMedida obj:list) {
             System.out.println("Recupere esta unidad: " + obj.getNombre());
             combU.addItem(obj.getNombre());

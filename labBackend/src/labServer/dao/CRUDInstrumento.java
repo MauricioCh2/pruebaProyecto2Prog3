@@ -31,8 +31,8 @@ public class CRUDInstrumento {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(sql);
         while (result.next()) {
-
-            Instrumento instrumento = new Instrumento( result.getString(1), result.getString(2), result.getString(3), result.getInt(4),result.getInt(5), result.getDouble(6));
+ //public Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia )
+            Instrumento instrumento = new Instrumento( result.getString(1), result.getString(3), result.getString(2), result.getInt(4),result.getInt(5), result.getDouble(6));
             lista.add(instrumento);
             //TiposInstrumentosList.list.add(instrumento);
         }
@@ -41,13 +41,24 @@ public class CRUDInstrumento {
     }
 
     public boolean update(Instrumento instrumento) throws Exception {
-        System.out.println("actualizo   instrumento.. "+ instrumento.getDescripcion()+"\n");
+        Connection connection = new DataBaseConn().connection();
+        String sql = "UPDATE instrumentos SET id_tipo_instrumento = ?, descripcion = ?, min = ?, max = ?, tolerancia = ? WHERE id_instrumentos = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, instrumento.getTipo());
+        statement.setString(2, instrumento.getDescripcion());
+        statement.setInt(3, instrumento.getMinimo());
+        statement.setInt(4, instrumento.getMaximo());
+        statement.setDouble(5, instrumento.getTolerancia());
+        statement.setInt(6, Integer.parseInt(instrumento.getSerie()));
+        statement.executeUpdate();
+
+        System.out.println("Instrumento actualizado: " + instrumento.getDescripcion() + "\n");
         return true;
     }
 
     public boolean delete(Instrumento instrumento) throws Exception {
         Connection connection =  new DataBaseConn().connection();
-        String sql = "delete from   instrumentos  where id_tipo_instrumento = ?";
+        String sql = "delete from   instrumentos  where id_instrumentos = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,instrumento.getSerie());
         statement.executeUpdate();
@@ -58,7 +69,7 @@ public class CRUDInstrumento {
 
     public boolean delete(String e) throws Exception {
         Connection connection =  new DataBaseConn().connection();
-        String sql = "delete from   instrumentos  where id_tipo_instrumento = ?";
+        String sql = "delete from   instrumentos  where id_instrumentos = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,e);
         statement.executeUpdate();

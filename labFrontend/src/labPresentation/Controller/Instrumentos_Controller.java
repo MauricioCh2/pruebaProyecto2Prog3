@@ -44,7 +44,6 @@ public class Instrumentos_Controller implements IController {
         this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         ServiceProxy.instance().setTControllerInstrumento(this);
-        //model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos());
         model.updateLista();
     }
     @Override
@@ -54,10 +53,6 @@ public class Instrumentos_Controller implements IController {
             model.setListaInstrumento((List<Instrumento>) o);
             cargarDatos((List<Instrumento>) o);
         }
-
-
-        //aqui llamamos al commit o algo asi
-        //la cosa es que le cvaiga encima a la lista y la actualice
     }
 
     public void cargarDatos(List<Instrumento> list) throws Exception {
@@ -68,7 +63,8 @@ public class Instrumentos_Controller implements IController {
             instrumentView.getBtn_borrar().setEnabled(false);
            // if (validar_excepciones(Integer.parseInt(instrumentView.getTxF_Maximo().getText()), Integer.parseInt(instrumentView.getTxF_Minimo().getText()), instrumentView.getTxF_Serie().getText())) {
             if (validar_excepciones(instrumentView.getTxF_Serie().getText())){
-                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
+                //Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia )
+                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem().toString()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
 
                 if (!EDIT) {
@@ -140,6 +136,7 @@ public class Instrumentos_Controller implements IController {
         instrumentView.getTxF_Minimo().setText("");
         instrumentView.getTxF_Maximo().setText("");
         instrumentView.getTxF_Tolerancia().setText("");
+        instrumentView.getCmB_Tipo().setSelectedItem(0);
         MainController.deselect();
         model.updateLista();
     }
@@ -157,8 +154,8 @@ public class Instrumentos_Controller implements IController {
                     instrumentView.getTxF_Minimo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Minimo"))));
                     instrumentView.getTxF_Maximo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Maximo"))));
                     instrumentView.getTxF_Tolerancia().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Tolerancia"))));
-                    instrumentView.getCmB_Tipo().setSelectedItem("");
-                    //instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());
+                    //instrumentView.getCmB_Tipo().setSelectedItem("");
+                    instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());
 
                 }
             } else {
