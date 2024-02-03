@@ -55,5 +55,7 @@ public class Protocol {
     public static final int READMEDICIONES = 501;
     public static final int UPDATEMEDICIONES = 502;
     public static final int DELETEMEDICIONES = 503;
+    public static final int GETLISTAMEDICIONES = 504;
+
 
 }
