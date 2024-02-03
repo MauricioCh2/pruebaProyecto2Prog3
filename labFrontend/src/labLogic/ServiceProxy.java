@@ -454,7 +454,11 @@ public class ServiceProxy implements IService {
     }
 
 
-    public Mediciones read(Mediciones medida) throws Exception {
+    public List<Mediciones> read(Mediciones medida) throws Exception{
+        out.writeInt(Protocol.READCALIBRACION);
+        out.writeObject(medida);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
         return null;
     }
 
