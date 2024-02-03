@@ -23,6 +23,8 @@ public class ServiceProxy implements IService {
     IDeliver deliver;
     IController controllerTipo;
     IController controllerInst;
+    IController controllerCal;
+    IController controllerMed;
 
 
     public void register() throws Exception {
@@ -70,6 +72,8 @@ public class ServiceProxy implements IService {
         controllerTipo = c;}
     public void setTControllerInstrumento(IController c){
         controllerInst = c;}
+    public void setControllerCal(IController c){
+        controllerCal = c;}
     //Listening funtions----------------------------------------------
     boolean continuar = true;
     public void start(){
@@ -106,33 +110,37 @@ public class ServiceProxy implements IService {
                             deliver(message);
                         } catch (ClassNotFoundException ex) {}
                         break;
+                    //Reload/ refresco de listas--------------------------------------------------------------------------------------
                     case Protocol.RELOAD_UM://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
-                        try {
-                            System.out.println("Se entro al deliver en service proxy");
-                            Object object=in.readObject();
-                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                            update(object,Protocol.RELOAD_UM);
-                        } catch (ClassNotFoundException ex) {}
+                        System.out.println("Se entro al deliver en service proxy");
+                        Object objectU=in.readObject();
+                        System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                        update(objectU,Protocol.RELOAD_UM);
                         break;
                     case Protocol.RELOAD_TIP_INS://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
-                        try {
-                            System.out.println("Se entro al deliver en service proxy");
-                            Object object=in.readObject();
-                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                            update(object,Protocol.RELOAD_TIP_INS);
-                        } catch (ClassNotFoundException ex) {}
+                        System.out.println("Se entro al deliver en service proxy");
+                        Object objectT=in.readObject();
+                        System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                        update(objectT,Protocol.RELOAD_TIP_INS);
                         break;
                     case Protocol.RELOAD_INSTRUMENTO://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
-                        try {
-                            System.out.println("Se entro al deliver en service proxy");
-                            Object object=in.readObject();
-                            System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                            update(object,Protocol.RELOAD_INSTRUMENTO);
-                        } catch (ClassNotFoundException ex) {}
+                        System.out.println("Se entro al deliver en service proxy");
+                        Object objectI=in.readObject();
+                        System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                        update(objectI,Protocol.RELOAD_INSTRUMENTO);
                         break;
-
+                    case Protocol.RELOAD_CALIBRACION:
+                        System.out.println("Se entro al deliver en service proxy");
+                        Object objectC=in.readObject();
+                        System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                        update(objectC,Protocol.RELOAD_CALIBRACION);
+                        break;
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");break;
+
+
+
+
 
                     //--------------------------------------------------Unidad Medida--------------------------------------------------
                     case Protocol.READUNIDAD:
@@ -215,16 +223,17 @@ public class ServiceProxy implements IService {
     }
     private void update (Object ob, final int pro){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
-                                       // se cierran solos cuando termina de pocesar (no esta en un while)
-                                       public void run(){
-                                           try {
-                                               controllerTipo.update(ob,pro);
-                                               controllerInst.update(ob,pro);
-                                           } catch (Exception e) {
-                                               JOptionPane.showMessageDialog (null, e.getMessage());
-                                           }
-                                       }
-                                   }
+            // se cierran solos cuando termina de pocesar (no esta en un while)
+               public void run(){
+                   try {
+                       controllerTipo.update(ob,pro);
+                       controllerInst.update(ob,pro);
+                       controllerCal.update(ob,pro);
+                   } catch (Exception e) {
+                       JOptionPane.showMessageDialog (null, e.getMessage());
+                   }
+               }
+           }
         );
     }
 
@@ -392,9 +401,9 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public List<Calibraciones> read(Calibraciones calibracion) throws Exception {
+    public List<Calibraciones> readCalibracion(String idIns) throws Exception {
         out.writeInt(Protocol.READCALIBRACION);
-        out.writeObject(calibracion);
+        out.writeObject(idIns);
         out.flush();
         System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
         return null;

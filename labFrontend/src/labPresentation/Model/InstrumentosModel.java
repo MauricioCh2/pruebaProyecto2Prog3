@@ -64,20 +64,9 @@ public class InstrumentosModel {
 
     public boolean actualizar(Instrumento ins) throws Exception {
         boolean respuesta;
-        //current = seleccionar_instrumento_Serie(ins.getSerie());
-        //current.setDescripcion(ins.getDescripcion());
-        //current.setMaximo(ins.getMaximo());
-        //current.setMinimo(ins.getMinimo());
-        //current.setTolerancia(ins.getTolerancia());
-        //current.setTipo(ins.getTipo());
-        //respuesta = dom.updateInstrumento(ins);
-        //dom.cargaInstrumentosATable(tbl_tiposInst);//refresca la tabla
-//        DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-//        Object[] fila = new Object[]{current.getSerie(), current.getDescripcion(), current.getMinimo(), current.getMaximo(), current.getTolerancia()};
-//        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
-//        modelo.removeRow(tbl_tiposInst.getSelectedRow());
         respuesta = true;
                 ServiceProxy.instance().update(ins);
+                updateLista();
         return respuesta;
     }
 

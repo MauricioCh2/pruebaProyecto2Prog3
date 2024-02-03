@@ -1,7 +1,10 @@
 package labPresentation.Controller;
 
 import Protocol.Calibraciones;
+import Protocol.IController;
 import Protocol.Instrumento;
+import Protocol.Protocol;
+import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
 import labPresentation.View.CalibracionesView;
@@ -19,8 +22,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
-public class CalibracionesController {
+public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
 
     //private Calibraciones Model;
@@ -38,10 +42,14 @@ public class CalibracionesController {
     private static int numeroCalibracion;
     private static Calibraciones currentC;
 
-    public static void setInstru(Instrumento instru) {
+    public static void setInstru(Instrumento instru) throws Exception {
         CalibracionesController.instru = instru;
         //modelo.cargarDatos(tableCalibraciones, instru.getSerie());
+        updateLista(instru.getSerie());
+    }
 
+    public static void updateLista(String id) throws Exception {
+        ServiceProxy.instance().readCalibracion(id);
     }
 
     public static void cargarEstado() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
@@ -50,7 +58,7 @@ public class CalibracionesController {
     }
 
     public CalibracionesController(){
-
+        ServiceProxy.instance().setControllerCal(this);
     }
     public void init(CalibracionesView view) throws ParserConfigurationException, IOException, TransformerException {
         calibracionesView = view;
@@ -140,6 +148,16 @@ public class CalibracionesController {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    @Override
+    public void update(Object o, int pro) throws Exception {
+        System.out.println("\n llegue al update ");
+        if(pro == Protocol.RELOAD_CALIBRACION){
+            modelo.setListC((java.util.List<Calibraciones>) o);
+            modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o);
+        }
+    }
+
     public static class BtnsCalibraciones implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
@@ -264,9 +282,10 @@ public static String toStringt(){
 
 }
 
-public static void update(){
+public static void update() throws Exception {
         calibracionesView.getTx_instrumento().setText(toStringt());
         calibracionesView.getTx_instrumento().setForeground(Color.RED);
+    updateLista(instru.getSerie());
 }
 
 

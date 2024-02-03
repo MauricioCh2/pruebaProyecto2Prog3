@@ -40,7 +40,7 @@ public class MainController {
 
 
     }
-    public static void selecInsCalibrar(Instrumento ins){
+    public static void selecInsCalibrar(Instrumento ins) throws Exception {
         app.enableCalib();
         CalibracionesController.setInstru(ins);
         CalibracionesController.update();

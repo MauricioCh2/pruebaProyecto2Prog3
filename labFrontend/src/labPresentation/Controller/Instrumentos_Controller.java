@@ -243,6 +243,9 @@ public class Instrumentos_Controller implements IController {
                 MainController.selecInsCalibrar(model.busquedaInstrumento(no_Serie));
             } catch (XPathExpressionException | ParserConfigurationException | IOException | SAXException ex) {
                 throw new RuntimeException(ex);
+
+            } catch (Exception ex) {
+                System.out.println("Error al seleccionar calibracion: "+ ex.getMessage());
             }
 
 

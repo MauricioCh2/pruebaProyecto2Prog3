@@ -44,7 +44,7 @@ public interface IService {
     //-----------------CALIBRACIONES------------------
     public void create(Calibraciones calibracion) throws Exception;
 
-    public List<Calibraciones> read(Calibraciones calibracion) throws Exception;
+    public List<Calibraciones> readCalibracion( String id ) throws Exception;
 
     public void update(Calibraciones calibracion) throws Exception;
 

@@ -269,34 +269,41 @@ public class Worker { // es cada socket
                         break;
                     //--------------------------------------------------CALIBRACIONES--------------------------------------------------
                     case Protocol.CREATECALIBRACION:
-                        System.out.println("Estoy en CREATE CALIBRACIONES de worker");
-                        Calibraciones cal = (Calibraciones) in.readObject();
-                        service.create(cal);
+                        try{
+                            System.out.println("Estoy en CREATE CALIBRACIONES de worker");
+                            Calibraciones cal = (Calibraciones) in.readObject();
+                            service.create(cal);
 
-                        out.writeInt(Protocol.CREATECALIBRACION);
-                        out.writeObject(cal);
+                            out.writeInt(Protocol.CREATECALIBRACION);
+                            out.writeObject(cal);
 
-                        out.flush();
+                            out.flush();
 
-                        message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
-                        srv.deliver(message);
+                            message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
+                            srv.deliver(message);
+                        }catch(Exception ex){
+                            System.out.println("Catch del create  calibraciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
                         break;
 
                     case Protocol.READCALIBRACION:
                         try{
                             System.out.println("Estoy en readCalibracion de worker");
-                            //List<Calibraciones> lisT = (List<Calibraciones>) in.readObject();
-                            Calibraciones cali = (Calibraciones) in.readObject();
+                            String idIns = (String) in.readObject();
+                            List<Calibraciones> lis = service.readCalibracion(idIns);
 
-                            out.writeInt(Protocol.READCALIBRACION);
-                            out.writeObject(service.read(cali));
+                            out.writeInt(Protocol.RELOAD_CALIBRACION);
+                            out.writeObject(lis);
                             System.out.println("Ya le mande de vuelta la lista de calibraciones");
                             out.flush();
 
                             //message = new Message( Message.READ, "CA", "Lista Calibracion");
                             //srv.deliver(message);
+                            srv.update(lis, Protocol.RELOAD_CALIBRACION);
+
                         }catch (Exception ex){
-                            System.out.println("Catch del read tipo");
+                            System.out.println("Catch del read calibracion:"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -316,7 +323,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del update calibracion"+ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -334,7 +341,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del delete calibracion: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;

@@ -32,7 +32,7 @@ public class Aplication extends JFrame{
         //Seteos basicos------------------------------------------------------------------------------------
         setContentPane(pnl_Aplication);// pone el panel prncipal en la ventana
         this.setTitle("SILAB: Sistema de Laboratirio industrial");
-        this.setSize(1010, 450);
+        this.setSize(1025, 500);
         this.setResizable(true);
 
         addWindowListener(new WindowAdapter() {

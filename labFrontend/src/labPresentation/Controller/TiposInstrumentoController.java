@@ -178,28 +178,32 @@ public class TiposInstrumentoController implements IController {
                 throw new Exception("Hay campos vacios, por favor revisar");
             }else{
                 //cB_unidad.getSelectedItem().toString();
-                TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
-                if(EDIT){
-                    str_forUptade = instrumento.getNombre();
-                    if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
-                        //JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
-                        //instrumentos_controller.agregar_categoriaCB(instrumento);
-                        resetGui();
-                    }else {
-                        throw new Exception("a habido un error");
-                    }
-                } else {
-                    try {
-                        tInstrumentosModel.save(instrumento);
-                        //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
-                        //instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
-                        resetGui();
-                    }  //guarda elemento en la lista y en la tabla
-                    catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "si entro aquiiiiii");
-                        throw new Exception(e);
-                    }
+                if(tpInst.getTx_Codigo().getText().length()<=4) {
+                    TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
+                    if (EDIT) {
+                        str_forUptade = instrumento.getNombre();
+                        if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
+                            //JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
+                            //instrumentos_controller.agregar_categoriaCB(instrumento);
+                            resetGui();
+                        } else {
+                            throw new Exception("ERROR: al editar");
+                        }
+                    } else {
+                        try {
+                            tInstrumentosModel.save(instrumento);
+                            //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+                            //instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
+                            resetGui();
+                        }  //guarda elemento en la lista y en la tabla
+                        catch (Exception e) {
 
+                            throw new Exception(e);
+                        }
+
+                    }
+                }else{
+                    throw new Exception("ERROR: por favor no introduzca mas de 4 caracteres en el codigo");
                 }
             }
         }catch(Exception ex ){

@@ -138,8 +138,8 @@ public class Service implements IService {
     }
 
     @Override
-    public List<Calibraciones> read(Calibraciones cali) throws Exception {
-        return calibraciones.read(cali);
+    public List<Calibraciones> readCalibracion(String idIns) throws Exception {
+        return calibraciones.read(idIns);
     }
 
     @Override

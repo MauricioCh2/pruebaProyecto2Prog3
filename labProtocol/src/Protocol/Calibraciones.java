@@ -1,9 +1,10 @@
 package Protocol;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Calibraciones {
+public class Calibraciones implements Serializable {
     private List<Mediciones> medicionesL;
 
     private int numeroCalibracion;
