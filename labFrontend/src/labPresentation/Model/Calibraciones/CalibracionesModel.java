@@ -46,6 +46,26 @@ public class CalibracionesModel {
             }
 
     }
+    public boolean calibrado(Mediciones mediciones, Instrumento instrumentoCalibrado) {
+        String mensaje;
+        try {
+            double valorReferencia = mediciones.getValorReferencia();
+            double valorLectura = mediciones.getValorMarcado();
+            double tolerancia = instrumentoCalibrado.getTolerancia();
+            double limiteInferior = valorReferencia - tolerancia;
+            double limiteSuperior = valorReferencia + tolerancia;
+
+            if (valorLectura < limiteInferior || valorLectura > limiteSuperior) {
+                mensaje =  "<html><div style='text-align: center;'> Según la última calibración, registrada, <br> el instrumento " + instrumentoCalibrado.toString() + " <br>se encuentra fuera del rango de tolerancia <br>, y requiere ser calibrado.</div></html>";
+                return false;
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        mensaje = "El instrumento: "+ instrumentoCalibrado.toString() +" se encuentra calibrado.";
+        return true;
+    }
     public void cargarDatos( JTable tbl, List<Calibraciones> list){
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();

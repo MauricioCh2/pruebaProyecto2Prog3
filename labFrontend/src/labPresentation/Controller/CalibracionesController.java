@@ -230,7 +230,6 @@ public class CalibracionesController implements IController {
             calibracionesView.getBorrarButton().setEnabled(true);
             calibracionesView.getMedicionesPanel().setVisible(true);
             cargar_tablaMediciones();
-
         }
 
 

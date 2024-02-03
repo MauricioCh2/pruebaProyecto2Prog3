@@ -38,32 +38,15 @@ public class MedicionesModel {
         double valorM = obj.getMinimo();
         for (int i = 1; i <= med; i++) {
             lis.add(new Mediciones(i, valorM, 0.0));
-            valorM += valorIntervalo;
             Object[] fila = new Object[]{i, valorM, 0.0};
             model.addRow(fila);
+            valorM += valorIntervalo;
         }
 
 
         //this.validarToleranciaMedicion(listM, obj);
     }
 
-
-    public void validarToleranciaMedicion(Mediciones mediciones, Instrumento instrumentoCalibrado) {
-        try {
-            double valorReferencia = mediciones.getValorReferencia();
-            double valorLectura = mediciones.getValorMarcado();
-            double tolerancia = instrumentoCalibrado.getTolerancia();
-            double limiteInferior = valorReferencia - tolerancia;
-            double limiteSuperior = valorReferencia + tolerancia;
-
-            if (valorLectura < limiteInferior || valorLectura > limiteSuperior) {
-                // mediciones.resaltar();
-                JOptionPane.showMessageDialog(null, "El instrumento presenta un problema. La medición está fuera del rango de tolerancia.", "Información", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
         List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;
