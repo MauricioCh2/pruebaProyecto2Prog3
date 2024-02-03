@@ -16,10 +16,12 @@ public class Aplication extends JFrame{
     private JPanel pnl_tiposDeInstrumentos;
     private JPanel pnl_instrumentos;
     private JPanel pnl_Calibraciones;
+    private JPanel pnl_forMessages;
     private InstrumentosView instrumentosView_items;
     private TipoInstrumentoView instrumentoView;
     private CalibracionesView instrumentosView_calibs;
     private AcercaDeView acercadeView;
+    private MensajesView mensajesView;
     public  Aplication() throws ParserConfigurationException, IOException, TransformerException {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");}
@@ -30,7 +32,7 @@ public class Aplication extends JFrame{
         //Seteos basicos------------------------------------------------------------------------------------
         setContentPane(pnl_Aplication);// pone el panel prncipal en la ventana
         this.setTitle("SILAB: Sistema de Laboratirio industrial");
-        this.setSize(900, 450);
+        this.setSize(1025, 500);
         this.setResizable(true);
 
         addWindowListener(new WindowAdapter() {
@@ -67,6 +69,9 @@ public class Aplication extends JFrame{
         this.acercadeView = new AcercaDeView();
         tbbP_Eleccion.setComponentAt(3,acercadeView.getPanel());
 
+        pnl_forMessages.setLayout(new BorderLayout());
+        this.mensajesView = new MensajesView();
+        pnl_forMessages.add(mensajesView.getPnl_principal());
     }
     public void configurarVentana(JPanel panel, int width, int heigth){
         setContentPane(panel);//añadimos el panel
@@ -97,4 +102,7 @@ public class Aplication extends JFrame{
     }
 
 
+    public MensajesView getMessageView() {
+        return mensajesView;
+    }
 }

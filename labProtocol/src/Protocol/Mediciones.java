@@ -1,8 +1,9 @@
 package Protocol;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Mediciones {
+public class Mediciones implements Serializable {
     private double valorReferencia;  //Valor que debería ser obtenido.
     private double valorMarcado;   //Valor que marcó el instrumento.
     private int numMedicion;

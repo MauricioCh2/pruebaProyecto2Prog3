@@ -2,8 +2,9 @@
 package labServer;
 
 import Protocol.*;
-import Protocol.Listas.UnidadMedList;
-import labServer.dao.*;
+import data.*;
+import data.*;
+
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -16,12 +17,15 @@ public class Service implements IService {
     private CRUDCalibraciones calibraciones;
     private CRUDMediciones mediciones;
     private DAOUnidadMedida unidadMedida;
+    private LocalData data;
     public Service() {
         tiposInstrumento = new CRUDTiposInstrumento();
         instrumento = new CRUDInstrumento();
         calibraciones = new CRUDCalibraciones();
         mediciones = new CRUDMediciones();
         unidadMedida = new DAOUnidadMedida();
+        //data = new LocalData();
+
     }
 
 
@@ -30,7 +34,7 @@ public class Service implements IService {
    }
     //--------------Unidades de medida---------------
     @Override
-    public boolean readUnidadesMedida(UnidadMedList list) throws SQLException {
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> list) throws SQLException {
         System.out.println("Estoy en readUnidad en service ");
         return unidadMedida.readUnidadesMedida(list);
     }
@@ -47,19 +51,37 @@ public class Service implements IService {
         System.out.print("Estoy en create en service  \n");
         if (tiposInstrumento.findById(e.getCodigo())== null){
             tiposInstrumento.create(e);
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado con exito!");
+
         }else{
-            throw new Exception("Este elemento ya existe");
+            throw new Exception("ERROR: Este codigo ya existe");
         }
     }
+
+    @Override
+    public void send_tipos_instrumento(TipoInstrumentoObj obj) {}
+    @Override
+    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {
+        data.getListaTipos().add(obj);
+        data.imprimir_lista_tipos();
+    }
+
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
         System.out.print("Estoy en read en service  \n");
         return tiposInstrumento.read(e);
     }
+
+    @Override
+    public List<TipoInstrumentoObj> read() throws Exception {
+        System.out.print("Estoy en read  tipos en service\n");
+        return tiposInstrumento.read();
+    }
+
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
          if (tiposInstrumento.update(e)){
-             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito");
+             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito!");
          }else{
              //no se si tirar la exepcion aqui o  como ya esta en el worker
          }
@@ -68,7 +90,7 @@ public class Service implements IService {
     @Override
     public void delete(TipoInstrumentoObj e) throws Exception {
         if (tiposInstrumento.delete(e)){
-            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento eliminado con exito!");
         }else {
 
         }
@@ -76,7 +98,7 @@ public class Service implements IService {
     @Override
     public void delete(String e) throws Exception {
         if (tiposInstrumento.delete(e)){
-            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento eliminado con exito!");
         }else {
 
         }
@@ -85,29 +107,47 @@ public class Service implements IService {
     //-----------------INSTRUMENTOS-------------------
     @Override
     public void create(Instrumento inst) throws Exception {
-        instrumento.create(inst);
+        if (instrumento.findById(inst.getSerie())== null){
+            instrumento.create(inst);
+            JOptionPane.showMessageDialog(null, "Instrumento agregado con exito!");
+        }else{
+            throw new Exception("ERROR: Este numero de serie ya existe");
+        }
     }
 
     @Override
-    public List<Instrumento> read_instrumentos(Instrumento e) throws Exception {
+    public List<Instrumento> read_instrumentos( ) throws Exception {
         System.out.print("Estoy en read de instrumentos en service  \n");
-        return instrumento.read(e);
+        return instrumento.read();
     }
 
 
     @Override
     public void update(Instrumento inst) throws Exception {
-         instrumento.update(inst);
+        if (instrumento.update(inst)){
+            JOptionPane.showMessageDialog(null, "Instrumento actualizado con exito!");
+        }else{
+            //no se si tirar la exepcion aqui o  como ya esta en el worker
+        }
     }
 
     @Override
     public void delete(Instrumento inst) throws Exception {
-         instrumento.delete(inst);
+
+        if (instrumento.delete(inst)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     @Override
     public void deleteInstrumentoId(String e) throws Exception {
-         instrumento.delete(e);
+        if (instrumento.delete(e)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     //-----------------CALIBRACIONES------------------
@@ -119,8 +159,8 @@ public class Service implements IService {
     }
 
     @Override
-    public List<Calibraciones> read(Calibraciones cali) throws Exception {
-        return calibraciones.read(cali);
+    public List<Calibraciones> readCalibracion(String idIns) throws Exception {
+        return calibraciones.read(idIns);
     }
 
     @Override
@@ -155,5 +195,9 @@ public class Service implements IService {
     @Override
     public Mediciones read(Mediciones medida) throws Exception {
         return mediciones.read(medida);
+    }
+
+    public List<TipoInstrumentoObj> get_lista_tipo_instrumento(){
+        return data.getListaTipos();
     }
 }

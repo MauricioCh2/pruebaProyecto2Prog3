@@ -1,6 +1,8 @@
 package labPresentation.Controller;
 
+import Protocol.IController;
 import Protocol.Instrumento;
+import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
@@ -17,8 +19,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.List;
 
-public class Instrumentos_Controller  {
+public class Instrumentos_Controller implements IController {
     //private static InstrumentosView view;
 
     private  static InstrumentosModel model;
@@ -40,24 +43,37 @@ public class Instrumentos_Controller  {
         this.instrumentView = view;
         this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
-       model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos());
+        ServiceProxy.instance().setTControllerInstrumento(this);
+        model.updateLista();
+    }
+    @Override
+    public void update(Object o, int pro) throws Exception {
+        System.out.println("\n llegue al update ");
+        if(pro == Protocol.RELOAD_INSTRUMENTO){
+            model.setListaInstrumento((List<Instrumento>) o);
+            cargarDatos((List<Instrumento>) o);
+        }
     }
 
+    public void cargarDatos(List<Instrumento> list) throws Exception {
+        model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos(),list);
+    }
     public static void guardar_instrumento() {
         try {
             instrumentView.getBtn_borrar().setEnabled(false);
            // if (validar_excepciones(Integer.parseInt(instrumentView.getTxF_Maximo().getText()), Integer.parseInt(instrumentView.getTxF_Minimo().getText()), instrumentView.getTxF_Serie().getText())) {
             if (validar_excepciones(instrumentView.getTxF_Serie().getText())){
-                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), "", Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
+                //Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia )
+                Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem().toString()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
 
                 if (!EDIT) {
                     model.save(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
 
                 } else {
                     model.actualizar(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
 
                 limpiar_pnl_ingreso_txFields();
@@ -111,7 +127,7 @@ public class Instrumentos_Controller  {
     }
 
 
-    public static void limpiar_pnl_ingreso_txFields() {
+    public static void limpiar_pnl_ingreso_txFields() throws Exception {
         EDIT = false;
         instrumentView.getTxF_Serie().setEnabled(true);
         instrumentView.getBtn_borrar().setEnabled(false);
@@ -120,8 +136,9 @@ public class Instrumentos_Controller  {
         instrumentView.getTxF_Minimo().setText("");
         instrumentView.getTxF_Maximo().setText("");
         instrumentView.getTxF_Tolerancia().setText("");
+        instrumentView.getCmB_Tipo().setSelectedIndex(0);
         MainController.deselect();
-
+        model.updateLista();
     }
 
     public static void rellenar_textfields(MouseEvent e){
@@ -137,8 +154,8 @@ public class Instrumentos_Controller  {
                     instrumentView.getTxF_Minimo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Minimo"))));
                     instrumentView.getTxF_Maximo().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Maximo"))));
                     instrumentView.getTxF_Tolerancia().setText(String.valueOf(instrumentView.getTbl_Listado_Instrumentos().getValueAt(instrumentView.getTbl_Listado_Instrumentos().getSelectedRow(),  modelo.findColumn("Tolerancia"))));
-                    instrumentView.getCmB_Tipo().setSelectedItem("");
-                    //instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());
+                    //instrumentView.getCmB_Tipo().setSelectedItem("");
+                    instrumentView.getCmB_Tipo().setSelectedItem(model.busquedaInstrumento(noSerie).getTipo());
 
                 }
             } else {
@@ -173,7 +190,11 @@ public class Instrumentos_Controller  {
                     break;
                 }
                 case "Limpiar": {
-                    limpiar_pnl_ingreso_txFields();
+                    try {
+                        limpiar_pnl_ingreso_txFields();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 case "Buscar": {
@@ -222,6 +243,9 @@ public class Instrumentos_Controller  {
                 MainController.selecInsCalibrar(model.busquedaInstrumento(no_Serie));
             } catch (XPathExpressionException | ParserConfigurationException | IOException | SAXException ex) {
                 throw new RuntimeException(ex);
+
+            } catch (Exception ex) {
+                System.out.println("Error al seleccionar calibracion: "+ ex.getMessage());
             }
 
 

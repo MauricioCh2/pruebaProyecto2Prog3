@@ -94,4 +94,6 @@ public class Instrumento implements Serializable {
     public void setTolerancia(double tolerancia) {
         this.tolerancia = tolerancia;
     }
+
+
 }

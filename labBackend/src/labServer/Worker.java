@@ -21,13 +21,18 @@ public class Worker { // es cada socket
     ObjectInputStream in; // por donde transmte
     ObjectOutputStream out; // por quien transmite
     IService service;
+    int numeroWorker;
 
     boolean continuar; //importante para saber cuando termina el servicio de este socket
-    public Worker(Server srv, ObjectInputStream in, ObjectOutputStream out, IService service) {
+
+
+
+    public Worker(Server srv, ObjectInputStream in,  ObjectOutputStream out,int numW, IService service) {
         this.srv=srv;
         this.in=in;
         this.out=out;
         this.service=service;
+        this.numeroWorker = numW;
     }
     public void start(){
         try {
@@ -67,17 +72,19 @@ public class Worker { // es cada socket
                     case Protocol.READUNIDAD:
                         try{
                             System.out.println("Estoy en READunidad de worker");
-                            UnidadMedList lisU = (UnidadMedList) in.readObject();
+                            List<UnidadMedida> lisU = (List<UnidadMedida>) in.readObject();
+                            List<UnidadMedida> lisU2 = service.readUnidadesMedida(lisU);
                             out.writeInt(Protocol.READUNIDAD);
-                            out.writeObject(service.readUnidadesMedida(lisU));
+                            out.writeObject(lisU2);
                             System.out.println("Le envio de vuelta la lista al service del ciente ");
                             out.flush();
 
-                            message = new Message( Message.READ, "UM", "Lisra Unidad");
-                            srv.deliver(message);
+                           // message = new Message( Message.READ, "UM", "Lista Unidad");
+                            //srv.deliver(message);
+                            srv.update(lisU2, Protocol.RELOAD_UM);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del read unidad: "+ ex.getMessage());
                             System.out.println(ex);
                             continuar = false;
                         }
@@ -85,18 +92,18 @@ public class Worker { // es cada socket
                     case Protocol.FINDIDUNIDAD:
                         try{
                             System.out.println("Estoy en FindUnidad de worker");
-                            String tipoId = (String) in.readObject();
+                            int idUn = (int) in.readObject();
 
                             out.writeInt(Protocol.FINDIDUNIDAD);
-                           // out.writeObject(service.delete(tipoId));
-                            System.out.println("Le envio de vuelta el id encontrado ");
+                            out.writeObject(service.findById(idUn));
+                            System.out.println("Le envio de vuelta el elemento encontrado "+service.findById(idUn).getNombre() );
                             out.flush();
 
-                            message = new Message( Message.DELETE, "CA", tipoId);
-                            srv.deliver(message);
+                           // message = new Message( Message.FIND, "CA", tipoId);
+                            //srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del find unidad: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -110,31 +117,36 @@ public class Worker { // es cada socket
                             out.flush();
 
 
-                           message = new Message( Message.CREATE, "TI", e.getNombre());
+                           message = new Message( Message.CREATE, " tipo instrumento", e.getNombre(), numeroWorker);
 
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create tipos");
-                            continuar = false;
+                            System.out.println("Catch del create tipos:" + ex.getMessage());
+
                             JOptionPane.showMessageDialog(null, ex.getMessage());
 
+                            if(!ex.getMessage().contains("Este codigo ya existe")){
+                                continuar = false;
+                            }
                         }
                         break;
                     case Protocol.READTIPO:
                         try{
                             System.out.println("Estoy en readTipo de worker");
                             List<TipoInstrumentoObj> lisT = (List<TipoInstrumentoObj>) in.readObject();
+                            List<TipoInstrumentoObj> lisT2 = service.read(lisT);
 
                             out.writeInt(Protocol.READTIPO);
-                            out.writeObject(service.read(lisT));
+                            out.writeObject(lisT2);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.READ, "TI", "Lista Tipos");
-                            srv.deliver(message);
+//                            message = new Message( Message.READ, "TI", "Lista Tipos");
+//                            srv.deliver(message);
+                            srv.update(lisT2, Protocol.RELOAD_TIP_INS);
                         }catch (Exception ex){
-                            System.out.println("Catch del read tipo");
+                            System.out.println("Catch del read tipo: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -147,14 +159,15 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.UPDATETIPO);
                             //out.writeObject(service.update(e));
+                            service.update(e);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "TI", "Lista Tipos");
+                            message = new Message( Message.UPDATE, " tipo instrumento", e.getNombre(), numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del update tipo: "+ ex.getMessage());
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                             continuar = false;
                         }
@@ -166,14 +179,15 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.DELETETIPO);
                             //out.writeObject(service.delete(tipoId));
+                            service.delete(tipoId);
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "TI", "Lista Tipos");
+                            message = new Message( Message.DELETE, " tipo instrumento", tipoId, numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del delete tipo"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -188,30 +202,31 @@ public class Worker { // es cada socket
                             out.flush();
 
 
-                            message = new Message( Message.CREATE, "Ins", e.getDescripcion());
+                            message = new Message( Message.CREATE, " instrumento", e.getSerie(), numeroWorker);
 
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create tipos");
-                            continuar = false;
-
+                            System.out.println("Catch del create instrumentos: "+ ex.getMessage());
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                            if(!ex.getMessage().contains("Este numero de serie ya existe")){
+                                continuar = false;
+                            }
                         }
                         break;
                     case Protocol.READINSTRUMENTO:
                         try{
                             System.out.println("Estoy en readTipo de worker");
-                            Instrumento ins = (Instrumento) in.readObject();
 
-                            out.writeInt(Protocol.READINSTRUMENTO);
-                            out.writeObject(service.read_instrumentos(ins)); // debe ser un read con name distinto
+                            List<Instrumento> lis = service.read_instrumentos();
+                            out.writeInt(Protocol.RELOAD_INSTRUMENTO);
+                            out.writeObject(lis); // debe ser un read con name distinto
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.READ, "Ins", "Lista Instrumento");
-                            srv.deliver(message);
+                            srv.update(lis, Protocol.RELOAD_INSTRUMENTO);
                         }catch (Exception ex){
-                            System.out.println("Catch del read instrumento");
+                            System.out.println("Catch del read instrumentos:"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -223,15 +238,16 @@ public class Worker { // es cada socket
 
 
                             out.writeInt(Protocol.UPDATEINSTRUMENTO);
+                            service.update(e);
                             //out.writeObject(service.update(e));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "Ins", e.getSerie());
+                            message = new Message( Message.UPDATE, " instrumento", e.getSerie(), numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update instrumentos");
+                            System.out.println("Catch del update instrumentos: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -241,48 +257,56 @@ public class Worker { // es cada socket
                             String tipoId = (String) in.readObject();
 
                             out.writeInt(Protocol.DELETEINSTRUMENTO);
+                            service.deleteInstrumentoId(tipoId);
                            // out.writeObject(service.deleteInstrumentoId(tipoId));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "Ins", tipoId);
+                            message = new Message( Message.DELETE, " instrumento", tipoId, numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete instrumentos");
+                            System.out.println("Catch del delete instrumentos: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
                     //--------------------------------------------------CALIBRACIONES--------------------------------------------------
                     case Protocol.CREATECALIBRACION:
-                        System.out.println("Estoy en CREATE CALIBRACIONES de worker");
-                        Calibraciones cal = (Calibraciones) in.readObject();
-                        service.create(cal);
+                        try{
+                            System.out.println("Estoy en CREATE CALIBRACIONES de worker");
+                            Calibraciones cal = (Calibraciones) in.readObject();
+                            service.create(cal);
 
-                        out.writeInt(Protocol.CREATECALIBRACION);
-                        out.writeObject(cal);
+                            out.writeInt(Protocol.CREATECALIBRACION);
+                            out.writeObject(cal);
 
-                        out.flush();
+                            out.flush();
 
-                        message = new Message( Message.CREATE, "CA", String.valueOf(cal.getNumeroCalibracion()));
-                        srv.deliver(message);
+                            message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
+                            srv.deliver(message);
+                        }catch(Exception ex){
+                            System.out.println("Catch del create  calibraciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
                         break;
 
                     case Protocol.READCALIBRACION:
                         try{
                             System.out.println("Estoy en readCalibracion de worker");
-                            //List<Calibraciones> lisT = (List<Calibraciones>) in.readObject();
-                            Calibraciones cali = (Calibraciones) in.readObject();
+                            String idIns = (String) in.readObject();
+                            List<Calibraciones> lis = service.readCalibracion(idIns);
 
-                            out.writeInt(Protocol.READCALIBRACION);
-                            out.writeObject(service.read(cali));
+                            out.writeInt(Protocol.RELOAD_CALIBRACION);
+                            out.writeObject(lis);
                             System.out.println("Ya le mande de vuelta la lista de calibraciones");
                             out.flush();
 
-                            message = new Message( Message.READ, "CA", "Lista Calibracion");
-                            srv.deliver(message);
+                            //message = new Message( Message.READ, "CA", "Lista Calibracion");
+                            //srv.deliver(message);
+                            srv.update(lis, Protocol.RELOAD_CALIBRACION);
+
                         }catch (Exception ex){
-                            System.out.println("Catch del read tipo");
+                            System.out.println("Catch del read calibracion:"+ ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -298,11 +322,11 @@ public class Worker { // es cada socket
                             System.out.println("Le mando de vuelta al proxy calibracion ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "CA", String.valueOf(e.getNumeroCalibracion()));
+                            message = new Message( Message.UPDATE, "a calibracion", String.valueOf(e.getNumeroCalibracion()), numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del update calibracion"+ex.getMessage());
                             continuar = false;
                         }
                         break;
@@ -316,20 +340,45 @@ public class Worker { // es cada socket
                             System.out.println("Le envio de vuelta el id eliminado ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "CA", tipoId);
+                            message = new Message( Message.DELETE, "a calibracion", tipoId, numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo");
+                            System.out.println("Catch del delete calibracion: "+ ex.getMessage());
                             continuar = false;
                         }
                         break;
+                    case Protocol.SEND_LISTA_TIPO_INSTRUMENTOS:
+                        try {
+                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
+                            srv.set_lista_candidatos_clientes(list);
+                        } catch (Exception ex) {}
+                        break;
+                    case Protocol.SEND_TIPO_INSTRUMENTOS:
+                        try {
+                            System.out.println("Se tiene que agregar un candidato");
+                            TipoInstrumentoObj obj = (TipoInstrumentoObj) in.readObject();
+                            System.out.println(obj.getNombre());
+                            service.agregar_tipo_instrumento(obj);
+                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
+                            srv.set_lista_candidatos_clientes(list);
+                        } catch (Exception ex) {}
+                        break;
+                    case Protocol.REQUEST_NUMERO_WORKER:
+                        try {
+                            //srv.send_numero_worker(numeroWorker);
+                            this.send_numero_worker(numeroWorker); //ya que es para cada usuario
+                        } catch (Exception ex) {}
+                        break;
+
 
                 }
                 out.flush();
             }catch (IOException  ex) {
                 srv.remove(this);
                 System.out.println(ex);
+                System.out.println("Catch, estoy callendo en continuar = false final");
+
                 continuar = false;
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -345,6 +394,39 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
+        }
+    }
+
+    public void send_numero_worker(int numeroWorker){
+        try {
+            System.out.println("Se entro al deliver del worker");
+            out.writeInt(Protocol.SEND_NUMERO_WORKER);//oiga estoyenviando un deliver
+            out.writeInt(numeroWorker);
+            out.flush();
+            //aqui entrega solo a su propio cliente sin tener que propagar a todos
+        } catch (IOException ex) {
+        }
+    }
+
+    public void update(Object abs, int protocol){
+        try {
+            System.out.println("Se entro al deliver del worker");
+            out.writeInt(protocol);//oiga estoyenviando un deliver
+            out.writeObject(abs);
+            out.flush();
+            //aqui entrega solo a su propio cliente sin tener que propagar a todos
+        } catch (IOException ex) {
+        }
+    }
+
+
+    public void set_lista_candidatos_clientes(List<TipoInstrumentoObj> list){
+        try {
+            out.writeInt(Protocol.INIT_LISTA_TIPO_INSTRUMENTOS);
+            out.writeObject(list);
+            out.flush();
+        }catch (Exception ex){
+            System.out.println("Excepcion: " + ex.getMessage());
         }
     }
 

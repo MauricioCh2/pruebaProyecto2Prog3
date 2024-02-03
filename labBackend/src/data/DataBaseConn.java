@@ -1,4 +1,4 @@
-package labServer.dao;
+package data;
 
 import Protocol.Protocol;
 

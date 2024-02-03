@@ -30,6 +30,7 @@ public class MainController {
         instrumentosController.init_view(app.getInstrumentosView_items());//inicializa la vista de instrumentos
         tiposInstrumentoController.add_visitor(instrumentosController);
         tiposInstrumentoController.init_view(app.getInstrumentoView());
+        messageController.initview(app.getMessageView());
 
         calibracionesController.init(app.getInstrumentosView_calibs());
 
@@ -39,7 +40,7 @@ public class MainController {
 
 
     }
-    public static void selecInsCalibrar(Instrumento ins){
+    public static void selecInsCalibrar(Instrumento ins) throws Exception {
         app.enableCalib();
         CalibracionesController.setInstru(ins);
         CalibracionesController.update();

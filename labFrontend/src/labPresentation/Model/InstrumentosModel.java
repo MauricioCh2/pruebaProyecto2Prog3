@@ -1,6 +1,7 @@
 package labPresentation.Model;
 
 import Protocol.Instrumento;
+import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import org.xml.sax.SAXException;
 
@@ -9,11 +10,15 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstrumentosModel {
 
         private ListaInstrumentos_E listaInstrumentos_e = new ListaInstrumentos_E();
+        private List<Instrumento> listaInstrumento;
         Instrumento current;
         JTable tbl_tiposInst;
         private DOM_Instrumento dom;
@@ -22,8 +27,18 @@ public class InstrumentosModel {
             tbl_tiposInst = table;
             dom = new DOM_Instrumento();
             reporte = new PDF("instrumentos", dom);
+            listaInstrumento = new ArrayList<>();
         }
-        public boolean instrumento_existente(String serie){
+
+    public List<Instrumento> getListaInstrumento() {
+        return listaInstrumento;
+    }
+
+    public void setListaInstrumento(List<Instrumento> listaInstrumento) {
+        this.listaInstrumento = listaInstrumento;
+    }
+
+    public boolean instrumento_existente(String serie){
             Instrumento ins = seleccionar_instrumento_Serie(serie);
             return ins != null;
         }
@@ -40,45 +55,40 @@ public class InstrumentosModel {
                 ServiceProxy.instance().create(ins);
                 //guardado = createTipoXML(ins);
                 //if (guardado) {
-                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-                Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
-                modelo.addRow(fila);
+//                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
+//                Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
+//                modelo.addRow(fila);
                 //}
             } //else this.actualizar(ins);
         }
 
     public boolean actualizar(Instrumento ins) throws Exception {
         boolean respuesta;
-        //current = seleccionar_instrumento_Serie(ins.getSerie());
-        //current.setDescripcion(ins.getDescripcion());
-        //current.setMaximo(ins.getMaximo());
-        //current.setMinimo(ins.getMinimo());
-        //current.setTolerancia(ins.getTolerancia());
-        //current.setTipo(ins.getTipo());
-        //respuesta = dom.updateInstrumento(ins);
-        //dom.cargaInstrumentosATable(tbl_tiposInst);//refresca la tabla
-//        DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-//        Object[] fila = new Object[]{current.getSerie(), current.getDescripcion(), current.getMinimo(), current.getMaximo(), current.getTolerancia()};
-//        modelo.insertRow(tbl_tiposInst.getSelectedRow()+1, fila);
-//        modelo.removeRow(tbl_tiposInst.getSelectedRow());
         respuesta = true;
                 ServiceProxy.instance().update(ins);
+                updateLista();
         return respuesta;
     }
 
     public void eliminar_elemento(String serie) throws Exception {
         Instrumento object = seleccionar_instrumento_Serie(serie);
-        listaInstrumentos_e.getList().remove(object);
+        listaInstrumento.remove(object);
         DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
         modelo.removeRow(tbl_tiposInst.getSelectedRow());
-        //dom.eliminarInstrumeto(serie);
-        //dom.cargaInstrumentosATable(tbl_tiposInst);
+
         ServiceProxy.instance().deleteInstrumentoId(serie);
+        updateLista();
     }
-    public void cargarDatos(JTable tbl) throws Exception {
-        //dom.cargaInstrumentosATable(tbl);
-        ServiceProxy.instance().read_instrumentos(new Instrumento());
-        //ins.agregar_categoriaCB(instrumento);
+    public void cargarDatos(JTable tbl, List<Instrumento> list ) throws Exception {
+        System.out.println("Cargando datos de lista\n");
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
+        for (Instrumento obj:list) {
+            System.out.println("Recupere este  instrumento " + obj.getSerie());
+            Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
+            modelo.addRow(newRow);
+
+        }
     }
     public ListaInstrumentos_E getListaInstrumentosE(){
         return listaInstrumentos_e;
@@ -86,21 +96,69 @@ public class InstrumentosModel {
     private boolean createTipoXML(Instrumento ins){return dom.addInstrumento(ins);}
 
     //busqueda--------------------------------------
-    public boolean busquedaPorDescripcion(String nom, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        return dom.buscarInstrumentosPorDescr(nom, tbl);
+    public boolean busquedaPorDescripcion(String buscar, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        //return dom.buscarInstrumentosPorDescr(nom, tbl);
+        boolean alguno = false;
+        String buscarLower = buscar.toLowerCase();
+        for(Instrumento obj: listaInstrumento){
+            String nombreActLower= obj.getDescripcion().toLowerCase();
+            if (nombreActLower.contains(buscarLower)){
+                Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                if (!alguno) {
+                    modelo.setRowCount(0);
+                }
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                alguno = true;
+            }
+        }
+        return alguno;
     }
 
     public boolean busquedaPorSerie(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        return dom.buscarInstrumentosPorSerie(cod, tbl);
+        //return dom.buscarInstrumentosPorSerie(cod, tbl);
+        boolean alguno = false;
+        for(Instrumento obj: listaInstrumento) {
+            String codigoActual = obj.getSerie().toLowerCase();
+            if (codigoActual.contains(cod.toLowerCase())) {
+
+                Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                modelo.setRowCount(0);
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                alguno = true;
+            }
+        }
+        return alguno;
     }
 
     public Instrumento busquedaInstrumento(String noSerie) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-            return dom.buscarInstrumentosPorSerie(noSerie);
+            //return dom.buscarInstrumentosPorSerie(noSerie);
+        for(Instrumento obj: listaInstrumento) {
+            String codigoActual = obj.getSerie().toLowerCase();
+            if (codigoActual.equals(noSerie.toLowerCase())) {
+                return obj;
+            }
+        }
+        return null;
     }
     public void generarReporte(){
         reporte.createPDF();
     }
 
+    public void updateLista() throws Exception {
+        ServiceProxy.instance().read_instrumentos();
+    }
 }
 
 //}
