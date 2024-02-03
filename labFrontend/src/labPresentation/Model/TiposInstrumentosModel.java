@@ -38,11 +38,16 @@ public class TiposInstrumentosModel {
         DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
        // boolean guardado = true;
                 ins.setUnidad(getUnidadNom(ins.getUnidadId()));
-                ServiceProxy.instance().create(ins);
-                ServiceProxy.instance().send_tipos_instrumento(ins);
-                Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidad()};
-                model.addRow(newRow);
-                updateLista();
+                try{
+                    ServiceProxy.instance().create(ins);
+                   // Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidad()};
+                   // model.addRow(newRow);
+                    updateLista();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+        // ServiceProxy.instance().send_tipos_instrumento(ins);
+
        // return guardado;
     }
 

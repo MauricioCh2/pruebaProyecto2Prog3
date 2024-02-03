@@ -122,10 +122,13 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create tipos");
-                            continuar = false;
+                            System.out.println("Catch del create tipos:" + ex.getMessage());
+
                             JOptionPane.showMessageDialog(null, ex.getMessage());
 
+                            if(!ex.getMessage().contains("Este codigo ya existe")){
+                                continuar = false;
+                            }
                         }
                         break;
                     case Protocol.READTIPO:
@@ -205,22 +208,22 @@ public class Worker { // es cada socket
 
                         }catch (Exception ex){
                             System.out.println("Catch del create instrumentos: "+ ex.getMessage());
-                            continuar = false;
-
+                            JOptionPane.showMessageDialog(null, ex.getMessage());
+                            if(!ex.getMessage().contains("Este numero de serie ya existe")){
+                                continuar = false;
+                            }
                         }
                         break;
                     case Protocol.READINSTRUMENTO:
                         try{
                             System.out.println("Estoy en readTipo de worker");
-                            //Instrumento ins = (Instrumento) in.readObject();
+
                             List<Instrumento> lis = service.read_instrumentos();
                             out.writeInt(Protocol.RELOAD_INSTRUMENTO);
                             out.writeObject(lis); // debe ser un read con name distinto
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
-                            //message = new Message( Message.READ, "Ins", "Lista Instrumento");
-                            //srv.deliver(message);
                             srv.update(lis, Protocol.RELOAD_INSTRUMENTO);
                         }catch (Exception ex){
                             System.out.println("Catch del read instrumentos:"+ ex.getMessage());
@@ -368,6 +371,8 @@ public class Worker { // es cada socket
             }catch (IOException  ex) {
                 srv.remove(this);
                 System.out.println(ex);
+                System.out.println("Catch, estoy callendo en continuar = false final");
+
                 continuar = false;
             } catch (Exception e) {
                 throw new RuntimeException(e);

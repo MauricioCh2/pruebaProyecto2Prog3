@@ -69,11 +69,11 @@ public class Instrumentos_Controller implements IController {
 
                 if (!EDIT) {
                     model.save(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
 
                 } else {
                     model.actualizar(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
 
                 limpiar_pnl_ingreso_txFields();
