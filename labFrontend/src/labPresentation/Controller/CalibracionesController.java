@@ -7,6 +7,7 @@ import Protocol.Protocol;
 import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
+import labPresentation.Model.TableModel;
 import labPresentation.View.CalibracionesView;
 import org.xml.sax.SAXException;
 
@@ -252,16 +253,21 @@ public class CalibracionesController implements IController {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
         }
-        private void cargar_tablaMediciones() {
+        public void cargar_tablaMediciones() {
             if (tableCalibraciones.getSelectedRow() == -1) {
                 JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
-            }else {
+            } else {
                 int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
                 modelo_mediciones.cargar_tablaMediciones(instru, med);
-                EDITAR_MEDICIONES = true;
+                DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
+                for (int i = 0; i < model.getRowCount(); i++) {
+                    model.isCellEditable(i,0);
+                    model.isCellEditable(i, 1);
+                }
                 calibracionesView.getTextMediciones().setEnabled(false);
             }
         }
+
 
         @Override
         public void mousePressed(MouseEvent e) {}

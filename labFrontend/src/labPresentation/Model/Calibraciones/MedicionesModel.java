@@ -42,10 +42,9 @@ public class MedicionesModel {
             model.addRow(fila);
             valorM += valorIntervalo;
         }
-
-
         //this.validarToleranciaMedicion(listM, obj);
     }
+
 
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
         List<Mediciones> lis = new ArrayList<>();
