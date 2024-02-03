@@ -51,4 +51,8 @@ public class Protocol {
     public static final int INIT_LISTA_TIPO_INSTRUMENTOS = 401;
     public static final int SEND_TIPO_INSTRUMENTOS = 402;
 
+    //-----------------------JDOM-------------------------------
+    public static final int SEND_NUMERO_WORKER = 1001;
+    public static final int REQUEST_NUMERO_WORKER = 1002;
+
 }

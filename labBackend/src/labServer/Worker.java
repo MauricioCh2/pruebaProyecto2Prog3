@@ -32,7 +32,7 @@ public class Worker { // es cada socket
         this.in=in;
         this.out=out;
         this.service=service;
-        this.numeroWorker = numW+1;
+        this.numeroWorker = numW;
     }
     public void start(){
         try {
@@ -361,6 +361,12 @@ public class Worker { // es cada socket
                             srv.set_lista_candidatos_clientes(list);
                         } catch (Exception ex) {}
                         break;
+                    case Protocol.REQUEST_NUMERO_WORKER:
+                        try {
+                            //srv.send_numero_worker(numeroWorker);
+                            this.send_numero_worker(numeroWorker); //ya que es para cada usuario
+                        } catch (Exception ex) {}
+                        break;
 
 
                 }
@@ -385,6 +391,18 @@ public class Worker { // es cada socket
         } catch (IOException ex) {
         }
     }
+
+    public void send_numero_worker(int numeroWorker){
+        try {
+            System.out.println("Se entro al deliver del worker");
+            out.writeInt(Protocol.SEND_NUMERO_WORKER);//oiga estoyenviando un deliver
+            out.writeInt(numeroWorker);
+            out.flush();
+            //aqui entrega solo a su propio cliente sin tener que propagar a todos
+        } catch (IOException ex) {
+        }
+    }
+
     public void update(Object abs, int protocol){
         try {
             System.out.println("Se entro al deliver del worker");
