@@ -132,12 +132,21 @@ public class Service implements IService {
 
     @Override
     public void delete(Instrumento inst) throws Exception {
-         instrumento.delete(inst);
+
+        if (instrumento.delete(inst)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     @Override
     public void deleteInstrumentoId(String e) throws Exception {
-         instrumento.delete(e);
+        if (instrumento.delete(e)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     //-----------------CALIBRACIONES------------------
