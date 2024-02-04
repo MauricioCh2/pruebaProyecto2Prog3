@@ -216,12 +216,16 @@ public class CalibracionesController implements IController {
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {
+               // limpiar();
                 int valFil = tableCalibraciones.getSelectedRow();//obtiene el valor de la fila
-                Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
-                int cod = (int) objCod; // lo convertimos a string
-                modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
-                //reseteamos GUI
-                calibracionesView.getBorrarButton().setEnabled(false);
+                if (valFil >= 0) {
+                    Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
+                    int cod = (int) objCod; // lo convertimos a string
+                    modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
+                    //reseteamos GUI
+                    limpiar();
+                    calibracionesView.getBorrarButton().setEnabled(false);
+                }
             }
         }
     }
@@ -264,9 +268,9 @@ public class CalibracionesController implements IController {
                     int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
                     modelo_mediciones.cargar_tablaMediciones(instru, med);
                     DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
-                    for (int i = 0; i < model.getRowCount(); i++) {
-                        model.isCellEditable(i, 0);
-                        model.isCellEditable(i, 1);
+                    for (int i = 0; i < tableCalibraciones.getSelectedRow(); i++) {
+                        model.isCellEditable(i, 2);
+                        tableMediciones.getModel().isCellEditable(i,2);
                     }
                     calibracionesView.getTextMediciones().setEnabled(false);
                 }

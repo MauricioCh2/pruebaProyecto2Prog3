@@ -331,14 +331,14 @@ public class Worker { // es cada socket
                     case Protocol.DELETECALIBRACION:
                         try{
                             System.out.println("Estoy en deleteCalibracion de worker");
-                            String tipoId = (String) in.readObject();
+                            Calibraciones calibraciones = (Calibraciones) in.readObject();
 
                             out.writeInt(Protocol.DELETECALIBRACION);
-                            //out.writeObject(service.delete(tipoId));
+                            service.delete(calibraciones);
                             System.out.println("Le envio de vuelta el id eliminado ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "a calibracion", tipoId, numeroWorker);
+                            message = new Message( Message.DELETE, "a calibracion",String.valueOf(calibraciones.getNumeroCalibracion()), numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
