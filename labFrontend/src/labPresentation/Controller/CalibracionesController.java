@@ -295,7 +295,7 @@ public class CalibracionesController implements IController {
                     int cod = (int) objCod; // lo convertimos a string
                     modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
                     //reseteamos GUI
-                    limpiar();
+                    resetGUI();
                     calibracionesView.getBorrarButton().setEnabled(false);
                 }
             }

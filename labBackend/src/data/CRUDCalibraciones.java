@@ -20,12 +20,8 @@ public class CRUDCalibraciones {
         String sql = "INSERT INTO calibraciones (fecha, mediciones, id_instrumento) VALUES (?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
 
-        // Convertir la fecha de String a java.sql.Timestamp
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date parsedDate = dateFormat.parse(cali.getFecha() + " 00:00:00"); // Asegúrate de agregar las horas, minutos y segundos si están disponibles en tu base de datos.
-        Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
 
-        statement.setTimestamp(1, timestamp);
+        statement.setString(1, cali.getFecha());
         statement.setInt(2, cali.getNumeroMediciones());
         statement.setInt(3, Integer.parseInt(cali.getNo_SerieIns()));
 
@@ -47,7 +43,7 @@ public class CRUDCalibraciones {
         while (result.next()) {
             // Obtener los datos de la calibración
             int numCalibracion = result.getInt("id_calibraciones");
-            LocalDateTime fecha = result.getTimestamp("fecha").toLocalDateTime();
+            String fecha= result.getString("fecha");
             int mediciones = result.getInt("mediciones");
 
             // Obtener los datos del instrumento asociado a la calibración
@@ -62,7 +58,7 @@ public class CRUDCalibraciones {
             Instrumento instrumento = new Instrumento(String.valueOf(idInstrumento), idTipoInstrumento, descripcion, min, max, tolerancia);
 
             // Crear el objeto Calibraciones y asociarlo con el objeto Instrumento
-            Calibraciones calibracion = new Calibraciones(numCalibracion, fecha.toString(), mediciones, instrumento);
+            Calibraciones calibracion = new Calibraciones(numCalibracion, fecha, mediciones, instrumento);
 
             // Agregar la calibración a la lista
             lista.add(calibracion);
@@ -71,16 +67,19 @@ public class CRUDCalibraciones {
     }
 
     public boolean update(Calibraciones cali) throws Exception {
-//        Connection connection =  new DataBaseConn().connection();
-//        String sql = "update  tipos_instrumento set nombre = ?  where id_calibraciones = ?";
-//        PreparedStatement statement = connection.prepareStatement(sql);
-//        statement.setString(1,cali.get());
-//        statement.setString(2,cali.getCodigo());
-//        statement.executeUpdate();
-//
+        Connection connection = new DataBaseConn().connection();
+        String sql = "UPDATE calibraciones SET fecha = ?, mediciones = ?, id_instrumento = ? WHERE id_calibraciones = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+
+        // Establecer los nuevos valores para los campos de la calibración
+        statement.setString(1, cali.getFecha());
+        statement.setInt(2, cali.getNumeroMediciones());
+        statement.setInt(3, Integer.parseInt(cali.getNo_SerieIns()));
+        statement.setInt(4, cali.getNumeroCalibracion()); // Suponiendo que tienes un método para obtener el ID de calibraciones
+
+        statement.executeUpdate();
 
         System.out.println("Actualiza  calibracion.. "+cali.getNumeroCalibracion()+"de instrumento: "+cali.getNo_SerieIns()+"\n");
-
         return true;
     }
 
@@ -91,7 +90,6 @@ public class CRUDCalibraciones {
         statement.setInt(1,cali.getNumeroCalibracion());
         statement.executeUpdate();
 
-        System.out.println("Se elimino una calibracion .. "+cali.getNumeroCalibracion()+"\n");
 
         System.out.println("Elimina  calibracion.. "+cali.getNumeroCalibracion()+"de instrumento: "+cali.getNo_SerieIns()+"\n");
 
