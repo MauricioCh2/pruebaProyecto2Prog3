@@ -3,7 +3,6 @@ package labPresentation.Model.Calibraciones;
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
 import Protocol.Mediciones;
-import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
 import labPresentation.Model.PDF;
@@ -14,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -95,6 +95,51 @@ public class CalibracionesModel {
 //
         }
     }
+    /*    public boolean busquedaPorSerie(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        //return dom.buscarInstrumentosPorSerie(cod, tbl);
+        boolean alguno = false;
+        for(Instrumento obj: listaInstrumento) {
+            String codigoActual = obj.getSerie().toLowerCase();
+            if (codigoActual.contains(cod.toLowerCase())) {
+
+                Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                modelo.setRowCount(0);
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                alguno = true;
+            }
+        }
+        return alguno;
+    }*/
+    public boolean busquedaCalibracion(int numC, JTable tbl)   {
+        boolean encontrado = false;
+        for (Calibraciones calibraciones : listC) {
+            int codigoActual = calibraciones.getNumeroCalibracion();
+            if (codigoActual == numC) {
+                Object[] newRow = {calibraciones.getNumeroCalibracion(), calibraciones.getFecha(), calibraciones.getNumeroMediciones()};
+                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+                modelo.setRowCount(0);
+                modelo.addRow(newRow);
+                tbl.setRowSelectionInterval(0, 0);
+                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
+                        System.currentTimeMillis(),
+                        0, 0, 0, 1, false);
+                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
+                encontrado = true;
+                break;
+            }
+        }
+        return encontrado;
+    }
+
+
+
+
     public boolean busquedaCalibracion(String noSerie,String numCal, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
         return dom.buscarCalibracionPorNum(noSerie, numCal ,tbl);//este es con numero de serie del instrumento
     }

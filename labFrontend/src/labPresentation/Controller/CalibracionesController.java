@@ -114,7 +114,9 @@ public class CalibracionesController implements IController {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else limpiar();//actualizar mediciones
+        } else{
+            limpiar();//actualizar mediciones
+        }
     }
 
     public static void limpiar(){
@@ -128,7 +130,6 @@ public class CalibracionesController implements IController {
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
-        modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -139,7 +140,7 @@ public class CalibracionesController implements IController {
                calibracionesView.getNumeroLabelBusqueda().setText("<html><u><font color='red'>Numero:</font></u></html>");
                 throw new Exception("El campo de número de búsqueda de la calibración, se encuentra vacío. Por favor, complete el espacio.");
             }else{
-                    if(!modelo.busquedaCalibracion(instru.getSerie(),textNumeroB.getText(),tableCalibraciones)){//este buscara por numero con un equal
+                    if(!modelo.busquedaCalibracion(Integer.parseInt(textNumeroB.getText()),tableCalibraciones)){//este buscara por numero con un equal
                         throw new Exception("No se encontraron resultados");
                     }else{
                         textNumeroB.setText("");
