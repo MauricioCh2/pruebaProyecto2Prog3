@@ -62,7 +62,6 @@ public class TiposInstrumentosModel {
 
     public boolean update (TipoInstrumentoObj ins) throws Exception {
         boolean re;
-
                 ServiceProxy.instance().update(ins);
                 updateLista();
         re = true;

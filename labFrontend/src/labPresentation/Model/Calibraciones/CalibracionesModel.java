@@ -143,4 +143,12 @@ public class CalibracionesModel {
         this.listC = listC;
     }
 
+    public void edit(Calibraciones calibraciones) {
+        try{
+            ServiceProxy.instance().update(calibraciones);
+            updateLista(calibraciones.getNo_SerieIns());
+        } catch (Exception e) {
+            System.out.println("Error al guardar calibracion: "+ e.getMessage());
+        }
+    }
 }

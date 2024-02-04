@@ -123,7 +123,11 @@ public class CalibracionesController implements IController {
                                 calibraciones.setMedicionesL(currentC.getMedicionesL());
                                 //modelo.update(calibraciones);
                             } else {
-                                modelo.save(calibraciones);
+                                if(EDITAR){
+                                    modelo.edit(calibraciones);
+                                }else{
+                                    modelo.save(calibraciones);
+                                }
                             }
                             currentC = calibraciones;
                             setCurrentC(currentC);
@@ -266,19 +270,7 @@ public class CalibracionesController implements IController {
         }
 
         private void reporte() throws FileNotFoundException {
-            Object[] opciones = {"Reporte", "Reporte General"};
-
-            // Mostrar la ventana
-            int opcion = JOptionPane.showOptionDialog(null, "Seleccione el tipo de reporte", "Reportes", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, opciones, null);
-
-            // Procesar la opción seleccionada
-            if (opcion == 0) {
-                // Generar el reporte
-                modelo.generarReporte(toStringt(), instru.getSerie());
-            } else {
-                // Generar el reporte general
                 modelo.generarReporteGen();
-            }
         }
 
         private void borrar() throws Exception {
@@ -305,13 +297,7 @@ public class CalibracionesController implements IController {
 
         public static class TablesCalibraciones implements MouseListener {
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                rellenartextfields(e);
-                calibracionesView.getBorrarButton().setEnabled(true);
-                calibracionesView.getMedicionesPanel().setVisible(true);
-                cargar_tablaMediciones();
-            }
+
 
 
             private void rellenartextfields(MouseEvent e) {
@@ -350,7 +336,14 @@ public class CalibracionesController implements IController {
                 }
             }
 
-
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            EDITAR = true;
+            rellenartextfields(e);
+            calibracionesView.getBorrarButton().setEnabled(true);
+            calibracionesView.getMedicionesPanel().setVisible(true);
+            cargar_tablaMediciones();
+        }
         @Override
         public void mousePressed(MouseEvent e) {}
         @Override

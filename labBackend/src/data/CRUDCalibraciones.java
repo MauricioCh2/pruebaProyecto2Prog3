@@ -17,13 +17,14 @@ public class CRUDCalibraciones {
 
     public boolean create(Calibraciones cali) throws Exception {
         Connection connection = new DataBaseConn().connection();
-        String sql = "INSERT INTO calibraciones (fecha, mediciones, id_instrumento) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO calibraciones VALUES (?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
 
 
-        statement.setString(1, cali.getFecha());
-        statement.setInt(2, cali.getNumeroMediciones());
-        statement.setInt(3, Integer.parseInt(cali.getNo_SerieIns()));
+        statement.setInt(1, cali.getNumeroCalibracion());
+        statement.setString(2, cali.getFecha());
+        statement.setInt(3, cali.getNumeroMediciones());
+        statement.setInt(4, Integer.parseInt(cali.getNo_SerieIns()));
 
         statement.executeUpdate();
         System.out.println("Crea calibracion.. " + cali.getNumeroCalibracion() + " de instrumento: " + cali.getNo_SerieIns() + "\n");
