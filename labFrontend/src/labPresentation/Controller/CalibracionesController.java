@@ -7,6 +7,7 @@ import Protocol.Protocol;
 import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
+import labPresentation.Model.PDF;
 import labPresentation.Model.TableModel;
 import labPresentation.View.CalibracionesView;
 import org.xml.sax.SAXException;
@@ -21,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -41,6 +43,8 @@ public class CalibracionesController implements IController {
     private static int numeroCalibracion;
 
     private static Calibraciones currentC;
+    private PDF pdfO;
+
 
     public static void setInstru(Instrumento instru) throws Exception {
         CalibracionesController.instru = instru;
@@ -75,7 +79,7 @@ public class CalibracionesController implements IController {
         textMediciones = calibracionesView.getTextMediciones();
         textFecha = calibracionesView.getTextFecha();
         textNumeroB = calibracionesView.getTextNumeroB();
-        modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones());
+        modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
         //numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount();
@@ -162,8 +166,12 @@ public class CalibracionesController implements IController {
         System.out.println("\n llegue al update ");
         if(pro == Protocol.RELOAD_CALIBRACION){
             modelo.setListC((java.util.List<Calibraciones>) o);
-            modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o);
+            modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
         }
+    }
+
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
     }
 
     public static class BtnsCalibraciones implements ActionListener {
@@ -190,14 +198,18 @@ public class CalibracionesController implements IController {
                     break;
                 }
                 case "Reporte": {
-                    reporte();
+                    try {
+                        reporte();
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 default:
             }
         }
 
-        private void reporte() {
+        private void reporte() throws FileNotFoundException {
             Object[] opciones = {"Reporte", "Reporte General"};
 
             // Mostrar la ventana
@@ -209,7 +221,7 @@ public class CalibracionesController implements IController {
                 modelo.generarReporte(toStringt(), instru.getSerie());
             } else {
                 // Generar el reporte general
-                modelo.generarReporteGen(toStringt());
+                modelo.generarReporteGen();
             }
         }
 

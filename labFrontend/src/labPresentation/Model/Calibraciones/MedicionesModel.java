@@ -78,4 +78,7 @@ public class MedicionesModel {
         listM.clear();
     }
 
+    public List<Mediciones> getListM() {
+        return listM;
+    }
 }
