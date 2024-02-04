@@ -4,16 +4,15 @@ package labPresentation.Model;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.jdom2.input.SAXBuilder;
 
 import javax.xml.XMLConstants;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 public class JDOM {
     private Document doc;
@@ -22,15 +21,26 @@ public class JDOM {
     private static String FILENAME;
 
     public JDOM() {
-
+        this.int_user_logs_folder();
     }
     private void generarRutaArchivo(int numeroWorker) {
         String idUsuario = String.valueOf(numeroWorker);
-        String dir = "labFrontend\\user_logs\\";
+        String dir = "labFrontend" + File.separator + "user_logs" + File.separator;
         FILENAME = dir + "data_usuario_" + idUsuario + ".xml";
         System.out.println("ruta: " + FILENAME);
     }
 
+    private void int_user_logs_folder() {
+        String dir = "labFrontend" + File.separator + "user_logs" + File.separator;
+        File logsFolder = new File(dir);
+        if (!logsFolder.exists()) {
+            if (logsFolder.mkdirs()) {
+                System.out.println("Carpeta 'user_logs' creada");
+            } else {
+                System.out.println("Error al crear la carpeta 'user_logs'");
+            }
+        }
+    }
 
     public void init_xml_file() throws IOException, JDOMException {
         this.sax = new SAXBuilder();

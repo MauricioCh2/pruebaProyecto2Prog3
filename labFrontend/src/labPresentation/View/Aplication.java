@@ -32,7 +32,7 @@ public class Aplication extends JFrame{
         //Seteos basicos------------------------------------------------------------------------------------
         setContentPane(pnl_Aplication);// pone el panel prncipal en la ventana
         this.setTitle("SILAB: Sistema de Laboratirio industrial");
-        this.setSize(1025, 500);
+        this.setSize(1100, 500);
         this.setResizable(true);
 
         addWindowListener(new WindowAdapter() {
@@ -52,7 +52,7 @@ public class Aplication extends JFrame{
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setMinimumSize(new Dimension(900, 450));
+        this.setMinimumSize(new Dimension(1050, 450));
         setLocationRelativeTo(null);//lo pone en medio
 
         //Seteos de cada tabbed Pane-

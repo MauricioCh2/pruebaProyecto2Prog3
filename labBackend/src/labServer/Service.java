@@ -3,10 +3,9 @@ package labServer;
 
 import Protocol.*;
 import data.*;
-import data.*;
-
 
 import javax.swing.*;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class Service implements IService {
     private CRUDCalibraciones calibraciones;
     private CRUDMediciones mediciones;
     private DAOUnidadMedida unidadMedida;
-    private LocalData data;
+
     public Service() {
         tiposInstrumento = new CRUDTiposInstrumento();
         instrumento = new CRUDInstrumento();
@@ -58,13 +57,6 @@ public class Service implements IService {
         }
     }
 
-    @Override
-    public void send_tipos_instrumento(TipoInstrumentoObj obj) {}
-    @Override
-    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {
-        data.getListaTipos().add(obj);
-        data.imprimir_lista_tipos();
-    }
 
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
@@ -72,11 +64,6 @@ public class Service implements IService {
         return tiposInstrumento.read(e);
     }
 
-    @Override
-    public List<TipoInstrumentoObj> read() throws Exception {
-        System.out.print("Estoy en read  tipos en service\n");
-        return tiposInstrumento.read();
-    }
 
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
@@ -117,7 +104,6 @@ public class Service implements IService {
 
     @Override
     public List<Instrumento> read_instrumentos( ) throws Exception {
-        System.out.print("Estoy en read de instrumentos en service  \n");
         return instrumento.read();
     }
 
@@ -176,28 +162,34 @@ public class Service implements IService {
          instrumento.delete(e);
     }
 
-    //--------------------MEDIDAS---------------------
+    //--------------------MEDICIONES---------------------
     @Override
     public void create(Mediciones medida) throws Exception {
+        System.out.print("Estoy en create de mediciones en service  \n");
         mediciones.create(medida);
     }
 
     @Override
+    public List<Mediciones> read(Mediciones medida) throws Exception {
+        System.out.print("Estoy en read de mediciones en service  \n");
+        return mediciones.read(medida);
+    }
+
+    @Override
     public void delete(Mediciones medida) throws Exception {
+        System.out.print("Estoy en delete de mediciones en service  \n");
         mediciones.delete(medida);
     }
 
     @Override
     public void update(Mediciones medida) throws Exception {
+        System.out.print("Estoy en update de mediciones en service  \n");
         mediciones.update(medida);
     }
 
-    @Override
-    public Mediciones read(Mediciones medida) throws Exception {
-        return mediciones.read(medida);
-    }
 
-    public List<TipoInstrumentoObj> get_lista_tipo_instrumento(){
-        return data.getListaTipos();
+    @Override
+    public void forceUpdate() throws IOException {
+
     }
 }

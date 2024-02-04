@@ -6,6 +6,7 @@ import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
+import labPresentation.Model.PDF;
 import labPresentation.Model.TiposInstrumentosModel;
 import labPresentation.View.TipoInstrumentoView;
 
@@ -22,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class TiposInstrumentoController implements IController {
     //private static List<TipoInstrumentoObj> listaInstrumentos;
     private static TipoInstrumentoView tpInst;
     private static JCheckBox chB_busqueda;
-
+    private PDF pdfO;
     ServiceProxy localService;
     //Constructor------------------------------------------------------------------------------------------------------
     public TiposInstrumentoController() throws ParserConfigurationException, IOException, TransformerException {
@@ -58,18 +60,12 @@ public class TiposInstrumentoController implements IController {
          chB_busqueda = tpInst.getChB_busqueda();
 
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
-        //localService.setTipoinscontroller(this);
 
-        tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad);
-        //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
+        tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad, pdfO);
 
         ServiceProxy.instance().setTControllerTipo(this);
         tInstrumentosModel.updateLista();
-        //tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 
-
-
-        //this.instrumentos_controller = visitor; //THIS
     }
 
     public void cargarDatos(List<TipoInstrumentoObj> list) throws Exception {
@@ -90,8 +86,6 @@ public class TiposInstrumentoController implements IController {
             cargarDatos((List<TipoInstrumentoObj> ) o);
         }
 
-        //aqui llamamos al commit o algo asi
-        //la cosa es que le cvaiga encima a la lista y la actualice
     }
 
     private void cargarDatosUnidades(List<UnidadMedida> lis) throws Exception {
@@ -100,6 +94,10 @@ public class TiposInstrumentoController implements IController {
 
     public void iniciarlizar_lista_tipos_instrumento(){
 
+    }
+
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
     }
 
     //Clases anidadas--------------------------------------------------------------------------------------------------
@@ -146,7 +144,13 @@ public class TiposInstrumentoController implements IController {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             switch(actionEvent.getActionCommand()){
-                case "Reporte":{reporte(); break;}
+                case "Reporte":{
+                    try {
+                        reporte();
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;}
                 case "Buscar":{buscar(); break;}
                 case "Busqueda por codigo":{changeText(); break;}
             }
@@ -158,7 +162,7 @@ public class TiposInstrumentoController implements IController {
 
         int respuesta = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro de querer borrar el tipo?",
+                "¿Está seguro de querer borrar el tipo? ESTO ELIMINARA LOS INSTRUMENTOS Y SUS CALIBRACIONES ASOCIADAS",
                 "Confirmación",
                 JOptionPane.YES_NO_OPTION);
 
@@ -169,6 +173,7 @@ public class TiposInstrumentoController implements IController {
             tInstrumentosModel.eliminar(cod, valFil); //elimina de la lista y de la tabla
             //reseteamos GUI
             resetGui();
+            ServiceProxy.instance().forceUpdate();
         }
     }
     static private void guardar (){
@@ -310,7 +315,7 @@ public class TiposInstrumentoController implements IController {
 
     }
 
-    static private void reporte(){
+    static private void reporte() throws FileNotFoundException {
         tInstrumentosModel.generarReporteGeneral();
     }
 
@@ -326,4 +331,6 @@ public class TiposInstrumentoController implements IController {
     public void add_visitor(Instrumentos_Controller ctl){
         this.instrumentos_controller = ctl; //THIS
     }
+
+
 }

@@ -96,4 +96,15 @@ public class Instrumento implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "serie='" + serie + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", unidad='" + unidad + '\'' +
+                ", maximo=" + maximo +
+                ", minimo=" + minimo +
+                ", tolerancia=" + tolerancia +
+                '}';
+    }
 }

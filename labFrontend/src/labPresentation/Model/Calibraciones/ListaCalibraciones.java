@@ -45,6 +45,14 @@ public class ListaCalibraciones {
         ListaCalibraciones that = (ListaCalibraciones) o;
         return Objects.equals(listaCalibraciones, that.listaCalibraciones);
     }
+    public Calibraciones obtener(int str) {
+        for (Calibraciones calibraciones : listaCalibraciones) {
+            if (calibraciones.getNumeroCalibracion() == str) {
+                return calibraciones;
+            }
+        }
+        return null;
+    }
 
     @Override
     public int hashCode() {

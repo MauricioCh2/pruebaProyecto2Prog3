@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <actions>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Calibre</action>
+    <action>El cliente num: 1 a creado  una calibracion: 5</action>
+    <action>El cliente num: 1 a creado  una calibracion: 5</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 14</action>
+    <action>El cliente num: 1 a creado  una calibracion: 6</action>
+  </actions>
+</data>

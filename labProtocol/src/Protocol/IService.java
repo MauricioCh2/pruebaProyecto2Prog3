@@ -1,14 +1,12 @@
 package Protocol;
 
-import Protocol.Listas.UnidadMedList;
-
 import java.io.IOException;
 import java.util.List;
 
 //comentario -----------------------------
 public interface IService {
     public void register()throws Exception ;
-
+    public void forceUpdate() throws IOException;
 
     //--------------Unidades de Medida---------------
     public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis ) throws Exception;
@@ -16,13 +14,7 @@ public interface IService {
     //--------------TIPOS DE INTRUMENTO---------------
     public void create(TipoInstrumentoObj e) throws Exception;
 
-    public void send_tipos_instrumento(TipoInstrumentoObj obj);//borrar
-
-    public void agregar_tipo_instrumento(TipoInstrumentoObj obj);//borrar
-
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception;
-
-    public List<TipoInstrumentoObj> read() throws Exception;
 
     public void update(TipoInstrumentoObj e) throws Exception;
 
@@ -52,15 +44,16 @@ public interface IService {
     public void deleteCalibracionId(String id) throws Exception;
 
 
-    //--------------------MEDIDAS---------------------
+    //--------------------MEDICIONES---------------------
     public void create(Mediciones medida) throws Exception;
 
-    public Mediciones read(Mediciones medida) throws Exception;
+    public List<Mediciones> read(Mediciones medida) throws Exception;
 
     public void update(Mediciones medida) throws Exception;
 
     public void delete(Mediciones medida) throws Exception;
 
-    public List<TipoInstrumentoObj> get_lista_tipo_instrumento();
+
+
 }
 

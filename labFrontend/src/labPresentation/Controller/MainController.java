@@ -3,6 +3,7 @@ package labPresentation.Controller;
 
 import Protocol.Instrumento;
 import labLogic.ServiceProxy;
+import labPresentation.Model.PDF;
 import labPresentation.View.Aplication;
 //import labLogic.ServiceProxy;
 
@@ -12,13 +13,18 @@ public class MainController {
     private TiposInstrumentoController tiposInstrumentoController;
     private static CalibracionesController calibracionesController;
     private MessageController messageController;
+    static PDF pdf;
     public MainController() throws Exception {
         ServiceProxy.instance().register();
         messageController = new MessageController();
-
+        pdf = new PDF();
         tiposInstrumentoController = new TiposInstrumentoController();
         instrumentosController = new Instrumentos_Controller(this);
         calibracionesController = new CalibracionesController();
+        tiposInstrumentoController.setPDF(pdf);
+        instrumentosController.setPDF(pdf);
+        calibracionesController.setPDF(pdf);
+
 
         app = new Aplication();
         app.getInstrumentoView().init_controller(tiposInstrumentoController);

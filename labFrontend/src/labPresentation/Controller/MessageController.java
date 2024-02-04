@@ -17,7 +17,7 @@ public class MessageController implements IDeliver {
     @Override
     public void deliver(Message messages) {
         Mesmodel.messages.add(messages);
-        Mesmodel.commit(Mesmodel.CHAT);
+
         String textoActual = view.getTxP_textoMensajes().getText();
         view.getTxP_textoMensajes().setText( textoActual + "\n" +messages.getMessage());
         Mesmodel.escribir_action(messages.getMessage());

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CRUDMediciones {
     //Database db;
@@ -24,7 +25,7 @@ public class CRUDMediciones {
         System.out.println("Crea medicion.. "+med.getNumMedicion()+"\n");
     }
 
-    public Mediciones read(Mediciones med) throws Exception {
+    public List<Mediciones> read(Mediciones med) throws Exception {
         ArrayList<Mediciones> lista = new ArrayList<>();
         Connection connection =  new DataBaseConn().connection();
         String sql = "select * from mediciones";

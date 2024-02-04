@@ -25,6 +25,11 @@ public class Mediciones implements Serializable {
         valorReferencia = vR;
         valorMarcado = vM;
     }
+    public Mediciones(int numM,double vR,double vM){
+        numMedicion = numM;
+        valorReferencia = vR;
+        valorMarcado = vM;
+    }
      public Mediciones(double vR, double vM, int cal){
         valorReferencia = vR;
         valorMarcado = vM;

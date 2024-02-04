@@ -1,6 +1,8 @@
 package labPresentation.Model.Calibraciones;
 
+import Protocol.Calibraciones;
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,60 +20,48 @@ public class MedicionesModel {
     public MedicionesModel(){
 
     }
-    public void cargar_tablaMediciones(Instrumento obj, int med){
-
-
+    public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med) {
         DefaultTableModel model = (DefaultTableModel) tablaM.getModel();
 
-        System.out.println(obj.toString() +"    "+ med);
+        System.out.println(obj.toString() + "    " + med);
         System.out.println("Cont " + model.getRowCount());
-        if (model.getRowCount()>0){this.limpiar_tabla(model);}
-        if (!listM.isEmpty()) {this.reiniciar_lista();}
-        this.obtenerMediciones(obj, med);
-        for (int i = 0; listM.size() > i; i++){
-            Object[] fila = new Object[]{i, listM.get(i).getValorReferencia(), "0"};
+
+        if (model.getRowCount() > 0) {
+            this.limpiar_tabla(model);
+        }
+
+        if (calibracion != null && !calibracion.getMedicionesL().isEmpty()) {
+            this.limpiar_tabla(model);
+        }
+
+        List<Mediciones> lis = new ArrayList<>();
+        double valorIntervalo = (double) (obj.getMaximo() - obj.getMinimo()) / med;
+        double valorM = obj.getMinimo();
+        for (int i = 1; i <= med; i++) {
+            Mediciones medicion = new Mediciones(i, valorM);
+            lis.add(medicion);
+            Object[] fila = new Object[]{i, valorM, null};
             model.addRow(fila);
-            validarToleranciaMedicion(listM.get(i), obj);
-        }
-
-    }
-    public void validarToleranciaMedicion(Mediciones mediciones, Instrumento instrumentoCalibrado) {
-        try {
-            double valorReferencia = mediciones.getValorReferencia();
-            double valorLectura = mediciones.getValorMarcado();
-            double tolerancia = instrumentoCalibrado.getTolerancia();
-            double limiteInferior = valorReferencia - tolerancia;
-            double limiteSuperior = valorReferencia + tolerancia;
-
-            if (valorLectura < limiteInferior || valorLectura > limiteSuperior) {
-                // mediciones.resaltar();
-                JOptionPane.showMessageDialog(null, "El instrumento presenta un problema. La medición está fuera del rango de tolerancia.", "Información", JOptionPane.INFORMATION_MESSAGE);
+            Object value = model.getValueAt(i - 1, 2);
+            if (value != null) {
+                medicion.setValorMarcado(((Double) value).doubleValue());
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+            valorM += valorIntervalo;
+        }
+        if (calibracion != null) {
+            calibracion.setMedicionesL(lis);
         }
     }
-    public void obtenerMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
-        //Rangos de mediciones
-        double valorMaximo = instrumentoCalibrado.getMaximo();  //Valor máximo.
-        double valorMinimo = instrumentoCalibrado.getMinimo();  //Valor mínimo.
-        double valorIntervalo = (valorMaximo - valorMinimo) / cantidadDeMediciones;
 
-        for (int i = 0; i < cantidadDeMediciones; i++) {
-            double valorReferencia = valorMinimo + i * valorIntervalo;
-            listM.add(new Mediciones(valorReferencia, 0));
-        }
-    }
+
+        //this.validarToleranciaMedicion(listM, obj);
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
         List<Mediciones> lis = new ArrayList<>();
-        //Rangos de mediciones
-        double valorMaximo = instrumentoCalibrado.getMaximo();  //Valor máximo.
-        double valorMinimo = instrumentoCalibrado.getMinimo();  //Valor mínimo.
-        double valorIntervalo = (valorMaximo - valorMinimo) / cantidadDeMediciones;
-
-        for (int i = 0; i < cantidadDeMediciones; i++) {
-            double valorReferencia = valorMinimo + i * valorIntervalo;
-            lis.add(new Mediciones(valorReferencia, 0));
+        double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;
+        double valorM = instrumentoCalibrado.getMinimo();
+        for (int i = 1; i <= cantidadDeMediciones; i++) {
+            lis.add(new Mediciones(i,valorM));
+            valorM+=valorIntervalo;
         }
         return  lis;
     }
@@ -88,4 +78,7 @@ public class MedicionesModel {
         listM.clear();
     }
 
+    public List<Mediciones> getListM() {
+        return listM;
+    }
 }

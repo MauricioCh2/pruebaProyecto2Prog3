@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,37 +19,29 @@ import java.util.List;
 public class TiposInstrumentosModel {
     private List<TipoInstrumentoObj> listaInstrumentos;
     private List<UnidadMedida> listaUnidades;
-    private TipoInstrumentoObj current;
+
     private JTable tbl_tiposInst;
     private JComboBox cmB_tiposIns;
     private JComboBox cmB_UnidadMed;
-    private DOM_tiposInstrumento dom;
     private PDF reporte;
 
     //Metodos----------------------------------------------------------------------------------------------------------
-    public TiposInstrumentosModel(JTable table, JComboBox comb, JComboBox combUnidad) throws ParserConfigurationException, IOException, TransformerException {
+    public TiposInstrumentosModel(JTable table, JComboBox comb, JComboBox combUnidad, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
         listaInstrumentos = new ArrayList<>();
         cmB_tiposIns = comb;
         cmB_UnidadMed = combUnidad;
         tbl_tiposInst = table;
-        dom = new DOM_tiposInstrumento();
-        reporte = new PDF("tipos de instrumentos", dom);
+        reporte = pdf;
     }
     public void save(TipoInstrumentoObj ins) throws Exception {
-        DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
-       // boolean guardado = true;
-                ins.setUnidad(getUnidadNom(ins.getUnidadId()));
-                try{
-                    ServiceProxy.instance().create(ins);
-                   // Object[] newRow = {ins.getCodigo(),ins.getNombre(),ins.getUnidad()};
-                   // model.addRow(newRow);
-                    updateLista();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-        // ServiceProxy.instance().send_tipos_instrumento(ins);
 
-       // return guardado;
+        ins.setUnidad(getUnidadNom(ins.getUnidadId()));
+        try{
+            ServiceProxy.instance().create(ins);
+            updateLista();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -59,33 +52,23 @@ public class TiposInstrumentosModel {
             listaInstrumentos.remove(ins);//elimina elemento de la lista
             modelo.removeRow(fila);         //elimina elemento de la tabla
             updateLista();
-            //dom.eliminarTipo(ins);
-            //dom.cargaTiposATable(tbl_tiposInst, cmB_tiposIns);
-
 
 
         } catch (Exception e){
-//
+
         }
 
     }
 
     public boolean update (TipoInstrumentoObj ins) throws Exception {
         boolean re;
-
                 ServiceProxy.instance().update(ins);
                 updateLista();
         re = true;
 
         return re;
     }
-    private boolean createTipoXML(TipoInstrumentoObj tIns){
-        return dom.addTipoInstrumento(tIns);
-    }
 
-    public List<TipoInstrumentoObj> getListaInstrumentos() {
-        return listaInstrumentos;
-    }
 
     public void setListaInstrumentos(List<TipoInstrumentoObj> listaInstrumentos) {this.listaInstrumentos = listaInstrumentos;}
     public void setListaUnidades(List<UnidadMedida> listaUnidades) {this.listaUnidades = listaUnidades;}
@@ -102,11 +85,10 @@ public class TiposInstrumentosModel {
             Object[] newRow = {obj.getCodigo(),obj.getNombre(),obj.getUnidad()};
 
             modelo.addRow(newRow);
-            //ServiceProxy.instance().findById(obj.getUnidadId());
             comb.addItem(obj.getCodigo());
 
         }
-       // setListaInstrumentos(list);
+       reporte.setListaTipos(list);
     }
     public void cargarDatosUnidad(List<UnidadMedida>list, JComboBox combU) throws Exception {
 
@@ -115,14 +97,13 @@ public class TiposInstrumentosModel {
         for (UnidadMedida obj:list) {
             System.out.println("Recupere esta unidad: " + obj.getNombre());
             combU.addItem(obj.getNombre());
-            //ServiceProxy.instance().findById(obj.getUnidadId());
-            //comb.addItem(ServiceProxy.instance().getPrueba());
+
         }
-        // setListaInstrumentos(list);
+
     }
 
     public void updateLista() throws Exception {
-        //ServiceProxy.instance().inicializar_cliente();
+
         ServiceProxy.instance().readUnidadesMedida(listaUnidades);
         ServiceProxy.instance().read(listaInstrumentos);
 
@@ -178,11 +159,8 @@ public class TiposInstrumentosModel {
 
 
     //Reporte------------------------------------------
-    public void generarReporteTipos(){
-
-    }
-    public void generarReporteGeneral(){
-        reporte.createPDF();
+    public void generarReporteGeneral() throws FileNotFoundException {
+        reporte.createPDF("tipos de instrumentos");
     }
 
 

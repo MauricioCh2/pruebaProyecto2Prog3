@@ -9,10 +9,6 @@ public class Message implements Serializable {
     String message;
     int numwork;
 
-    //se podria mandar la estructura o algo similar
-    // o un int con el protocolo que se ejecutó en el mensaje
-    // como decir hey se hizo un update a este objeto, paraa que los demás workers hagan lo mismo
-    //asi será más util que solo texto
     public static final int CREATE = 1;
     //public static final int READ = 2;
     public static final int UPDATE = 2;
@@ -51,8 +47,5 @@ public class Message implements Serializable {
     public String getMessage() {
         return message;
     }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    
 }

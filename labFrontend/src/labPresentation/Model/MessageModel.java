@@ -23,15 +23,6 @@ public class MessageModel {
         this.messages = mensajes;
     }
 
-    public void addObserver(java.util.Observer o) {
-//        super.addObserver(o);
-//        this.commit(MessageModel.CHAT);
-    }
-
-    public void commit(int properties) {
-//        this.setChanged();
-//        this.notifyObservers(properties);
-    }
 
     public void escribir_action(String msg){
         try {

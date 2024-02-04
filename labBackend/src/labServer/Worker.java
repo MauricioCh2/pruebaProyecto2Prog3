@@ -1,13 +1,6 @@
 package labServer;
 
-import Protocol.IService;
-import Protocol.Listas.UnidadMedList;
-import Protocol.Message;
-import Protocol.Protocol;
-import Protocol.TipoInstrumentoObj;
-import Protocol.Calibraciones;
-import Protocol.Instrumento;
-import Protocol.UnidadMedida;
+import Protocol.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -333,14 +326,14 @@ public class Worker { // es cada socket
                     case Protocol.DELETECALIBRACION:
                         try{
                             System.out.println("Estoy en deleteCalibracion de worker");
-                            String tipoId = (String) in.readObject();
+                            Calibraciones calibraciones = (Calibraciones) in.readObject();
 
                             out.writeInt(Protocol.DELETECALIBRACION);
-                            //out.writeObject(service.delete(tipoId));
+                            service.delete(calibraciones);
                             System.out.println("Le envio de vuelta el id eliminado ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "a calibracion", tipoId, numeroWorker);
+                            message = new Message( Message.DELETE, "a calibracion",String.valueOf(calibraciones.getNumeroCalibracion()), numeroWorker);
                             srv.deliver(message);
 
                         }catch(Exception ex){
@@ -348,22 +341,79 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
-                    case Protocol.SEND_LISTA_TIPO_INSTRUMENTOS:
-                        try {
-                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
-                            srv.set_lista_candidatos_clientes(list);
-                        } catch (Exception ex) {}
+                    case Protocol.CREATEMEDICIONES:
+                        try{
+                            System.out.println("Estoy en CREATE MEDICIONES de worker");
+                            Mediciones med = (Mediciones) in.readObject();
+                            service.create(med);
+
+                            out.writeInt(Protocol.CREATEMEDICIONES);
+                            out.writeObject(med);
+
+                            out.flush();
+
+                            message = new Message( Message.CREATE, "a mediciones", String.valueOf(med.getNumMedicion()),numeroWorker);
+                            srv.deliver(message);
+                        }catch(Exception ex){
+                            System.out.println("Catch del create  mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
                         break;
-                    case Protocol.SEND_TIPO_INSTRUMENTOS:
-                        try {
-                            System.out.println("Se tiene que agregar un candidato");
-                            TipoInstrumentoObj obj = (TipoInstrumentoObj) in.readObject();
-                            System.out.println(obj.getNombre());
-                            service.agregar_tipo_instrumento(obj);
-                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
-                            srv.set_lista_candidatos_clientes(list);
-                        } catch (Exception ex) {}
+                    case Protocol.READMEDICIONES:
+                        try{
+                            System.out.println("Estoy en readMediciones de worker");
+                            Mediciones med = (Mediciones) in.readObject();
+                            List<Mediciones> lis = service.read(med);
+
+                            out.writeInt(Protocol.READMEDICIONES);
+                            out.writeObject(lis);
+                            System.out.println("Ya le mande de vuelta la lista de mediciones");
+                            out.flush();
+
+                            srv.update(lis, Protocol.READMEDICIONES);
+
+                        }catch (Exception ex){
+                            System.out.println("Catch del read mediciones:"+ ex.getMessage());
+                            continuar = false;
+                        }
                         break;
+                    case Protocol.UPDATEMEDICIONES:
+                        try{
+                            System.out.println("Estoy en updateMediciones de worker");
+
+                            Mediciones med = (Mediciones) in.readObject();
+
+
+                            out.writeInt(Protocol.READMEDICIONES);
+                            System.out.println("Le mando de vuelta al proxy mediciones ");
+                            out.flush();
+
+                            message = new Message( Message.UPDATE, "a medicion", String.valueOf(med.getNumMedicion()), numeroWorker);
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del update mediciones"+ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETEMEDICIONES:
+                        try{
+                            System.out.println("Estoy en deleteMediciones de worker");
+                            String tipoId = (String) in.readObject();
+
+                            out.writeInt(Protocol.DELETEMEDICIONES);
+                            System.out.println("Le envio de vuelta el id eliminado ");
+                            out.flush();
+
+                            message = new Message( Message.DELETE, "a medicion", tipoId, numeroWorker);
+                            srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
+
                     case Protocol.REQUEST_NUMERO_WORKER:
                         try {
                             //srv.send_numero_worker(numeroWorker);
@@ -371,6 +421,10 @@ public class Worker { // es cada socket
                         } catch (Exception ex) {}
                         break;
 
+                    case Protocol.FORCE_UPDATE:
+                        srv.update(service.read_instrumentos(), Protocol.RELOAD_INSTRUMENTO);
+                        //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
+                        break;
 
                 }
                 out.flush();

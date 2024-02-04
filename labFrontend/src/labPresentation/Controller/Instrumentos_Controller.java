@@ -6,6 +6,7 @@ import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
+import labPresentation.Model.PDF;
 import labPresentation.View.InstrumentosView;
 import org.xml.sax.SAXException;
 
@@ -18,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class Instrumentos_Controller implements IController {
 
     private static Instrumento instrumento;
     ServiceProxy localService;
+    private PDF pdfO;
 
     public Instrumentos_Controller(MainController cont) throws ParserConfigurationException, IOException, TransformerException {
         super();
@@ -41,7 +44,7 @@ public class Instrumentos_Controller implements IController {
     }
     public void init_view(InstrumentosView view) throws Exception {
         this.instrumentView = view;
-        this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
+        this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos(), pdfO);
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         ServiceProxy.instance().setTControllerInstrumento(this);
         model.updateLista();
@@ -55,6 +58,8 @@ public class Instrumentos_Controller implements IController {
         }
     }
 
+
+
     public void cargarDatos(List<Instrumento> list) throws Exception {
         model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos(),list);
     }
@@ -66,14 +71,10 @@ public class Instrumentos_Controller implements IController {
                 //Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia )
                 Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem().toString()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
-
                 if (!EDIT) {
                     model.save(instrumento);
-                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
-
                 } else {
                     model.actualizar(instrumento);
-                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
 
                 limpiar_pnl_ingreso_txFields();
@@ -87,8 +88,18 @@ public class Instrumentos_Controller implements IController {
     }
 
     public static void eliminar_elemento(String serie) throws Exception {
-        limpiar_pnl_ingreso_txFields();
-        model.eliminar_elemento(serie);
+        int respuesta = JOptionPane.showConfirmDialog(
+                null,
+                "¿Está seguro de querer borrar el instrumento? ESTO ELIMINARA LAS CALIBRACIONES Y SUS MEDICIONES ASOCIADAS",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            limpiar_pnl_ingreso_txFields();
+            model.eliminar_elemento(serie);
+        }
+
+
     }
 
     public static boolean validar_excepciones(String serie){
@@ -102,7 +113,7 @@ public class Instrumentos_Controller implements IController {
             }
             min = Integer.parseInt(instrumentView.getTxF_Minimo().getText());
             max = Integer.parseInt(instrumentView.getTxF_Maximo().getText());
-            if (min>max) {
+            if (min>=max) {
                 throw new Exception("El valor maximo debe ser mayor al minimo");
             }
 //            if (model.instrumento_existente(serie)){
@@ -172,6 +183,10 @@ public class Instrumentos_Controller implements IController {
 
     }
 
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
+    }
+
 
     // classes
     public static class Btns_Instrumento implements ActionListener { //controller de botones de tipo de instrumento
@@ -206,14 +221,18 @@ public class Instrumentos_Controller implements IController {
                     break;
                 }
                 case "Reporte": {
-                    reporte();
+                    try {
+                        reporte();
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 default:
             }
         }
 
-        private void reporte() {
+        private void reporte() throws FileNotFoundException {
             model.generarReporte();
         }
 
