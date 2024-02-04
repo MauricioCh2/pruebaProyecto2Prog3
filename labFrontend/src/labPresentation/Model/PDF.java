@@ -9,7 +9,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import labPresentation.Model.Calibraciones.DOM_calibraciones;
 //import labPresentation.Model.Calibraciones.Mediciones;
 
 import javax.swing.*;

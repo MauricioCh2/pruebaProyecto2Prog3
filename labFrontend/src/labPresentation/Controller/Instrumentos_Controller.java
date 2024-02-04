@@ -90,8 +90,18 @@ public class Instrumentos_Controller implements IController {
     }
 
     public static void eliminar_elemento(String serie) throws Exception {
-        limpiar_pnl_ingreso_txFields();
-        model.eliminar_elemento(serie);
+        int respuesta = JOptionPane.showConfirmDialog(
+                null,
+                "¿Está seguro de querer borrar el instrumento? ESTO ELIMINARA LAS CALIBRACIONES Y SUS MEDICIONES ASOCIADAS",
+                "Confirmación",
+                JOptionPane.YES_NO_OPTION);
+
+        if (respuesta == JOptionPane.YES_OPTION) {
+            limpiar_pnl_ingreso_txFields();
+            model.eliminar_elemento(serie);
+        }
+
+
     }
 
     public static boolean validar_excepciones(String serie){

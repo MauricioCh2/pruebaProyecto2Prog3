@@ -170,7 +170,7 @@ public class TiposInstrumentoController implements IController {
 
         int respuesta = JOptionPane.showConfirmDialog(
                 null,
-                "¿Está seguro de querer borrar el tipo?",
+                "¿Está seguro de querer borrar el tipo? ESTO ELIMINARA LOS INSTRUMENTOS Y SUS CALIBRACIONES ASOCIADAS",
                 "Confirmación",
                 JOptionPane.YES_NO_OPTION);
 

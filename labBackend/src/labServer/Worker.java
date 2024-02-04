@@ -421,22 +421,7 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
-                    case Protocol.SEND_LISTA_TIPO_INSTRUMENTOS:
-                        try {
-                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
-                            srv.set_lista_candidatos_clientes(list);
-                        } catch (Exception ex) {}
-                        break;
-                    case Protocol.SEND_TIPO_INSTRUMENTOS:
-                        try {
-                            System.out.println("Se tiene que agregar un candidato");
-                            TipoInstrumentoObj obj = (TipoInstrumentoObj) in.readObject();
-                            System.out.println(obj.getNombre());
-                            service.agregar_tipo_instrumento(obj);
-                            List<TipoInstrumentoObj> list = service.get_lista_tipo_instrumento();
-                            srv.set_lista_candidatos_clientes(list);
-                        } catch (Exception ex) {}
-                        break;
+
                     case Protocol.REQUEST_NUMERO_WORKER:
                         try {
                             //srv.send_numero_worker(numeroWorker);

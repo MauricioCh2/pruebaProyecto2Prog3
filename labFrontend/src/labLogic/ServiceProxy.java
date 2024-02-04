@@ -11,12 +11,14 @@ import java.util.List;
 
 public class ServiceProxy implements IService {
     private static ServiceProxy theInstance;
+
     public static ServiceProxy instance() {
-        if (theInstance == null){
+        if (theInstance == null) {
             theInstance = new ServiceProxy();
         }
         return theInstance;
     }
+
     ObjectInputStream in; // obj entrada
     ObjectOutputStream out; // obj salida
 
@@ -33,75 +35,85 @@ public class ServiceProxy implements IService {
 
         out.flush();//una vez transmito limpio y cierro
         int response = in.readInt();//automaticamente ahora espero la respuesta
-        if (response==Protocol.ERROR_NO_ERROR){
+        if (response == Protocol.ERROR_NO_ERROR) {
             System.out.println("Voy a ejecutar start");
             this.start();//una vez nos coencatmos bien a todo
-        }else{
+        } else {
             System.out.println("Error al conectar con el servidor");
         }
     }
 
 
     Socket skt;
-    private void connect() throws Exception{
-        skt = new Socket(Protocol.SERVER,Protocol.PORT);
-        out = new ObjectOutputStream(skt.getOutputStream() );
+
+    private void connect() throws Exception {
+        skt = new Socket(Protocol.SERVER, Protocol.PORT);
+        out = new ObjectOutputStream(skt.getOutputStream());
         out.flush();//deja de transmitir, es como un break, quedaria abierto, limpia elruido dl socket
         in = new ObjectInputStream(skt.getInputStream());
     }
 
-    private void disconnect() throws Exception{
+    private void disconnect() throws Exception {
         skt.shutdownOutput();//manda una señal de que la transmcion termino
         skt.close();
     }
 
-    public void inicializar_cliente(){
+    public void inicializar_cliente() {
         try {
             out.writeInt(Protocol.SEND_LISTA_TIPO_INSTRUMENTOS);
             out.flush();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Excepcion: " + ex.getMessage());
         }
     }
 
-    public void solicitar_numero_worker(){
+    public void solicitar_numero_worker() {
         try {
             out.writeInt(Protocol.REQUEST_NUMERO_WORKER);
             out.flush();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("Excepcion: " + ex.getMessage());
         }
     }
 
-    public void setIDeliver(IDeliver d){
+    public void setIDeliver(IDeliver d) {
         deliver = d;
     }
-    public void setTControllerTipo(IController c){
-        controllerTipo = c;}
-    public void setTControllerInstrumento(IController c){
-        controllerInst = c;}
-    public void setControllerCal(IController c){
-        controllerCal = c;}
+
+    public void setTControllerTipo(IController c) {
+        controllerTipo = c;
+    }
+
+    public void setTControllerInstrumento(IController c) {
+        controllerInst = c;
+    }
+
+    public void setControllerCal(IController c) {
+        controllerCal = c;
+    }
+
     //Listening funtions----------------------------------------------
     boolean continuar = true;
-    public void start(){
+
+    public void start() {
         System.out.println("Client worker atendiendo peticiones...");
-        Thread t = new Thread(new Runnable(){
-            public void run(){
+        Thread t = new Thread(new Runnable() {
+            public void run() {
                 listen();
             }//aca se encicla para que el hilo no se acaba
         });
         continuar = true;
         t.start();
     }
-    public void stop(){
-        continuar=false;
+
+    public void stop() {
+        continuar = false;
     }
 
 
-    public void listen(){
+    public void listen() {
         System.out.println("Ejecutando listen de front end");
         int method;
         while (continuar) {
@@ -109,47 +121,46 @@ public class ServiceProxy implements IService {
                 method = in.readInt();
 
                 System.out.println("DELIVERY del listen del worker ");
-                System.out.println("Operacion: "+method);
+                System.out.println("Operacion: " + method);
 
-                switch(method){
+                switch (method) {
                     case Protocol.DELIVER://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         try {
                             System.out.println("Se entro al deliver en service proxy");
-                            Message message=(Message)in.readObject();
-                            System.out.println("Mensaje de message en Service Proxy: /Protocol deliver "+message.getMessage());
+                            Message message = (Message) in.readObject();
+                            System.out.println("Mensaje de message en Service Proxy: /Protocol deliver " + message.getMessage());
                             deliver(message);
-                        } catch (ClassNotFoundException ex) {}
+                        } catch (ClassNotFoundException ex) {
+                        }
                         break;
                     //Reload/ refresco de listas--------------------------------------------------------------------------------------
                     case Protocol.RELOAD_UM://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         System.out.println("Se entro al deliver en service proxy");
-                        Object objectU=in.readObject();
+                        Object objectU = in.readObject();
                         System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                        update(objectU,Protocol.RELOAD_UM);
+                        update(objectU, Protocol.RELOAD_UM);
                         break;
                     case Protocol.RELOAD_TIP_INS://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         System.out.println("Se entro al deliver en service proxy");
-                        Object objectT=in.readObject();
+                        Object objectT = in.readObject();
                         System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                        update(objectT,Protocol.RELOAD_TIP_INS);
+                        update(objectT, Protocol.RELOAD_TIP_INS);
                         break;
                     case Protocol.RELOAD_INSTRUMENTO://en particular este solo hace el deliveri por que el cliente solo necesita escuhar esto
                         System.out.println("Se entro al deliver en service proxy");
-                        Object objectI=in.readObject();
+                        Object objectI = in.readObject();
                         System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                        update(objectI,Protocol.RELOAD_INSTRUMENTO);
+                        update(objectI, Protocol.RELOAD_INSTRUMENTO);
                         break;
                     case Protocol.RELOAD_CALIBRACION:
                         System.out.println("Se entro al deliver en service proxy");
-                        Object objectC=in.readObject();
+                        Object objectC = in.readObject();
                         System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
-                        update(objectC,Protocol.RELOAD_CALIBRACION);
+                        update(objectC, Protocol.RELOAD_CALIBRACION);
                         break;
                     case Protocol.ERROR_NO_ERROR:
-                        System.out.println("Error_no_error");break;
-
-
-
+                        System.out.println("Error_no_error");
+                        break;
 
 
                     //--------------------------------------------------Unidad Medida--------------------------------------------------
@@ -158,7 +169,7 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la lista de unidad de medida perfectamente a Service!!\n");
                         break;
                     case Protocol.FINDIDUNIDAD:
-                         UnidadMedida med  = (UnidadMedida) in.readObject();
+                        UnidadMedida med = (UnidadMedida) in.readObject();
                         System.out.println("Me llego el elemento buscado  de unidad de medida perfectamente a Service!!\n");
                         break;
                     //--------------------------------------------------TIPOS DE INSTRUMENTOS--------------------------------------------------
@@ -180,11 +191,11 @@ public class ServiceProxy implements IService {
                         System.out.println("Me llego la lista de instrumentos perfectamente a Service!!\n");
                         break;
                     case Protocol.UPDATEINSTRUMENTO:
-                       // boolean p_i = (boolean) in.readObject();
+                        // boolean p_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que actualizo instrumento!!\n");
                         break;
                     case Protocol.DELETEINSTRUMENTO:
-                       // boolean del_i = (boolean) in.readObject();
+                        // boolean del_i = (boolean) in.readObject();
                         System.out.println("Me llego la notificacion de que elimino instrumento!!\n");
                         break;
 
@@ -219,7 +230,7 @@ public class ServiceProxy implements IService {
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
-                System.out.println("Se detuvo en el catch de listen de service proxy: "+ex.getMessage());
+                System.out.println("Se detuvo en el catch de listen de service proxy: " + ex.getMessage());
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -232,55 +243,56 @@ public class ServiceProxy implements IService {
         }
     }
 
-    private void deliver( final Message message ){
-        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
-            // se cierran solos cuando termina de pocesar (no esta en un while)
-               public void run(){
-                   deliver.deliver(message);
-               }
-           }
+    private void deliver(final Message message) {
+        SwingUtilities.invokeLater(new Runnable() {//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run() {
+                                           deliver.deliver(message);
+                                       }
+                                   }
         );
     }
 
-    private void set_numero_worker(final int num ){
-        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
+    private void set_numero_worker(final int num) {
+        SwingUtilities.invokeLater(new Runnable() {//crea un hilo temporal que se destrulle cuando termina
                                        // se cierran solos cuando termina de pocesar (no esta en un while)
-                                       public void run(){
+                                       public void run() {
                                            deliver.set_numero_worker(num);
                                        }
                                    }
         );
     }
-    private void update (Object ob, final int pro){
-        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
-            // se cierran solos cuando termina de pocesar (no esta en un while)
-               public void run(){
-                   try {
-                       controllerTipo.update(ob,pro);
-                       controllerInst.update(ob,pro);
-                       controllerCal.update(ob,pro);
-                   } catch (Exception e) {
-                       JOptionPane.showMessageDialog (null, e.getMessage());
-                   }
-               }
-           }
+
+    private void update(Object ob, final int pro) {
+        SwingUtilities.invokeLater(new Runnable() {//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run() {
+                                           try {
+                                               controllerTipo.update(ob, pro);
+                                               controllerInst.update(ob, pro);
+                                               controllerCal.update(ob, pro);
+                                           } catch (Exception e) {
+                                               JOptionPane.showMessageDialog(null, e.getMessage());
+                                           }
+                                       }
+                                   }
         );
     }
 
-    private void iniciar_lista_tipos_instrumento( final List<TipoInstrumentoObj> list ){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                try {
-                    //controller.cargar_datos(list);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+    private void iniciar_lista_tipos_instrumento(final List<TipoInstrumentoObj> list) {
+        SwingUtilities.invokeLater(new Runnable() {
+                                       public void run() {
+                                           try {
+                                               //controller.cargar_datos(list);
+                                           } catch (Exception e) {
+                                               throw new RuntimeException(e);
+                                           }
+                                       }
+                                   }
         );
     }
 
-    public void exit() throws Exception{ // como de deslogueo
+    public void exit() throws Exception { // como de deslogueo
         out.writeInt(Protocol.DISCONNECT);
         //out.writeObject(u);
         out.flush();
@@ -290,18 +302,18 @@ public class ServiceProxy implements IService {
     }
 
 
-
     //-------------------------------------------------------CRUD-------------------------------------------------------
     @Override
-    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis) throws Exception{
+    public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis) throws Exception {
         out.writeInt(Protocol.READUNIDAD);
         out.writeObject(lis);
         out.flush();
         System.out.println("Mande el mensaje de leer UM a el server");
         return lis;
     }
+
     @Override
-    public UnidadMedida findById(int id)throws Exception{
+    public UnidadMedida findById(int id) throws Exception {
         out.writeInt(Protocol.FINDIDUNIDAD);
         out.writeObject(id);
         out.flush();
@@ -320,19 +332,6 @@ public class ServiceProxy implements IService {
 
     }
 
-    @Override
-    public void send_tipos_instrumento(TipoInstrumentoObj obj) {
-        try {
-            out.writeInt(Protocol.SEND_TIPO_INSTRUMENTOS);
-            out.writeObject(obj);
-            out.flush();
-        } catch (IOException ex) {
-
-        }
-    }
-
-    @Override
-    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {}
 
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> Listipo) throws Exception {
@@ -342,7 +341,6 @@ public class ServiceProxy implements IService {
         System.out.println("Le estoy pasando la lista de tipos a server desde serviceProxy");
         return Listipo;
     }
-
 
 
     @Override
@@ -363,6 +361,7 @@ public class ServiceProxy implements IService {
 
 
     }
+
     @Override
     public void delete(String tipoID) throws Exception {
         out.writeInt(Protocol.DELETETIPO);
@@ -384,7 +383,7 @@ public class ServiceProxy implements IService {
     }
 
     @Override
-    public List<Instrumento> read_instrumentos( ) throws Exception {
+    public List<Instrumento> read_instrumentos() throws Exception {
         out.writeInt(Protocol.READINSTRUMENTO);
         //out.writeObject(listInst);
         out.flush();
@@ -420,6 +419,7 @@ public class ServiceProxy implements IService {
         System.out.println("Mande el mensaje de delete id instrumento a el server");
 
     }
+
     //-----------------------------------------------Calibraciones------------------------------------------------
     @Override
     public void create(Calibraciones calibracion) throws Exception {
@@ -458,6 +458,7 @@ public class ServiceProxy implements IService {
 
 
     }
+
     @Override
     public void deleteCalibracionId(String calibracion) throws Exception {
         out.writeInt(Protocol.DELETECALIBRACION);
@@ -484,7 +485,7 @@ public class ServiceProxy implements IService {
     }
 
 
-    public List<Mediciones> read(Mediciones medida) throws Exception{
+    public List<Mediciones> read(Mediciones medida) throws Exception {
         out.writeInt(Protocol.READCALIBRACION);
         out.writeObject(medida);
         out.flush();
@@ -493,28 +494,8 @@ public class ServiceProxy implements IService {
     }
 
     //-------------------------------------------Not Used-----------------------------------------------------
-    @Override
-    public List<TipoInstrumentoObj> get_lista_tipo_instrumento() {
-        return null;
-    }
-    @Override
-    public List<TipoInstrumentoObj> read() throws Exception {
-        return null;
-    }
-
-    //--------------------------------------------Setters controllers---------------------------------------------
 
 
-//    public void setTipoinscontroller(TiposInstrumentoController tipoinscontroller) {
-//        this.tipoinscontroller = tipoinscontroller;
-//    }
-//
-//    public void setInstrumentoController(Instrumentos_Controller instrumentoController) {
-//        this.instrumentoController = instrumentoController;
-//    }
-//
-//    public void setCalibracionesController(CalibracionesController calibracionesController) {
-//        this.calibracionesController = calibracionesController;
-//    }
 }
+
 

@@ -30,11 +30,11 @@ public class CalibracionesModel {
 
     JTable tablaC;
 
-    DOM_calibraciones dom;
+
     private PDF reporte;
 
     public  CalibracionesModel(JTable tabC, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
-        dom = new DOM_calibraciones();
+
         tablaC = tabC;
         reporte = pdf;
     }
@@ -84,9 +84,7 @@ public class CalibracionesModel {
         reporte.setListaCalibraciones(list);
         reporte.setListaMediciones(medicionesModel.getListM());
     }
-    boolean addCalibracionXML(Calibraciones cal){
-        return dom.addCalibraciones(cal);
-    }
+
     public void eliminar(int id, int fila) throws Exception {
         for (int i = 0; i < listC.size(); i++) {
             Calibraciones calibracion = listC.get(i);

@@ -17,7 +17,7 @@ public class Service implements IService {
     private CRUDCalibraciones calibraciones;
     private CRUDMediciones mediciones;
     private DAOUnidadMedida unidadMedida;
-    private LocalData data;
+
     public Service() {
         tiposInstrumento = new CRUDTiposInstrumento();
         instrumento = new CRUDInstrumento();
@@ -58,13 +58,6 @@ public class Service implements IService {
         }
     }
 
-    @Override
-    public void send_tipos_instrumento(TipoInstrumentoObj obj) {}
-    @Override
-    public void agregar_tipo_instrumento(TipoInstrumentoObj obj) {
-        data.getListaTipos().add(obj);
-        data.imprimir_lista_tipos();
-    }
 
     @Override
     public List<TipoInstrumentoObj> read(List<TipoInstrumentoObj> e) throws Exception {
@@ -72,11 +65,6 @@ public class Service implements IService {
         return tiposInstrumento.read(e);
     }
 
-    @Override
-    public List<TipoInstrumentoObj> read() throws Exception {
-        System.out.print("Estoy en read  tipos en service\n");
-        return tiposInstrumento.read();
-    }
 
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
@@ -199,7 +187,5 @@ public class Service implements IService {
         System.out.print("Estoy en update de mediciones en service  \n");
         mediciones.update(medida);
     }
-    public List<TipoInstrumentoObj> get_lista_tipo_instrumento(){
-        return data.getListaTipos();
-    }
+
 }

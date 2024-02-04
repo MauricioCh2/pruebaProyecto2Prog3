@@ -23,7 +23,6 @@ public class TiposInstrumentosModel {
     private JTable tbl_tiposInst;
     private JComboBox cmB_tiposIns;
     private JComboBox cmB_UnidadMed;
-    private DOM_tiposInstrumento dom;
     private PDF reporte;
 
     //Metodos----------------------------------------------------------------------------------------------------------
@@ -32,7 +31,6 @@ public class TiposInstrumentosModel {
         cmB_tiposIns = comb;
         cmB_UnidadMed = combUnidad;
         tbl_tiposInst = table;
-        dom = new DOM_tiposInstrumento();
         reporte = pdf;
     }
     public void save(TipoInstrumentoObj ins) throws Exception {
@@ -80,9 +78,7 @@ public class TiposInstrumentosModel {
 
         return re;
     }
-    private boolean createTipoXML(TipoInstrumentoObj tIns){
-        return dom.addTipoInstrumento(tIns);
-    }
+
 
     public List<TipoInstrumentoObj> getListaInstrumentos() {
         return listaInstrumentos;

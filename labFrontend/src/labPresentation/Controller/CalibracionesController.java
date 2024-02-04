@@ -138,6 +138,14 @@ public class CalibracionesController implements IController {
             textNumero.setText(numeroActual);
         }
     }
+    private static void resetGUI() throws Exception {
+
+            limpiar();
+
+            updateLista(instru.getSerie());
+
+    }
+
     public static  void buscarCalibraciones(){
         try {
             if(textNumeroB.getText().isEmpty() ){
@@ -186,7 +194,11 @@ public class CalibracionesController implements IController {
                     break;
                 }
                 case "Limpiar": {
-                    limpiar();
+                    try {
+                        resetGUI();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 case "Buscar": {
@@ -224,7 +236,7 @@ public class CalibracionesController implements IController {
         private void borrar() throws Exception {
             int respuesta = JOptionPane.showConfirmDialog(
                     null,
-                    "¿Está seguro de borrar esta calibracion?. Puede tener mediciones asociadas.",
+                    "¿Está seguro de borrar esta calibracion?. Puede tener mediciones asociadas y tambien se perderan.",
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {
@@ -234,9 +246,11 @@ public class CalibracionesController implements IController {
                     Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
                     int cod = (int) objCod; // lo convertimos a string
                     modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
+                    //updateLista(instru.getSerie());
                     //reseteamos GUI
                     limpiar();
                     calibracionesView.getBorrarButton().setEnabled(false);
+
                 }
             }
         }
@@ -309,7 +323,7 @@ public class CalibracionesController implements IController {
 
         public static String toStringt() {
             if (instru != null) {
-                return instru.getSerie() + " - " + instru.getDescripcion() + "(" + instru.getMinimo() + " a " + instru.getMaximo() + " " + instru.getUnidad() + ")";
+                return instru.getSerie() + " - " + instru.getDescripcion() + "(" +instru.getMinimo() + " a " + instru.getMaximo() + ", Unidad: " + instru.getUnidad() + ")";
             } else {
                 return "No hay instrumento cargado";
             }
