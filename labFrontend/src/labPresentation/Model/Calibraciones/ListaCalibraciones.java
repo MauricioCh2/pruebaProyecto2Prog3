@@ -1,6 +1,7 @@
 package labPresentation.Model.Calibraciones;
 
 import Protocol.Calibraciones;
+import Protocol.Instrumento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,14 @@ public class ListaCalibraciones {
         if (o == null || getClass() != o.getClass()) return false;
         ListaCalibraciones that = (ListaCalibraciones) o;
         return Objects.equals(listaCalibraciones, that.listaCalibraciones);
+    }
+    public Calibraciones obtener(int str) {
+        for (Calibraciones calibraciones : listaCalibraciones) {
+            if (calibraciones.getNumeroCalibracion() == str) {
+                return calibraciones;
+            }
+        }
+        return null;
     }
 
     @Override

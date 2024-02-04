@@ -87,8 +87,8 @@ public class CalibracionesController implements IController {
                 } else {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
-
-                    if (num <= (Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1)) {
+                    int numComparacion = Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1;
+                    if (num >= numComparacion) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             LocalDate date = LocalDate.now();
@@ -170,7 +170,11 @@ public class CalibracionesController implements IController {
                     break;
                 }
                 case "Borrar": {
-                    borrar();
+                    try {
+                        borrar();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 case "Limpiar": {
@@ -205,96 +209,102 @@ public class CalibracionesController implements IController {
             }
         }
 
-        private void borrar() {
+        private void borrar() throws Exception {
             int respuesta = JOptionPane.showConfirmDialog(
                     null,
-                    "¿Está seguro de querer borrar esta calibracion?",
+                    "¿Está seguro de borrar esta calibracion?. Puede tener mediciones asociadas.",
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
-
             if (respuesta == JOptionPane.YES_OPTION) {
                 int valFil = tableCalibraciones.getSelectedRow();//obtiene el valor de la fila
                 Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
-                String cod = objCod.toString(); // lo convertimos a string
-                modelo.eliminar(instru.getSerie(),cod, valFil); //elimina de la lista y de la tabla
+                int cod = (int) objCod; // lo convertimos a string
+                modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
                 //reseteamos GUI
                 calibracionesView.getBorrarButton().setEnabled(false);
             }
         }
-
     }
 
-    public static class TablesCalibraciones implements MouseListener {
+        public static class TablesCalibraciones implements MouseListener {
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            rellenartextfields(e);
-            calibracionesView.getBorrarButton().setEnabled(true);
-            calibracionesView.getMedicionesPanel().setVisible(true);
-            cargar_tablaMediciones();
-        }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                rellenartextfields(e);
+                calibracionesView.getBorrarButton().setEnabled(true);
+                calibracionesView.getMedicionesPanel().setVisible(true);
+                cargar_tablaMediciones();
+            }
 
 
-        private void rellenartextfields(MouseEvent e) {
+            private void rellenartextfields(MouseEvent e) {
 
-            textNumero.setEnabled(false);
-            try {
-                if (tableCalibraciones.getSelectedRow() != -1) {
-                    if (e.getClickCount() == 1) {
-                        DefaultTableModel modelo = (DefaultTableModel) tableCalibraciones.getModel();
-                        textNumero.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 0)));
-                        textFecha.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 1)));
-                        textMediciones.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
+                textNumero.setEnabled(false);
+                try {
+                    if (tableCalibraciones.getSelectedRow() != -1) {
+                        if (e.getClickCount() == 1) {
+                            DefaultTableModel modelo = (DefaultTableModel) tableCalibraciones.getModel();
+                            textNumero.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 0)));
+                            textFecha.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 1)));
+                            textMediciones.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
 
+                        }
+                    } else {
+                        throw new Exception("Seleccione una columna primero");
                     }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+
+            public void cargar_tablaMediciones() {
+                if (tableCalibraciones.getSelectedRow() == -1) {
+                    JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
                 } else {
-                    throw new Exception("Seleccione una columna primero");
+                    int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
+                    modelo_mediciones.cargar_tablaMediciones(instru, med);
+                    DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
+                    for (int i = 0; i < model.getRowCount(); i++) {
+                        model.isCellEditable(i, 0);
+                        model.isCellEditable(i, 1);
+                    }
+                    calibracionesView.getTextMediciones().setEnabled(false);
                 }
-            }catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
+
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+
         }
-        public void cargar_tablaMediciones() {
-            if (tableCalibraciones.getSelectedRow() == -1) {
-                JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
+
+        public static String toStringt() {
+            if (instru != null) {
+                return instru.getSerie() + " - " + instru.getDescripcion() + "(" + instru.getMinimo() + " a " + instru.getMaximo() + " " + instru.getUnidad() + ")";
             } else {
-                int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
-                modelo_mediciones.cargar_tablaMediciones(instru, med);
-                DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
-                for (int i = 0; i < model.getRowCount(); i++) {
-                    model.isCellEditable(i,0);
-                    model.isCellEditable(i, 1);
-                }
-                calibracionesView.getTextMediciones().setEnabled(false);
+                return "No hay instrumento cargado";
             }
+
         }
 
+        public static void update() throws Exception {
+            calibracionesView.getTx_instrumento().setText(toStringt());
+            calibracionesView.getTx_instrumento().setForeground(Color.RED);
+            updateLista(instru.getSerie());
+        }
 
-        @Override
-        public void mousePressed(MouseEvent e) {}
-        @Override
-        public void mouseReleased(MouseEvent e) {}
-        @Override
-        public void mouseEntered(MouseEvent e) {}
-        @Override
-        public void mouseExited(MouseEvent e) {}
 
     }
-
-public static String toStringt(){
-        if(instru != null){
-            return  instru.getSerie() + " - " +  instru.getDescripcion() + "(" + instru.getMinimo()+" a "+instru.getMaximo() +" "+instru.getUnidad() +")";
-        }else{
-            return "No hay instrumento cargado";
-        }
-
-}
-
-public static void update() throws Exception {
-        calibracionesView.getTx_instrumento().setText(toStringt());
-        calibracionesView.getTx_instrumento().setForeground(Color.RED);
-    updateLista(instru.getSerie());
-}
-
-
-}

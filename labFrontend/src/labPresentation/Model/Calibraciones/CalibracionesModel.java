@@ -17,6 +17,8 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
+import static labPresentation.Controller.CalibracionesController.updateLista;
+
 public class CalibracionesModel {
     private InstrumentosModel InsActual;
     private Calibraciones caliActual;
@@ -84,18 +86,19 @@ public class CalibracionesModel {
     boolean addCalibracionXML(Calibraciones cal){
         return dom.addCalibraciones(cal);
     }
-    public void eliminar(String no_ser, String cal, int fila){
-        try{
-            DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
-            modelo.removeRow(fila);         //elimina elemento de la tabla
-            dom.eliminarCalibraciones(no_ser,cal);
-            dom.cargarCalibraciones(tablaC, cal);
-
-        } catch (Exception e){
-//
+    public void eliminar(int id, int fila) throws Exception {
+        for (int i = 0; i < listC.size(); i++) {
+            Calibraciones calibracion = listC.get(i);
+            if (calibracion.getNumeroCalibracion() == id) {
+                listC.remove(i);
+                DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
+                modelo.removeRow(fila);
+                ServiceProxy.instance().delete(calibracion);
+                break;
+            }
         }
+        updateLista(String.valueOf(id));
     }
-
     public boolean busquedaCalibracion(int numC, JTable tbl)   {
         boolean encontrado = false;
         for (Calibraciones calibraciones : listC) {
