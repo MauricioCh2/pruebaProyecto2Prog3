@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class InstrumentosModel {
         public InstrumentosModel(JTable table) throws ParserConfigurationException, IOException, TransformerException {
             tbl_tiposInst = table;
             dom = new DOM_Instrumento();
-            reporte = new PDF("instrumentos", dom);
+
             listaInstrumento = new ArrayList<>();
         }
 
@@ -152,7 +153,8 @@ public class InstrumentosModel {
         }
         return null;
     }
-    public void generarReporte(){
+    public void generarReporte() throws FileNotFoundException {
+        reporte = new PDF("instrumentos", listaInstrumento);
         reporte.createPDF();
     }
 

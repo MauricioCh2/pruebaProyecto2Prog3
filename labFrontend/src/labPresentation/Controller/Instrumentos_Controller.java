@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -102,7 +103,7 @@ public class Instrumentos_Controller implements IController {
             }
             min = Integer.parseInt(instrumentView.getTxF_Minimo().getText());
             max = Integer.parseInt(instrumentView.getTxF_Maximo().getText());
-            if (min>max) {
+            if (min>=max) {
                 throw new Exception("El valor maximo debe ser mayor al minimo");
             }
 //            if (model.instrumento_existente(serie)){
@@ -206,14 +207,18 @@ public class Instrumentos_Controller implements IController {
                     break;
                 }
                 case "Reporte": {
-                    reporte();
+                    try {
+                        reporte();
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 default:
             }
         }
 
-        private void reporte() {
+        private void reporte() throws FileNotFoundException {
             model.generarReporte();
         }
 

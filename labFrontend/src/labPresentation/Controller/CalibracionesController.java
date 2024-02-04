@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -178,14 +179,18 @@ public class CalibracionesController implements IController {
                     break;
                 }
                 case "Reporte": {
-                    reporte();
+                    try {
+                        reporte();
+                    } catch (FileNotFoundException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     break;
                 }
                 default:
             }
         }
 
-        private void reporte() {
+        private void reporte() throws FileNotFoundException {
             Object[] opciones = {"Reporte", "Reporte General"};
 
             // Mostrar la ventana
@@ -197,7 +202,7 @@ public class CalibracionesController implements IController {
                 modelo.generarReporte(toStringt(), instru.getSerie());
             } else {
                 // Generar el reporte general
-                modelo.generarReporteGen(toStringt());
+                modelo.generarReporteGen();
             }
         }
 

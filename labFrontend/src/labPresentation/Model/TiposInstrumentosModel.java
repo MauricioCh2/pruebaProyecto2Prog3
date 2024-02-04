@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class TiposInstrumentosModel {
         cmB_UnidadMed = combUnidad;
         tbl_tiposInst = table;
         dom = new DOM_tiposInstrumento();
-        reporte = new PDF("tipos de instrumentos", dom);
+
     }
     public void save(TipoInstrumentoObj ins) throws Exception {
         DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
@@ -181,7 +182,8 @@ public class TiposInstrumentosModel {
     public void generarReporteTipos(){
 
     }
-    public void generarReporteGeneral(){
+    public void generarReporteGeneral() throws FileNotFoundException {
+        reporte = new PDF("tipos de instrumentos", listaInstrumentos);
         reporte.createPDF();
     }
 

@@ -1,9 +1,11 @@
 package data;
 
 import Protocol.Calibraciones;
+import Protocol.Instrumento;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,14 +33,36 @@ public class CRUDCalibraciones {
 
     public List<Calibraciones> read(String idInstrumento) throws Exception {
         ArrayList<Calibraciones> lista = new ArrayList<>();
-        Connection connection =  new DataBaseConn().connection();
-        String sql = "SELECT * FROM calibraciones WHERE id_instrumento = ?";
+        Connection connection = new DataBaseConn().connection();
+        String sql = "SELECT c.id_calibraciones, c.fecha, c.mediciones, i.id_instrumentos, i.id_tipo_instrumento, i.descripcion, i.min, i.max, i.tolerancia " +
+                "FROM calibraciones c " +
+                "INNER JOIN instrumentos i ON c.id_instrumento = i.id_instrumentos " +
+                "WHERE c.id_instrumento = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, Integer.parseInt(idInstrumento));
-        ResultSet result = statement.executeQuery(); // Aquí deberías llamar solo a executeQuery()
+        ResultSet result = statement.executeQuery();
         while (result.next()) {
-            Calibraciones calib = new Calibraciones(result.getInt(1), result.getString(2), result.getInt(3), result.getInt(4));
-            lista.add(calib);
+            // Obtener los datos de la calibración
+            int numCalibracion = result.getInt("id_calibraciones");
+            LocalDateTime fecha = result.getTimestamp("fecha").toLocalDateTime();
+            int mediciones = result.getInt("mediciones");
+
+            // Obtener los datos del instrumento asociado a la calibración
+            //int serInstrumento = result.getInt("id_instrumentos");
+            String idTipoInstrumento = result.getString("id_tipo_instrumento");
+            String descripcion = result.getString("descripcion");
+            int min = result.getInt("min");
+            int max = result.getInt("max");
+            double tolerancia = result.getDouble("tolerancia");
+
+            // Crear el objeto Instrumento
+            Instrumento instrumento = new Instrumento(String.valueOf(idInstrumento), idTipoInstrumento, descripcion, min, max, tolerancia);
+
+            // Crear el objeto Calibraciones y asociarlo con el objeto Instrumento
+            Calibraciones calibracion = new Calibraciones(numCalibracion, fecha.toString(), mediciones, instrumento);
+
+            // Agregar la calibración a la lista
+            lista.add(calibracion);
         }
         return lista;
     }

@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class CalibracionesModel {
     public  CalibracionesModel(JTable tabC) throws ParserConfigurationException, IOException, TransformerException {
         dom = new DOM_calibraciones();
         tablaC = tabC;
-        reporte = new PDF("calibraciones", dom);
+
     }
     public void save(Calibraciones calA) {
             try{
@@ -88,12 +89,14 @@ public class CalibracionesModel {
 
     }
 
-    public void generarReporte(String stri,String ser){
+    public void generarReporte(String stri,String ser) throws FileNotFoundException {
+        reporte = new PDF("calibraciones", listC, listM);
         reporte.createPDFreportes(stri,ser);
-    }
-    public void generarReporteGen(String stri){
 
-        reporte.createPDFreportesGeneral(stri);
+    }
+    public void generarReporteGen( ) throws FileNotFoundException {
+        reporte = new PDF("calibraciones", listC, listM);
+        reporte.createPDF();
     }
     public void setListC(List<Calibraciones> listC) {
         this.listC = listC;

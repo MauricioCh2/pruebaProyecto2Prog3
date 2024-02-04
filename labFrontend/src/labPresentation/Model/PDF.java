@@ -1,11 +1,15 @@
 package labPresentation.Model;
 
+import Protocol.Calibraciones;
+import Protocol.Instrumento;
+import Protocol.TipoInstrumentoObj;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import labPresentation.Model.Calibraciones.DOM_calibraciones;
+import labPresentation.Model.Calibraciones.Mediciones;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 
 public class PDF {
     private static final Font prueba = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.ITALIC);
@@ -27,32 +32,22 @@ public class PDF {
     private static final Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
     private String tipoReporte;
-    private DOM dom;
-
-    private  DOM_calibraciones domC;
-
-
 
     Document document = new Document();
 
-    //private FileOutputStream archivo = new FileOutputStream("pdfPrueba.pdf");
+    List lista;
+    List listaMediciones;
 
-    public PDF(String tipoReporte, DOM d) throws FileNotFoundException {
+
+    public PDF(String tipoReporte, List lis) throws FileNotFoundException {
         this.tipoReporte = tipoReporte;
-        this.dom = d;
-
-      //  document = new Document();
-
+        this.lista = lis;
     }
-    public PDF(String tipoReporte, DOM_calibraciones d) throws FileNotFoundException {
+    public PDF(String tipoReporte, List lis, List lisM) throws FileNotFoundException {
         this.tipoReporte = tipoReporte;
-        this.domC = d;
-
-     //   document = new Document();
-
+        this.lista = lis;
+        this.listaMediciones = lisM;
     }
-
-
 
 
     public void createPDF() {
@@ -96,7 +91,7 @@ public class PDF {
             // Handle PDF creation error
         }
     }
-    public void createPDFreportes(String toString,String ser) {
+    public void createPDFreportes(String infoIns, String ser) {
         try (FileOutputStream fos = new FileOutputStream(tipoReporte+".pdf")) {
             document = new Document();
 
@@ -119,11 +114,28 @@ public class PDF {
             document.add(new Paragraph("\n"));
 
 
-
+            document.add(new Paragraph("Calibrciones y mediciones de: "+infoIns));
             PdfPTable tabla = tablaCal();
-            domC.createTablePDF(tabla,ser);
+            for(Calibraciones obj: (List<Calibraciones>) lista){
+                if(obj.getNo_SerieIns().equals(ser)){
+                    tabla.addCell("faltaTipo");
+                    tabla.addCell(obj.getNo_SerieIns());
+                    tabla.addCell(String.valueOf(obj.getNumeroCalibracion()));
+                    tabla.addCell("-");
+                    tabla.addCell("-");
+                    tabla.addCell("-");
+                    for(Mediciones med:(List<Mediciones>)listaMediciones){
+                        tabla.addCell("-");//tipo
+                        tabla.addCell("-");//serie
+                        tabla.addCell("-");//numColum
+                        //mediciones----------------------------
+                        tabla.addCell(String.valueOf(med.getNumMedicion()));//numero
+                        tabla.addCell(String.valueOf(med.getValorReferencia()));//referencia
+                        tabla.addCell(String.valueOf(med.getValorMarcado()));///lectura
 
-
+                    }
+                }
+            }
 
             if(tabla != null){
                 document.add(tabla);
@@ -144,52 +156,7 @@ public class PDF {
             // Handle PDF creation error
         }
     }
-    public void createPDFreportesGeneral(String toString) {
-        try (FileOutputStream fos = new FileOutputStream(tipoReporte+".pdf")) {
-            PdfWriter writer = PdfWriter.getInstance(document, fos);
-            writer.setInitialLeading(20);
 
-            document.open();
-
-            // Metadata
-            document.addAuthor("Mauricio Chaves");
-            document.addSubject("Reporte ");
-            document.addCreationDate();
-            document.addTitle("SILAB:Sistema de Laboratorio Industrial");
-
-            // Content
-            document.add(new Paragraph("SILAB:Sistema de Laboratorio Industrial", pru2));
-            document.add(new Paragraph("Reporte de  "+ tipoReporte +", creado a las: " + LocalDate.now().toString()));
-            document.add(new Paragraph("\n"));
-            //document.add(new Paragraph(toString, pru2));
-            document.add(new Paragraph("\n"));
-
-
-
-            PdfPTable tabla = tablaCal();
-            domC.createTablePDF(tabla);
-
-
-
-            if(tabla != null){
-                document.add(tabla);
-            }
-
-
-            document.close();
-            JOptionPane.showMessageDialog(null, "Reporte creado.");
-            try {
-                File file = new File(tipoReporte + ".pdf");
-                Desktop.getDesktop().open(file);
-            } catch (IOException e) {
-                // Handle error if unable to open file
-            }
-        } catch (FileNotFoundException e) {
-            // Handle file not found error
-        } catch (DocumentException | IOException e) {
-            // Handle PDF creation error
-        }
-    }
     public PdfPTable tablaReporte(String tipo){
         switch (tipo){
             case "tipos de instrumentos": return tablaTiposIns();
@@ -225,7 +192,24 @@ public class PDF {
         tabla.addCell(lec);
 
 
-//        dom.createTablePDF(tabla);
+        for(Calibraciones obj: (List<Calibraciones>) lista){
+            tabla.addCell("faltaTipo");
+            tabla.addCell(obj.getNo_SerieIns());
+            tabla.addCell(String.valueOf(obj.getNumeroCalibracion()));
+            tabla.addCell("-");
+            tabla.addCell("-");
+            tabla.addCell("-");
+            for(Mediciones med:(List<Mediciones>)listaMediciones){
+                tabla.addCell("-");//tipo
+                tabla.addCell("-");//serie
+                tabla.addCell("-");//numColum
+                //mediciones----------------------------
+                tabla.addCell(String.valueOf(med.getNumMedicion()));//numero
+                tabla.addCell(String.valueOf(med.getValorReferencia()));//referencia
+                tabla.addCell(String.valueOf(med.getValorMarcado()));///lectura
+
+            }
+        }
 
 
         return tabla;
@@ -245,7 +229,12 @@ public class PDF {
         tabla.addCell(nom);
         tabla.addCell(un);
 
-        dom.createTablePDF(tabla);
+
+        for (TipoInstrumentoObj obj: (List<TipoInstrumentoObj>)lista){
+            tabla.addCell(obj.getCodigo());
+            tabla.addCell(obj.getNombre());
+            tabla.addCell(obj.getUnidad());
+        }
 
 
         return tabla;
@@ -277,8 +266,14 @@ public class PDF {
         tabla.addCell(tip);
 
 
-
-        dom.createTablePDF(tabla);
+        for (Instrumento obj: (List<Instrumento>)lista){
+            tabla.addCell(obj.getSerie());
+            tabla.addCell(obj.getDescripcion());
+            tabla.addCell(String.valueOf(obj.getMinimo()));
+            tabla.addCell(String.valueOf(obj.getMaximo()));
+            tabla.addCell(String.valueOf(obj.getTolerancia()));
+            tabla.addCell(obj.getTipo());
+        }
 
 
         return tabla;

@@ -40,9 +40,10 @@ public class Calibraciones implements Serializable {
         this.medicionesL = new ArrayList<>(numMediciones);
         this.numeroMediciones = numMediciones;
     }
-    public Calibraciones(int numCal, String fecha, int numMediciones, int ins) {
+    public Calibraciones(int numCal, String fecha, int numMediciones, Instrumento ins) {
         this.numeroCalibracion = numCal;
-        this.instrumentoId = ins;
+        this.instrumentoId = Integer.parseInt(ins.getSerie());
+        this.instrumento = ins;
         this.fecha = fecha;
         this.medicionesL = new ArrayList<>(numMediciones);
         this.numeroMediciones = numMediciones;
