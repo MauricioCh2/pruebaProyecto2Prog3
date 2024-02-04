@@ -95,27 +95,7 @@ public class CalibracionesModel {
 //
         }
     }
-    /*    public boolean busquedaPorSerie(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        //return dom.buscarInstrumentosPorSerie(cod, tbl);
-        boolean alguno = false;
-        for(Instrumento obj: listaInstrumento) {
-            String codigoActual = obj.getSerie().toLowerCase();
-            if (codigoActual.contains(cod.toLowerCase())) {
 
-                Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
-                DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
-                modelo.setRowCount(0);
-                modelo.addRow(newRow);
-                tbl.setRowSelectionInterval(0, 0);
-                MouseEvent clickEvent = new MouseEvent(tbl, MouseEvent.MOUSE_CLICKED,
-                        System.currentTimeMillis(),
-                        0, 0, 0, 1, false);
-                tbl.dispatchEvent(clickEvent); //activa el listener como si fuera un click
-                alguno = true;
-            }
-        }
-        return alguno;
-    }*/
     public boolean busquedaCalibracion(int numC, JTable tbl)   {
         boolean encontrado = false;
         for (Calibraciones calibraciones : listC) {
