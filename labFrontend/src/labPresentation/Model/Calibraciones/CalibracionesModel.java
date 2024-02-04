@@ -136,14 +136,6 @@ public class CalibracionesModel {
         }
         return encontrado;
     }
-
-
-
-
-    public boolean busquedaCalibracion(String noSerie,String numCal, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
-        return dom.buscarCalibracionPorNum(noSerie, numCal ,tbl);//este es con numero de serie del instrumento
-    }
-
     private void actualizar(Calibraciones actual) {
         //caliActual.setNumero(actual.getNumero());
         caliActual.setFecha(actual.getFecha());
