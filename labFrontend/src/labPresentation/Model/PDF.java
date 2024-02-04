@@ -2,6 +2,7 @@ package labPresentation.Model;
 
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 import Protocol.TipoInstrumentoObj;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.*;
@@ -9,7 +10,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import labPresentation.Model.Calibraciones.DOM_calibraciones;
-import labPresentation.Model.Calibraciones.Mediciones;
+//import labPresentation.Model.Calibraciones.Mediciones;
 
 import javax.swing.*;
 import java.awt.*;
@@ -175,7 +176,7 @@ public class PDF {
         tipo.setBackgroundColor(BaseColor.CYAN);
         PdfPCell numSerie = new PdfPCell(new Phrase("Numero de serie"));
         numSerie.setBackgroundColor(BaseColor.CYAN);
-        PdfPCell numCal = new PdfPCell(new Phrase("Numero de calibracion"));
+        PdfPCell numCal = new PdfPCell(new Phrase("Numero de calibración"));
         numCal.setBackgroundColor(BaseColor.CYAN);
         PdfPCell num = new PdfPCell(new Phrase("Numero"));
         num.setBackgroundColor(BaseColor.RED);
@@ -218,7 +219,7 @@ public class PDF {
     public PdfPTable tablaTiposIns(){
         PdfPTable tabla = new PdfPTable(3);
         tabla.setWidthPercentage(100);
-        PdfPCell cod = new PdfPCell(new Phrase("Codigo"));
+        PdfPCell cod = new PdfPCell(new Phrase("Código"));
         cod.setBackgroundColor(BaseColor.CYAN);
         PdfPCell nom = new PdfPCell(new Phrase("Nombre"));
         nom.setBackgroundColor(BaseColor.ORANGE);
@@ -247,15 +248,15 @@ public class PDF {
         tabla.setWidthPercentage(100);
         PdfPCell ser = new PdfPCell(new Phrase("No. serie"));
         ser.setBackgroundColor(BaseColor.CYAN);
-        PdfPCell des = new PdfPCell(new Phrase("Descripcion"));
+        PdfPCell des = new PdfPCell(new Phrase("Descripción"));
         des.setBackgroundColor(BaseColor.ORANGE);
-        PdfPCell min = new PdfPCell(new Phrase("minimo"));
+        PdfPCell min = new PdfPCell(new Phrase("Mínimo"));
         min.setBackgroundColor(BaseColor.ORANGE);
-        PdfPCell max = new PdfPCell(new Phrase("maximo"));
+        PdfPCell max = new PdfPCell(new Phrase("Máximo"));
         max.setBackgroundColor(BaseColor.ORANGE);
-        PdfPCell tol = new PdfPCell(new Phrase("tolerancia"));
+        PdfPCell tol = new PdfPCell(new Phrase("Tolerancia"));
         tol.setBackgroundColor(BaseColor.ORANGE);
-        PdfPCell tip = new PdfPCell(new Phrase("tipo"));
+        PdfPCell tip = new PdfPCell(new Phrase("Tipo"));
         tip.setBackgroundColor(BaseColor.ORANGE);
 
         tabla.addCell(ser);
