@@ -43,7 +43,6 @@ public class CalibracionesController implements IController {
     private static JTextField textMediciones;
     private static JTextField textFecha;
     private static JTextField textNumeroB;
-    private static JTextField textWriteFecha;
     private static boolean EDITAR;
     private static boolean EDITAR_MEDICIONES;
     private static  Instrumento instru =null;
@@ -85,7 +84,6 @@ public class CalibracionesController implements IController {
         textMediciones = calibracionesView.getTextMediciones();
         textFecha = calibracionesView.getTextFecha();
         textNumeroB = calibracionesView.getTextNumeroB();
-        textWriteFecha = calibracionesView.getTextWriteFecha();
         modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
@@ -100,7 +98,7 @@ public class CalibracionesController implements IController {
         if (!EDITAR_MEDICIONES) {
             num = 0;
             try {
-                if(textWriteFecha.getText().isEmpty()){
+                if(textFecha.getText().equals("")){
                     calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
                     throw new Exception("No se ingreso la fecha, digite la fecha por favor\n");
                 } else fecha_valida();
@@ -115,7 +113,7 @@ public class CalibracionesController implements IController {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             //LocalDate date = LocalDate.now();
-                            String date = String.valueOf(textWriteFecha.getText());
+                            String date = String.valueOf(textFecha.getText());
                             numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount(); // needed it
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
@@ -149,12 +147,13 @@ public class CalibracionesController implements IController {
 
     public static void fecha_valida() throws Exception{
         // Expresión regular para validar fechas en formato YYYY-MM-DD o YYYY/MM/DD
-           String regex = "^\\d{4}-\\d{2}-\\d{2}$";
+        String regex = "^\\d{4}-\\d{2}-\\d{2}$";
 
-            Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(textWriteFecha.getText());
+
+        Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(textFecha.getText());
             if (!matcher.matches()) {
-                throw  new Exception("La fecha no es válida.\nUsa El Formato Año-Mes-Día");
+                throw  new Exception("La fecha no es válida.\nUsa El Formato Año - Mes - Día");
             }
     }
 
@@ -164,18 +163,19 @@ public class CalibracionesController implements IController {
         String numeroActual = textNumero.getText();
         textNumero.setText("000");
         textMediciones.setText("");
-        textFecha.setEnabled(false);
+        textFecha.setEnabled(true);
         textNumeroB.setText("");
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
-        textWriteFecha.setText("");
-        textFecha.setText("xx/xx/xxxx");
+
         calibracionesView.getPanelMensaje().setEnabled(false);
         for (Component component : calibracionesView.getPanelMensaje().getComponents()) {
                calibracionesView.getMensaje().setEnabled(false);
         }
+        //textFecha.setText("xxxx/xx/xx");
+        textFecha.setText("");
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -220,6 +220,11 @@ public class CalibracionesController implements IController {
     public void setPDF(PDF pdf) {
         pdfO = pdf;
     }
+
+//    @Override
+//    public void changesMaked() {
+//
+//    }
 
     public static class BtnsCalibraciones implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -295,6 +300,7 @@ public class CalibracionesController implements IController {
                 }
             }
         }
+
     }
 
         public static class TablesCalibraciones implements MouseListener {

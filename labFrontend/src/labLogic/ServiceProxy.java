@@ -18,7 +18,6 @@ public class ServiceProxy implements IService {
         }
         return theInstance;
     }
-
     ObjectInputStream in; // obj entrada
     ObjectOutputStream out; // obj salida
 
@@ -235,13 +234,13 @@ public class ServiceProxy implements IService {
         }
     }
 
-    private void deliver(final Message message) {
-        SwingUtilities.invokeLater(new Runnable() {//crea un hilo temporal que se destrulle cuando termina
-                                       // se cierran solos cuando termina de pocesar (no esta en un while)
-                                       public void run() {
-                                           deliver.deliver(message);
-                                       }
-                                   }
+    private void deliver( final Message message ){
+        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
+            // se cierran solos cuando termina de pocesar (no esta en un while)
+               public void run(){
+                   deliver.deliver(message);
+               }
+           }
         );
     }
 
@@ -256,31 +255,33 @@ public class ServiceProxy implements IService {
     }
 
     private void update(Object ob, final int pro) {
-        SwingUtilities.invokeLater(new Runnable() {//crea un hilo temporal que se destrulle cuando termina
-                                       // se cierran solos cuando termina de pocesar (no esta en un while)
-                                       public void run() {
-                                           try {
-                                               controllerTipo.update(ob, pro);
-                                               controllerInst.update(ob, pro);
-                                               controllerCal.update(ob, pro);
-                                           } catch (Exception e) {
-                                               JOptionPane.showMessageDialog(null, e.getMessage());
-                                           }
-                                       }
-                                   }
+        SwingUtilities.invokeLater(new Runnable()
+           {//crea un hilo temporal que se destrulle cuando termina
+               // se cierran solos cuando termina de pocesar (no esta en un while)
+               public void run() {
+                   try {
+                       controllerTipo.update(ob, pro);
+                       controllerInst.update(ob, pro);
+                       controllerCal.update(ob, pro);
+                   } catch (Exception e) {
+                       JOptionPane.showMessageDialog(null, e.getMessage());
+                   }
+               }
+           }
         );
     }
 
     private void iniciar_lista_tipos_instrumento(final List<TipoInstrumentoObj> list) {
-        SwingUtilities.invokeLater(new Runnable() {
-                                       public void run() {
-                                           try {
-                                               //controller.cargar_datos(list);
-                                           } catch (Exception e) {
-                                               throw new RuntimeException(e);
-                                           }
-                                       }
-                                   }
+        SwingUtilities.invokeLater(new Runnable()
+           {
+               public void run() {
+                   try {
+                       //controller.cargar_datos(list);
+                   } catch (Exception e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+           }
         );
     }
 
@@ -294,6 +295,7 @@ public class ServiceProxy implements IService {
     }
 
 
+
     //-------------------------------------------------------CRUD-------------------------------------------------------
     @Override
     public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis) throws Exception {
@@ -303,7 +305,6 @@ public class ServiceProxy implements IService {
         System.out.println("Mande el mensaje de leer UM a el server");
         return lis;
     }
-
     @Override
     public UnidadMedida findById(int id) throws Exception {
         out.writeInt(Protocol.FINDIDUNIDAD);
@@ -333,7 +334,6 @@ public class ServiceProxy implements IService {
         System.out.println("Le estoy pasando la lista de tipos a server desde serviceProxy");
         return Listipo;
     }
-
 
     @Override
     public void update(TipoInstrumentoObj tipo) throws Exception {
@@ -485,9 +485,6 @@ public class ServiceProxy implements IService {
         return null;
     }
 
-    //-------------------------------------------Not Used-----------------------------------------------------
-
 
 }
-
 

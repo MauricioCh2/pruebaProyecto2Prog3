@@ -40,8 +40,8 @@ public class CalibracionesView {
         btn_reporte.setIcon(new ImageIcon(scaledImage));
         textNumero.setText("000");
         textNumero.setEnabled(false);
-        textFecha.setEnabled(false);
-        textFecha.setText("xxxx/xx/xx");
+        textFecha.setEnabled(true);
+        //textFecha.setText("xxxx/xx/xx");
         borrarButton.setEnabled(false);
         medicionesPanel.setVisible(false);
         this.intiPanelMediciones();
