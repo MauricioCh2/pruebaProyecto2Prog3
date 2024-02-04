@@ -28,6 +28,7 @@ public class CalibracionesView {
     private JLabel NumeroLabelBusqueda;
     private JLabel MedicionesLabel;
     private JLabel mensaje;
+    private JPanel panelMensaje;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -166,12 +167,11 @@ public class CalibracionesView {
     public CalibracionesController getControlCalibraciones() {
         return controlCalibraciones;
     }
+    public JPanel getPanelMensaje() {
+        return panelMensaje;
+    }
+
     public JLabel getMensaje() {
         return mensaje;
     }
-
-    public void setMensaje(JLabel mensaje) {
-        this.mensaje = mensaje;
-    }
-
 }

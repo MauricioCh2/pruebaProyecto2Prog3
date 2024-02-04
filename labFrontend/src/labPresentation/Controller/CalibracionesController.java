@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.awt.Color.red;
+
 public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
     private static CalibracionesModel modelo;
@@ -82,11 +84,13 @@ public class CalibracionesController implements IController {
         modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
+        calibracionesView.getMensaje().setEnabled(false);
         //numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount();
 
     }
 
     public static void guardarCalibraciones() {
+        calibracionesView.getMensaje().setEnabled(false);
         int num = 0;
         if (!EDITAR_MEDICIONES) {
             num = 0;
@@ -95,6 +99,7 @@ public class CalibracionesController implements IController {
                     calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
+                    calibracionesView.getPanelMensaje().setEnabled(false);
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
                     int numComparacion = Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1;
@@ -138,6 +143,10 @@ public class CalibracionesController implements IController {
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        calibracionesView.getPanelMensaje().setEnabled(false);
+        for (Component component : calibracionesView.getPanelMensaje().getComponents()) {
+               calibracionesView.getMensaje().setEnabled(false);
+        }
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -153,6 +162,7 @@ public class CalibracionesController implements IController {
                     }else{
                         textNumeroB.setText("");
                         EDITAR= true;
+                        calibracionesView.getMensaje().setEnabled(false);
                     }
 
             }
@@ -232,7 +242,7 @@ public class CalibracionesController implements IController {
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {
-               // limpiar();
+                calibracionesView.getMensaje().setEnabled(false);
                 int valFil = tableCalibraciones.getSelectedRow();//obtiene el valor de la fila
                 if (valFil >= 0) {
                     Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
@@ -280,6 +290,7 @@ public class CalibracionesController implements IController {
             public void cargar_tablaMediciones() {
                 if (tableCalibraciones.getSelectedRow() == -1) {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
+                    calibracionesView.getMensaje().setEnabled(false);
                 } else {
                     int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
                     modelo_mediciones.cargar_tablaMediciones(getCurrentC(),instru, med);
