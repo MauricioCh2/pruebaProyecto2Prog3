@@ -23,6 +23,8 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
@@ -36,11 +38,13 @@ public class CalibracionesController implements IController {
     private static JTextField textMediciones;
     private static JTextField textFecha;
     private static JTextField textNumeroB;
+    private static JTextField textWriteFecha;
     private static boolean EDITAR;
     private static boolean EDITAR_MEDICIONES;
     private static  Instrumento instru =null;
     private static int numeroCalibracion;
     private static Calibraciones currentC;
+
 
     public static void setInstru(Instrumento instru) throws Exception {
         CalibracionesController.instru = instru;
@@ -68,6 +72,7 @@ public class CalibracionesController implements IController {
         textMediciones = calibracionesView.getTextMediciones();
         textFecha = calibracionesView.getTextFecha();
         textNumeroB = calibracionesView.getTextNumeroB();
+        textWriteFecha = calibracionesView.getTextWriteFecha();
         modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones());
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
@@ -80,6 +85,9 @@ public class CalibracionesController implements IController {
         if (!EDITAR_MEDICIONES) {
             num = 0;
             try {
+                if(textWriteFecha.getText().isEmpty()){
+                    throw new Exception("No se ingreso la fecha, digite la fecha por favor\n");
+                } else fecha_valida();
                 if (textMediciones.getText().isEmpty()) {
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
@@ -89,12 +97,13 @@ public class CalibracionesController implements IController {
                     if (num < (instru.getMaximo() + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
-                            LocalDate date = LocalDate.now();
+                            //LocalDate date = LocalDate.now();
+                            String date = String.valueOf(textWriteFecha.getText());
                             numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount(); // needed it
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
-                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
+                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date, numM);
                             modelo.save(calibraciones);
                             currentC = calibraciones;
                             limpiar();
@@ -115,6 +124,17 @@ public class CalibracionesController implements IController {
         } else limpiar();//actualizar mediciones
     }
 
+    public static void fecha_valida() throws Exception{
+        // Expresión regular para validar fechas en formato YYYY-MM-DD o YYYY/MM/DD
+           String regex = "^\\d{4}-\\d{2}-\\d{2}$";
+
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(textWriteFecha.getText());
+            if (!matcher.matches()) {
+                throw  new Exception("La fecha no es válida.\nUsa El Formato Año-Mes-Día");
+            }
+    }
+
     public static void limpiar(){
         textNumero.setEnabled(false);
         calibracionesView.getTextMediciones().setEnabled(true);
@@ -127,6 +147,8 @@ public class CalibracionesController implements IController {
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        textWriteFecha.setText("");
+        textFecha.setText("xx/xx/xxxx");
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -253,7 +275,8 @@ public class CalibracionesController implements IController {
         }
         private void cargar_tablaMediciones() {
             //System.out.println("Valor: " + Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
-            int med = Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
+            String m = String.valueOf( tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
+            int med = Integer.parseInt(m);
             
             modelo_mediciones.cargar_tablaMediciones(instru, med);
             EDITAR_MEDICIONES = true;// I needed it
