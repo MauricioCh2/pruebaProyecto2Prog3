@@ -25,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
@@ -38,6 +40,7 @@ public class CalibracionesController implements IController {
     private static JTextField textMediciones;
     private static JTextField textFecha;
     private static JTextField textNumeroB;
+    private static JTextField textWriteFecha;
     private static boolean EDITAR;
     private static boolean EDITAR_MEDICIONES;
     private static  Instrumento instru =null;
@@ -84,8 +87,11 @@ public class CalibracionesController implements IController {
         if (!EDITAR_MEDICIONES) {
             num = 0;
             try {
-                if (textMediciones.getText().isEmpty()) {
+                if(textWriteFecha.getText().isEmpty()){
                     calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
+                    throw new Exception("No se ingreso la fecha, digite la fecha por favor\n");
+                } else fecha_valida();
+                if (textMediciones.getText().isEmpty()) {
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
                     num = Integer.parseInt(textMediciones.getText());
@@ -94,12 +100,13 @@ public class CalibracionesController implements IController {
                     if (num >= numComparacion) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
-                            LocalDate date = LocalDate.now();
+                            //LocalDate date = LocalDate.now();
+                            String date = String.valueOf(textWriteFecha.getText());
                             numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount(); // needed it
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
-                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
+                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date, numM);
                             modelo.save(calibraciones);
                             currentC = calibraciones;
                             limpiar();
@@ -133,6 +140,9 @@ public class CalibracionesController implements IController {
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        textWriteFecha.setText("");
+        textFecha.setText("xx/xx/xxxx");
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -238,8 +248,8 @@ public class CalibracionesController implements IController {
                     "¿Está seguro de borrar esta calibracion?. Puede tener mediciones asociadas y tambien se perderan.",
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
+
             if (respuesta == JOptionPane.YES_OPTION) {
-               // limpiar();
                 int valFil = tableCalibraciones.getSelectedRow();//obtiene el valor de la fila
                 if (valFil >= 0) {
                     Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
@@ -253,6 +263,7 @@ public class CalibracionesController implements IController {
                 }
             }
         }
+
     }
 
         public static class TablesCalibraciones implements MouseListener {
@@ -277,48 +288,36 @@ public class CalibracionesController implements IController {
                             textFecha.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 1)));
                             textMediciones.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
 
-                        }
-                    } else {
-                        throw new Exception("Seleccione una columna primero");
                     }
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-
-            public void cargar_tablaMediciones() {
-                if (tableCalibraciones.getSelectedRow() == -1) {
-                    JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
                 } else {
-                    int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
-                    modelo_mediciones.cargar_tablaMediciones(instru, med);
-                    DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
-                    for (int i = 0; i < tableCalibraciones.getSelectedRow(); i++) {
-                        model.isCellEditable(i, 2);
-                        tableMediciones.getModel().isCellEditable(i,2);
-                    }
-                    calibracionesView.getTextMediciones().setEnabled(false);
+                    throw new Exception("Seleccione una columna primero");
                 }
+            }catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
+        }
+        private void cargar_tablaMediciones() {
+            //System.out.println("Valor: " + Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
+            String m = String.valueOf( tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
+            int med = Integer.parseInt(m);
+            
+            modelo_mediciones.cargar_tablaMediciones(instru, med);
+            EDITAR_MEDICIONES = true;// I needed it
+            calibracionesView.getTextMediciones().setEnabled(false);// I needed it
 
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
 
         }
+
+        @Override
+        public void mousePressed(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
+        @Override
+        public void mouseEntered(MouseEvent e) {}
+        @Override
+        public void mouseExited(MouseEvent e) {}
+
+    }
 
         public static String toStringt() {
             if (instru != null) {
@@ -327,7 +326,7 @@ public class CalibracionesController implements IController {
                 return "No hay instrumento cargado";
             }
 
-        }
+}
 
         public static void update() throws Exception {
             calibracionesView.getTx_instrumento().setText(toStringt());
@@ -336,4 +335,4 @@ public class CalibracionesController implements IController {
         }
 
 
-    }
+}
