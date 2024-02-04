@@ -75,6 +75,7 @@ public class CalibracionesController implements IController {
         textMediciones = calibracionesView.getTextMediciones();
         textFecha = calibracionesView.getTextFecha();
         textNumeroB = calibracionesView.getTextNumeroB();
+        textWriteFecha = calibracionesView.getTextWriteFecha();
         modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
@@ -96,8 +97,8 @@ public class CalibracionesController implements IController {
                 } else {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
-                    int numComparacion = Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1;
-                    if (num >= numComparacion) {
+
+                    if (num < (instru.getMaximo() + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             //LocalDate date = LocalDate.now();
@@ -124,9 +125,18 @@ public class CalibracionesController implements IController {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else{
-            limpiar();//actualizar mediciones
-        }
+        } else limpiar();//actualizar mediciones
+    }
+
+    public static void fecha_valida() throws Exception{
+        // Expresión regular para validar fechas en formato YYYY-MM-DD o YYYY/MM/DD
+           String regex = "^\\d{4}-\\d{2}-\\d{2}$";
+
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(textWriteFecha.getText());
+            if (!matcher.matches()) {
+                throw  new Exception("La fecha no es válida.\nUsa El Formato Año-Mes-Día");
+            }
     }
 
     public static void limpiar(){
