@@ -21,6 +21,9 @@ public class MedicionesModel {
 
     }
     public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med) {
+        boolean[] canEdit = new boolean [] {
+                false, false, true
+        };
         DefaultTableModel model = (DefaultTableModel) tablaM.getModel();
 
         System.out.println(obj.toString() + "    " + med);
@@ -53,8 +56,11 @@ public class MedicionesModel {
         }
     }
 
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return columnIndex == 2;
+    }
 
-        //this.validarToleranciaMedicion(listM, obj);
+    //this.validarToleranciaMedicion(listM, obj);
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
         List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;

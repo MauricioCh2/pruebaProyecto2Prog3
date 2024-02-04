@@ -2,6 +2,7 @@ package labPresentation.View;
 
 
 import labPresentation.Controller.CalibracionesController;
+import labPresentation.Controller.Instrumentos_Controller;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,10 +28,11 @@ public class CalibracionesView {
     private JLabel tx_instrumento;
     private JLabel NumeroLabelBusqueda;
     private JLabel MedicionesLabel;
-    private JLabel lbWriteFecha;
     private JTextField textWriteFecha;
     private JLabel mensaje;
     private JPanel panelMensaje;
+    private JScrollPane JScrollMediciones;
+    private JLabel fechaLabel;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -158,8 +160,6 @@ public class CalibracionesView {
         return buscarButton;
     }
 
-    public JLabel getLbWriteFecha() {return lbWriteFecha;}
-
     public JTextField getTextWriteFecha() {return textWriteFecha;}
 
     public JLabel getNumeroLabelBusqueda() {
@@ -177,7 +177,27 @@ public class CalibracionesView {
         return panelMensaje;
     }
 
+    public JLabel getFechaLabel() {
+        return fechaLabel;
+    }
+
+
     public JLabel getMensaje() {
         return mensaje;
     }
+    public void initTableMed(){
+        tableMediciones.setModel(new javax.swing.table.DefaultTableModel() {
+            boolean[] canEdit = new boolean [] {
+                    false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        JScrollMediciones.setViewportView(tableMediciones);
+        CalibracionesController.TablesCalibraciones tableMed = new CalibracionesController.TablesCalibraciones();
+        tableMediciones.addMouseListener(tableMed);
+    }
+
 }
