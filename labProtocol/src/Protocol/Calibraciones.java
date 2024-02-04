@@ -107,4 +107,7 @@ public class Calibraciones implements Serializable {
     public String getNo_SerieIns() {
         return instrumento.getSerie();
     }
+    public String getTipo(){
+        return instrumento.getTipo();
+    }
 }

@@ -6,6 +6,7 @@ import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import Protocol.UnidadMedida;
 import labLogic.ServiceProxy;
+import labPresentation.Model.PDF;
 import labPresentation.Model.TiposInstrumentosModel;
 import labPresentation.View.TipoInstrumentoView;
 
@@ -39,7 +40,7 @@ public class TiposInstrumentoController implements IController {
     //private static List<TipoInstrumentoObj> listaInstrumentos;
     private static TipoInstrumentoView tpInst;
     private static JCheckBox chB_busqueda;
-
+    private PDF pdfO;
     ServiceProxy localService;
     //Constructor------------------------------------------------------------------------------------------------------
     public TiposInstrumentoController() throws ParserConfigurationException, IOException, TransformerException {
@@ -61,7 +62,7 @@ public class TiposInstrumentoController implements IController {
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         //localService.setTipoinscontroller(this);
 
-        tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad);
+        tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad, pdfO);
         //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
         ServiceProxy.instance().setTControllerTipo(this);
@@ -101,6 +102,10 @@ public class TiposInstrumentoController implements IController {
 
     public void iniciarlizar_lista_tipos_instrumento(){
 
+    }
+
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
     }
 
     //Clases anidadas--------------------------------------------------------------------------------------------------

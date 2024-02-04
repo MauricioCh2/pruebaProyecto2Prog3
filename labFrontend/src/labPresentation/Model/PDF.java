@@ -32,26 +32,37 @@ public class PDF {
     private static final Font blueFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.RED);
     private static final Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 
-    private String tipoReporte;
+    //private String tipoReporte;
 
     Document document = new Document();
 
-    List lista;
-    List listaMediciones;
+    List<TipoInstrumentoObj> listaTipos;
+    List<Instrumento> listaInstrumentos;
+    List<Calibraciones> listaCalibraciones;
+    List<Mediciones> listaMediciones;
 
-
-    public PDF(String tipoReporte, List lis) throws FileNotFoundException {
-        this.tipoReporte = tipoReporte;
-        this.lista = lis;
-    }
-    public PDF(String tipoReporte, List lis, List lisM) throws FileNotFoundException {
-        this.tipoReporte = tipoReporte;
-        this.lista = lis;
-        this.listaMediciones = lisM;
+    public void setListaTipos(List<TipoInstrumentoObj> listaTipos) {
+        this.listaTipos = listaTipos;
     }
 
+    public void setListaInstrumentos(List<Instrumento> listaInstrumentos) {
+        this.listaInstrumentos = listaInstrumentos;
+    }
 
-    public void createPDF() {
+    public void setListaCalibraciones(List<Calibraciones> listaCalibraciones) {
+        this.listaCalibraciones = listaCalibraciones;
+    }
+
+    public void setListaMediciones(List<Mediciones> listaMediciones) {
+        this.listaMediciones = listaMediciones;
+    }
+
+
+    public PDF(){
+
+    }
+
+    public void createPDF(String tipoReporte) {
         try (FileOutputStream fos = new FileOutputStream(tipoReporte+".pdf")) {
             document = new Document();
             PdfWriter writer = PdfWriter.getInstance(document, fos);
@@ -71,7 +82,7 @@ public class PDF {
             document.add(new Paragraph("\n"));
             document.add(new Paragraph("\n"));
 
-            
+
             PdfPTable tabla = tablaReporte(tipoReporte);
             if(tabla != null){
                 document.add(tabla);
@@ -92,7 +103,7 @@ public class PDF {
             // Handle PDF creation error
         }
     }
-    public void createPDFreportes(String infoIns, String ser) {
+    public void createPDFreportes(String infoIns, String ser, String tipoReporte) {
         try (FileOutputStream fos = new FileOutputStream(tipoReporte+".pdf")) {
             document = new Document();
 
@@ -117,15 +128,15 @@ public class PDF {
 
             document.add(new Paragraph("Calibrciones y mediciones de: "+infoIns));
             PdfPTable tabla = tablaCal();
-            for(Calibraciones obj: (List<Calibraciones>) lista){
+            for(Calibraciones obj: listaCalibraciones){
                 if(obj.getNo_SerieIns().equals(ser)){
-                    tabla.addCell("faltaTipo");
+                    tabla.addCell(obj.getTipo());
                     tabla.addCell(obj.getNo_SerieIns());
                     tabla.addCell(String.valueOf(obj.getNumeroCalibracion()));
                     tabla.addCell("-");
                     tabla.addCell("-");
                     tabla.addCell("-");
-                    for(Mediciones med:(List<Mediciones>)listaMediciones){
+                    for(Mediciones med:listaMediciones){
                         tabla.addCell("-");//tipo
                         tabla.addCell("-");//serie
                         tabla.addCell("-");//numColum
@@ -193,23 +204,25 @@ public class PDF {
         tabla.addCell(lec);
 
 
-        for(Calibraciones obj: (List<Calibraciones>) lista){
-            tabla.addCell("faltaTipo");
-            tabla.addCell(obj.getNo_SerieIns());
-            tabla.addCell(String.valueOf(obj.getNumeroCalibracion()));
-            tabla.addCell("-");
-            tabla.addCell("-");
-            tabla.addCell("-");
-            for(Mediciones med:(List<Mediciones>)listaMediciones){
-                tabla.addCell("-");//tipo
-                tabla.addCell("-");//serie
-                tabla.addCell("-");//numColum
-                //mediciones----------------------------
-                tabla.addCell(String.valueOf(med.getNumMedicion()));//numero
-                tabla.addCell(String.valueOf(med.getValorReferencia()));//referencia
-                tabla.addCell(String.valueOf(med.getValorMarcado()));///lectura
+        for(Calibraciones obj: listaCalibraciones){
+           //if(obj.getNo_SerieIns().equals(ser)){
+                tabla.addCell(obj.getTipo());
+                tabla.addCell(obj.getNo_SerieIns());
+                tabla.addCell(String.valueOf(obj.getNumeroCalibracion()));
+                tabla.addCell("-");
+                tabla.addCell("-");
+                tabla.addCell("-");
+                for(Mediciones med:listaMediciones){
+                    tabla.addCell("-");//tipo
+                    tabla.addCell("-");//serie
+                    tabla.addCell("-");//numColum
+                    //mediciones----------------------------
+                    tabla.addCell(String.valueOf(med.getNumMedicion()));//numero
+                    tabla.addCell(String.valueOf(med.getValorReferencia()));//referencia
+                    tabla.addCell(String.valueOf(med.getValorMarcado()));///lectura
 
-            }
+                }
+           // }
         }
 
 
@@ -231,7 +244,7 @@ public class PDF {
         tabla.addCell(un);
 
 
-        for (TipoInstrumentoObj obj: (List<TipoInstrumentoObj>)lista){
+        for (TipoInstrumentoObj obj: listaTipos){
             tabla.addCell(obj.getCodigo());
             tabla.addCell(obj.getNombre());
             tabla.addCell(obj.getUnidad());
@@ -267,7 +280,7 @@ public class PDF {
         tabla.addCell(tip);
 
 
-        for (Instrumento obj: (List<Instrumento>)lista){
+        for (Instrumento obj: listaInstrumentos){
             tabla.addCell(obj.getSerie());
             tabla.addCell(obj.getDescripcion());
             tabla.addCell(String.valueOf(obj.getMinimo()));

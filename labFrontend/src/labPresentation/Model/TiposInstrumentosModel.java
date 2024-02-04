@@ -27,13 +27,13 @@ public class TiposInstrumentosModel {
     private PDF reporte;
 
     //Metodos----------------------------------------------------------------------------------------------------------
-    public TiposInstrumentosModel(JTable table, JComboBox comb, JComboBox combUnidad) throws ParserConfigurationException, IOException, TransformerException {
+    public TiposInstrumentosModel(JTable table, JComboBox comb, JComboBox combUnidad, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
         listaInstrumentos = new ArrayList<>();
         cmB_tiposIns = comb;
         cmB_UnidadMed = combUnidad;
         tbl_tiposInst = table;
         dom = new DOM_tiposInstrumento();
-
+        reporte = pdf;
     }
     public void save(TipoInstrumentoObj ins) throws Exception {
         DefaultTableModel model = (DefaultTableModel) tbl_tiposInst.getModel();
@@ -107,7 +107,7 @@ public class TiposInstrumentosModel {
             comb.addItem(obj.getCodigo());
 
         }
-       // setListaInstrumentos(list);
+       reporte.setListaTipos(list);
     }
     public void cargarDatosUnidad(List<UnidadMedida>list, JComboBox combU) throws Exception {
 
@@ -183,8 +183,7 @@ public class TiposInstrumentosModel {
 
     }
     public void generarReporteGeneral() throws FileNotFoundException {
-        reporte = new PDF("tipos de instrumentos", listaInstrumentos);
-        reporte.createPDF();
+        reporte.createPDF("tipos de instrumentos");
     }
 
 

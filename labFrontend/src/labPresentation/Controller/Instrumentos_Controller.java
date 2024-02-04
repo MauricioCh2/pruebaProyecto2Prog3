@@ -6,6 +6,7 @@ import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
+import labPresentation.Model.PDF;
 import labPresentation.View.InstrumentosView;
 import org.xml.sax.SAXException;
 
@@ -32,6 +33,7 @@ public class Instrumentos_Controller implements IController {
 
     private static Instrumento instrumento;
     ServiceProxy localService;
+    private PDF pdfO;
 
     public Instrumentos_Controller(MainController cont) throws ParserConfigurationException, IOException, TransformerException {
         super();
@@ -42,7 +44,7 @@ public class Instrumentos_Controller implements IController {
     }
     public void init_view(InstrumentosView view) throws Exception {
         this.instrumentView = view;
-        this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos());
+        this.model = new InstrumentosModel(instrumentView.getTbl_Listado_Instrumentos(), pdfO);
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
         ServiceProxy.instance().setTControllerInstrumento(this);
         model.updateLista();
@@ -171,6 +173,10 @@ public class Instrumentos_Controller implements IController {
     public void agregar_categoriaCB(TipoInstrumentoObj ct){
         instrumentView.getCmB_Tipo().addItem(ct.getNombre());
 
+    }
+
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
     }
 
 

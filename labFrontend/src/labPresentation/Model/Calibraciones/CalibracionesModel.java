@@ -33,10 +33,10 @@ public class CalibracionesModel {
     DOM_calibraciones dom;
     private PDF reporte;
 
-    public  CalibracionesModel(JTable tabC) throws ParserConfigurationException, IOException, TransformerException {
+    public  CalibracionesModel(JTable tabC, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
         dom = new DOM_calibraciones();
         tablaC = tabC;
-
+        reporte = pdf;
     }
     public void save(Calibraciones calA) {
             try{
@@ -69,7 +69,7 @@ public class CalibracionesModel {
         mensaje = "El instrumento: "+ instrumentoCalibrado.toString() +" se encuentra calibrado.";
         return true;
     }
-    public void cargarDatos( JTable tbl, List<Calibraciones> list){
+    public void cargarDatos( JTable tbl, List<Calibraciones> list, MedicionesModel medicionesModel){
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
         modelo.setRowCount(0);//nos aseguramos que la tabla esta vacia para no sobrecargarla
@@ -79,10 +79,10 @@ public class CalibracionesModel {
             Object[] newRow = {obj.getNumeroCalibracion(),obj.getStringFecha(),obj.getNumeroMediciones()};
 
             modelo.addRow(newRow);
-            //ServiceProxy.instance().findById(obj.getUnidadId());
-            //comb.addItem(obj.getCodigo());
 
         }
+        reporte.setListaCalibraciones(list);
+        reporte.setListaMediciones(medicionesModel.getListM());
     }
     boolean addCalibracionXML(Calibraciones cal){
         return dom.addCalibraciones(cal);
@@ -131,13 +131,11 @@ public class CalibracionesModel {
     }
 
     public void generarReporte(String stri,String ser) throws FileNotFoundException {
-        reporte = new PDF("calibraciones", listC, listM);
-        reporte.createPDFreportes(stri,ser);
+        reporte.createPDFreportes(stri,ser,"calibraciones");
 
     }
-    public void generarReporteGen( ) throws FileNotFoundException {
-        reporte = new PDF("calibraciones", listC, listM);
-        reporte.createPDF();
+    public void generarReporteGen() throws FileNotFoundException {
+        reporte.createPDF("calibraciones");
     }
     public void setListC(List<Calibraciones> listC) {
         this.listC = listC;

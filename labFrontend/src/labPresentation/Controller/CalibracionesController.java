@@ -7,6 +7,7 @@ import Protocol.Protocol;
 import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
+import labPresentation.Model.PDF;
 import labPresentation.Model.TableModel;
 import labPresentation.View.CalibracionesView;
 import org.xml.sax.SAXException;
@@ -43,6 +44,8 @@ public class CalibracionesController implements IController {
     private static  Instrumento instru =null;
     private static int numeroCalibracion;
     private static Calibraciones currentC;
+    private PDF pdfO;
+
 
     public static void setInstru(Instrumento instru) throws Exception {
         CalibracionesController.instru = instru;
@@ -70,7 +73,7 @@ public class CalibracionesController implements IController {
         textMediciones = calibracionesView.getTextMediciones();
         textFecha = calibracionesView.getTextFecha();
         textNumeroB = calibracionesView.getTextNumeroB();
-        modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones());
+        modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
         //numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount();
@@ -159,8 +162,12 @@ public class CalibracionesController implements IController {
         System.out.println("\n llegue al update ");
         if(pro == Protocol.RELOAD_CALIBRACION){
             modelo.setListC((java.util.List<Calibraciones>) o);
-            modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o);
+            modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
         }
+    }
+
+    public void setPDF(PDF pdf) {
+        pdfO = pdf;
     }
 
     public static class BtnsCalibraciones implements ActionListener {

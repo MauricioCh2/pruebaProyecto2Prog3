@@ -24,10 +24,10 @@ public class InstrumentosModel {
         JTable tbl_tiposInst;
         private DOM_Instrumento dom;
         private PDF reporte;
-        public InstrumentosModel(JTable table) throws ParserConfigurationException, IOException, TransformerException {
+        public InstrumentosModel(JTable table, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
             tbl_tiposInst = table;
             dom = new DOM_Instrumento();
-
+            reporte = pdf;
             listaInstrumento = new ArrayList<>();
         }
 
@@ -90,6 +90,7 @@ public class InstrumentosModel {
             modelo.addRow(newRow);
 
         }
+        reporte.setListaInstrumentos(list);
     }
     public ListaInstrumentos_E getListaInstrumentosE(){
         return listaInstrumentos_e;
@@ -154,8 +155,7 @@ public class InstrumentosModel {
         return null;
     }
     public void generarReporte() throws FileNotFoundException {
-        reporte = new PDF("instrumentos", listaInstrumento);
-        reporte.createPDF();
+        reporte.createPDF("instrumentos");
     }
 
     public void updateLista() throws Exception {
