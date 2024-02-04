@@ -25,6 +25,8 @@ public class CalibracionesView {
     private JButton btn_reporte;
     private JButton buscarButton;
     private JLabel tx_instrumento;
+    private JLabel NumeroLabelBusqueda;
+    private JLabel MedicionesLabel;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -150,5 +152,17 @@ public class CalibracionesView {
 
     public JButton getBuscarButton() {
         return buscarButton;
+    }
+
+    public JLabel getNumeroLabelBusqueda() {
+        return NumeroLabelBusqueda;
+    }
+
+    public JLabel getMedicionesLabel() {
+        return MedicionesLabel;
+    }
+
+    public CalibracionesController getControlCalibraciones() {
+        return controlCalibraciones;
     }
 }

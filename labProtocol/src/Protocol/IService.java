@@ -52,10 +52,10 @@ public interface IService {
     public void deleteCalibracionId(String id) throws Exception;
 
 
-    //--------------------MEDIDAS---------------------
+    //--------------------MEDICIONES---------------------
     public void create(Mediciones medida) throws Exception;
 
-    public Mediciones read(Mediciones medida) throws Exception;
+    public List<Mediciones> read(Mediciones medida) throws Exception;
 
     public void update(Mediciones medida) throws Exception;
 

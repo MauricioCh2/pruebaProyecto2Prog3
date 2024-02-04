@@ -50,6 +50,13 @@ public class Protocol {
     public static final int SEND_LISTA_TIPO_INSTRUMENTOS = 400;
     public static final int INIT_LISTA_TIPO_INSTRUMENTOS = 401;
     public static final int SEND_TIPO_INSTRUMENTOS = 402;
+    //--------------MEDICIONES---------------
+    public static final int CREATEMEDICIONES = 500;
+    public static final int READMEDICIONES = 501;
+    public static final int UPDATEMEDICIONES = 502;
+    public static final int DELETEMEDICIONES = 503;
+    public static final int GETLISTAMEDICIONES = 504;
+
 
     //-----------------------JDOM-------------------------------
     public static final int SEND_NUMERO_WORKER = 1001;

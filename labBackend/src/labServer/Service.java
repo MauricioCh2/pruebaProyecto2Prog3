@@ -117,7 +117,6 @@ public class Service implements IService {
 
     @Override
     public List<Instrumento> read_instrumentos( ) throws Exception {
-        System.out.print("Estoy en read de instrumentos en service  \n");
         return instrumento.read();
     }
 
@@ -176,27 +175,30 @@ public class Service implements IService {
          instrumento.delete(e);
     }
 
-    //--------------------MEDIDAS---------------------
+    //--------------------MEDICIONES---------------------
     @Override
     public void create(Mediciones medida) throws Exception {
+        System.out.print("Estoy en create de mediciones en service  \n");
         mediciones.create(medida);
     }
 
     @Override
+    public List<Mediciones> read(Mediciones medida) throws Exception {
+        System.out.print("Estoy en read de mediciones en service  \n");
+        return mediciones.read(medida);
+    }
+
+    @Override
     public void delete(Mediciones medida) throws Exception {
+        System.out.print("Estoy en delete de mediciones en service  \n");
         mediciones.delete(medida);
     }
 
     @Override
     public void update(Mediciones medida) throws Exception {
+        System.out.print("Estoy en update de mediciones en service  \n");
         mediciones.update(medida);
     }
-
-    @Override
-    public Mediciones read(Mediciones medida) throws Exception {
-        return mediciones.read(medida);
-    }
-
     public List<TipoInstrumentoObj> get_lista_tipo_instrumento(){
         return data.getListaTipos();
     }

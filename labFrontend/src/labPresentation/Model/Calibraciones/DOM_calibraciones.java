@@ -3,6 +3,7 @@ package labPresentation.Model.Calibraciones;
 
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
+import Protocol.Mediciones;
 import com.itextpdf.text.pdf.PdfPTable;
 import labPresentation.Model.DOM;
 import org.w3c.dom.Attr;
