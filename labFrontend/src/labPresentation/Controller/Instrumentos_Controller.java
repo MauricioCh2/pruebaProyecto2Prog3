@@ -58,10 +58,10 @@ public class Instrumentos_Controller implements IController {
         }
     }
 
-    @Override
-    public void changesMaked() {
-
-    }
+//    @Override
+//    public void changesMaked() {
+//
+//    }
 
     public void cargarDatos(List<Instrumento> list) throws Exception {
         model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos(),list);

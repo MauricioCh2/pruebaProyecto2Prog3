@@ -339,21 +339,21 @@ public class TiposInstrumentoController implements IController {
         this.instrumentos_controller = ctl; //THIS
     }
 
-    @Override
-    public void changesMaked(){
-        try{resetGui();}catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
-        /*try {
-            if (!tInstrumentosModel.busquedaPorCodigo(txF_codigo.getText(), tbl_listadoTipos)) {
-                System.out.println("SE TIENE QUE LIMPIAR LA INTERFAZ DE LOS USER\n\n\n");
-                txF_codigo.setEnabled(true);
-                txF_codigo.setText("");
-                txF_nombre.setText("");
-                EDIT = false;
-            }
-        }catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }*/
-    }
+//    @Override
+//    public void changesMaked(){
+//        try{resetGui();}catch (Exception ex){
+//            System.out.println(ex.getMessage());
+//        }
+//        /*try {
+//            if (!tInstrumentosModel.busquedaPorCodigo(txF_codigo.getText(), tbl_listadoTipos)) {
+//                System.out.println("SE TIENE QUE LIMPIAR LA INTERFAZ DE LOS USER\n\n\n");
+//                txF_codigo.setEnabled(true);
+//                txF_codigo.setText("");
+//                txF_nombre.setText("");
+//                EDIT = false;
+//            }
+//        }catch (Exception ex){
+//            System.out.println(ex.getMessage());
+//        }*/
+//    }
 }
