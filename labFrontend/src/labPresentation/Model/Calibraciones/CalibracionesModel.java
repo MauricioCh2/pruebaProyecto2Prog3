@@ -60,13 +60,12 @@ public class CalibracionesModel {
             if (valorLectura < limiteInferior || valorLectura > limiteSuperior) {
                 mensaje =  "<html><div style='text-align: center;'> Según la última calibración, registrada, <br> el instrumento " + instrumentoCalibrado.toString() + " <br>se encuentra fuera del rango de tolerancia <br>, y requiere ser calibrado.</div></html>";
                 return false;
-            }
+            }mensaje = "El instrumento: "+ instrumentoCalibrado.toString() +" se encuentra calibrado.";
+            return true;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        mensaje = "El instrumento: "+ instrumentoCalibrado.toString() +" se encuentra calibrado.";
-        return true;
+        return false;
     }
     public void cargarDatos( JTable tbl, List<Calibraciones> list){
         System.out.println("Cargando datos de lista\n");

@@ -27,8 +27,6 @@ import java.util.List;
 
 public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
-
-    //private Calibraciones Model;
     private static CalibracionesModel modelo;
     private static MedicionesModel modelo_mediciones;
     private static JTable tableCalibraciones;
@@ -41,12 +39,20 @@ public class CalibracionesController implements IController {
     private static boolean EDITAR_MEDICIONES;
     private static  Instrumento instru =null;
     private static int numeroCalibracion;
+
     private static Calibraciones currentC;
 
     public static void setInstru(Instrumento instru) throws Exception {
         CalibracionesController.instru = instru;
         //modelo.cargarDatos(tableCalibraciones, instru.getSerie());
         updateLista(instru.getSerie());
+    }
+    public static Calibraciones getCurrentC() {
+        return currentC;
+    }
+
+    public static void setCurrentC(Calibraciones currentC) {
+        CalibracionesController.currentC = currentC;
     }
 
     public static void updateLista(String id) throws Exception {
@@ -76,7 +82,7 @@ public class CalibracionesController implements IController {
 
     }
 
-    public static void guardarCalibraciones(){
+    public static void guardarCalibraciones() {
         int num = 0;
         if (!EDITAR_MEDICIONES) {
             num = 0;
@@ -88,7 +94,7 @@ public class CalibracionesController implements IController {
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
                     int numComparacion = Math.abs((instru.getMaximo()-instru.getMinimo()))  + 1;
-                    if (num >= numComparacion) {
+                    if (num <= numComparacion) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             LocalDate date = LocalDate.now();
@@ -97,25 +103,23 @@ public class CalibracionesController implements IController {
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
                             Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
-                            modelo.save(calibraciones);
+                            if (currentC != null && currentC.getNo_SerieIns().equals(instru)) {
+                                calibraciones.setMedicionesL(currentC.getMedicionesL());
+                                //modelo.update(calibraciones);
+                            } else {
+                                modelo.save(calibraciones);
+                            }
                             currentC = calibraciones;
+                            setCurrentC(currentC);
                             limpiar();
                             calibracionesView.getBorrarButton().setEnabled(false);
                             JOptionPane.showMessageDialog(null, "Calibracion agregada");
-                            cargarEstado();
-                        } else {
-                            throw new Exception("El valor de la cantidad de mediciones, no ha sido completada correctamente. Cantidad minima permitida 2.");
                         }
-                    } else {
-                        throw new Exception("El valor de la cantidad de mediciones, no ha sido completada correctamente.La cantidad máxima no debe superar el máximo del instrumento.");
                     }
-
                 }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage());
             }
-        } else{
-            limpiar();//actualizar mediciones
         }
     }
 
@@ -266,7 +270,7 @@ public class CalibracionesController implements IController {
                     JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
                 } else {
                     int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
-                    modelo_mediciones.cargar_tablaMediciones(instru, med);
+                    modelo_mediciones.cargar_tablaMediciones(getCurrentC(),instru, med);
                     DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
                     for (int i = 0; i < tableCalibraciones.getSelectedRow(); i++) {
                         model.isCellEditable(i, 2);
