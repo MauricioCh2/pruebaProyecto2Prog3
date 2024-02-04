@@ -60,18 +60,12 @@ public class TiposInstrumentoController implements IController {
          chB_busqueda = tpInst.getChB_busqueda();
 
         localService = (ServiceProxy)ServiceProxy.instance();//especificamos que va ase un Service proxy
-        //localService.setTipoinscontroller(this);
 
         tInstrumentosModel = new TiposInstrumentosModel(tbl_listadoTipos, instrumentos_controller.getCB_categoria(), cB_unidad, pdfO);
-        //listaInstrumentos = tInstrumentosModel.getListaInstrumentos();
 
         ServiceProxy.instance().setTControllerTipo(this);
         tInstrumentosModel.updateLista();
-        //tInstrumentosModel.cargarDatos(tpInst.getTbl_ListadoTipos(),instrumentos_controller.getCB_categoria());
 
-
-
-        //this.instrumentos_controller = visitor; //THIS
     }
 
     public void cargarDatos(List<TipoInstrumentoObj> list) throws Exception {
@@ -92,8 +86,6 @@ public class TiposInstrumentoController implements IController {
             cargarDatos((List<TipoInstrumentoObj> ) o);
         }
 
-        //aqui llamamos al commit o algo asi
-        //la cosa es que le cvaiga encima a la lista y la actualice
     }
 
     private void cargarDatosUnidades(List<UnidadMedida> lis) throws Exception {
@@ -181,6 +173,7 @@ public class TiposInstrumentoController implements IController {
             tInstrumentosModel.eliminar(cod, valFil); //elimina de la lista y de la tabla
             //reseteamos GUI
             resetGui();
+            ServiceProxy.instance().forceUpdate();
         }
     }
     static private void guardar (){
@@ -339,21 +332,5 @@ public class TiposInstrumentoController implements IController {
         this.instrumentos_controller = ctl; //THIS
     }
 
-//    @Override
-//    public void changesMaked(){
-//        try{resetGui();}catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
-//        /*try {
-//            if (!tInstrumentosModel.busquedaPorCodigo(txF_codigo.getText(), tbl_listadoTipos)) {
-//                System.out.println("SE TIENE QUE LIMPIAR LA INTERFAZ DE LOS USER\n\n\n");
-//                txF_codigo.setEnabled(true);
-//                txF_codigo.setText("");
-//                txF_nombre.setText("");
-//                EDIT = false;
-//            }
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }*/
-//    }
+
 }

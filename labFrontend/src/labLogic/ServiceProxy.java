@@ -463,28 +463,40 @@ public class ServiceProxy implements IService {
     //-------------------------------------------------Mediciones-------------------------------------------------
     @Override
     public void create(Mediciones medida) throws Exception {
-
-    }
-
-
-    public void delete(Mediciones medida) throws Exception {
-
-    }
-
-
-    public void update(Mediciones medida) throws Exception {
-
-    }
-
-
-    public List<Mediciones> read(Mediciones medida) throws Exception {
-        out.writeInt(Protocol.READCALIBRACION);
+        out.writeInt(Protocol.CREATEMEDICIONES);
         out.writeObject(medida);
         out.flush();
-        System.out.println("Le estoy pasando la lista de instrumentos a server desde serviceProxy");
-        return null;
+        System.out.println("Mande el mensaje de Crear mediciones a el server");
     }
 
+    @Override
+    public List<Mediciones> read(Mediciones medida) throws Exception {
+        out.writeInt(Protocol.READMEDICIONES);
+        out.writeObject(medida);
+        out.flush();
+        System.out.println("Le estoy pasando la lista de mediciones a server desde serviceProxy");
+        return null;
+    }
+    @Override
+    public void update(Mediciones medida) throws Exception {
+        out.writeInt(Protocol.UPDATEMEDICIONES);
+        out.writeObject(medida);
+        out.flush();
+        System.out.println("Mande el mensaje de update medida a el server");
 
+    }
+    @Override
+    public void delete(Mediciones medida) throws Exception {
+        out.writeInt(Protocol.DELETEMEDICIONES);
+        out.writeObject(medida);
+        out.flush();
+        System.out.println("Mande el mensaje de delete medicon a el server");
+    }
+
+    @Override
+    public void forceUpdate() throws IOException {
+        out.writeInt(Protocol.FORCE_UPDATE);
+        out.flush();
+    }
 }
 

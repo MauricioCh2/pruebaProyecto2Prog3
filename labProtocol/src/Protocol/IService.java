@@ -1,11 +1,12 @@
 package Protocol;
 
+import java.io.IOException;
 import java.util.List;
 
 //comentario -----------------------------
 public interface IService {
     public void register()throws Exception ;
-
+    public void forceUpdate() throws IOException;
 
     //--------------Unidades de Medida---------------
     public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> lis ) throws Exception;
@@ -51,6 +52,8 @@ public interface IService {
     public void update(Mediciones medida) throws Exception;
 
     public void delete(Mediciones medida) throws Exception;
+
+
 
 }
 

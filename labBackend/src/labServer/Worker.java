@@ -421,6 +421,10 @@ public class Worker { // es cada socket
                         } catch (Exception ex) {}
                         break;
 
+                    case Protocol.FORCE_UPDATE:
+                        srv.update(service.read_instrumentos(), Protocol.RELOAD_INSTRUMENTO);
+                        //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
+                        break;
 
                 }
                 out.flush();

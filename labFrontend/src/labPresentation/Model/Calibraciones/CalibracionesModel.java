@@ -23,16 +23,10 @@ public class CalibracionesModel {
     private Calibraciones caliActual;
     private List<Calibraciones> listC;
     private List<Mediciones> listM;
-
-
-
-    JTable tablaC;
-
-
+    private JTable tablaC;
     private PDF reporte;
 
     public  CalibracionesModel(JTable tabC, PDF pdf) throws ParserConfigurationException, IOException, TransformerException {
-
         tablaC = tabC;
         reporte = pdf;
     }

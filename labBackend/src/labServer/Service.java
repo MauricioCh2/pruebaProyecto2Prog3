@@ -5,6 +5,7 @@ import Protocol.*;
 import data.*;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -186,4 +187,9 @@ public class Service implements IService {
         mediciones.update(medida);
     }
 
+
+    @Override
+    public void forceUpdate() throws IOException {
+
+    }
 }

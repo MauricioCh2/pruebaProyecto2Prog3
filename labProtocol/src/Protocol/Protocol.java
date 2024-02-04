@@ -5,6 +5,8 @@ public class Protocol {
     public static final int PORT = 1234;
 
     public static final int REGISTER = 1;
+
+    public static final int FORCE_UPDATE = 42;
     //protocolo de listas-------------------------------
     public static final int RELOAD_UM = 21;
     public static final int RELOAD_TIP_INS = 22;
