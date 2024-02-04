@@ -69,11 +69,11 @@ public class Instrumentos_Controller implements IController {
 
                 if (!EDIT) {
                     model.save(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
 
                 } else {
                     model.actualizar(instrumento);
-                    JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
 
                 limpiar_pnl_ingreso_txFields();
@@ -136,7 +136,7 @@ public class Instrumentos_Controller implements IController {
         instrumentView.getTxF_Minimo().setText("");
         instrumentView.getTxF_Maximo().setText("");
         instrumentView.getTxF_Tolerancia().setText("");
-        instrumentView.getCmB_Tipo().setSelectedItem(0);
+        instrumentView.getCmB_Tipo().setSelectedIndex(0);
         MainController.deselect();
         model.updateLista();
     }

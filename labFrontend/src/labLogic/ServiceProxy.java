@@ -65,6 +65,16 @@ public class ServiceProxy implements IService {
         }
     }
 
+    public void solicitar_numero_worker(){
+        try {
+            out.writeInt(Protocol.REQUEST_NUMERO_WORKER);
+            out.flush();
+
+        }catch (Exception ex){
+            System.out.println("Excepcion: " + ex.getMessage());
+        }
+    }
+
     public void setIDeliver(IDeliver d){
         deliver = d;
     }
@@ -195,6 +205,16 @@ public class ServiceProxy implements IService {
                         }
                         break;
                     }
+                    case Protocol.SEND_NUMERO_WORKER: {
+                        try {
+                            System.out.println("Seteando worker\n\n\n\n\n\n\n");
+                            int numeroWorker = (int) in.readInt();
+                            set_numero_worker(numeroWorker);
+                        } catch (Exception ex) {
+                            System.out.println("Excepcion: " + ex.getMessage());
+                        }
+                        break;
+                    }
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -219,6 +239,16 @@ public class ServiceProxy implements IService {
                    deliver.deliver(message);
                }
            }
+        );
+    }
+
+    private void set_numero_worker(final int num ){
+        SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run(){
+                                           deliver.set_numero_worker(num);
+                                       }
+                                   }
         );
     }
     private void update (Object ob, final int pro){

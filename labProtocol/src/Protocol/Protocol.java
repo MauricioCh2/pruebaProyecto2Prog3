@@ -2,7 +2,7 @@ package Protocol;
 
 public class Protocol {
     public static final String SERVER = "localhost";
-    public static final int PORT = 1235;
+    public static final int PORT = 1234;
 
     public static final int REGISTER = 1;
     //protocolo de listas-------------------------------
@@ -57,5 +57,9 @@ public class Protocol {
     public static final int DELETEMEDICIONES = 503;
     public static final int GETLISTAMEDICIONES = 504;
 
+
+    //-----------------------JDOM-------------------------------
+    public static final int SEND_NUMERO_WORKER = 1001;
+    public static final int REQUEST_NUMERO_WORKER = 1002;
 
 }

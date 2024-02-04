@@ -2,8 +2,9 @@
 package labServer;
 
 import Protocol.*;
-import Protocol.Listas.UnidadMedList;
-import labServer.dao.*;
+import data.*;
+import data.*;
+
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -50,8 +51,10 @@ public class Service implements IService {
         System.out.print("Estoy en create en service  \n");
         if (tiposInstrumento.findById(e.getCodigo())== null){
             tiposInstrumento.create(e);
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado con exito!");
+
         }else{
-            throw new Exception("Este elemento ya existe");
+            throw new Exception("ERROR: Este codigo ya existe");
         }
     }
 
@@ -71,14 +74,14 @@ public class Service implements IService {
 
     @Override
     public List<TipoInstrumentoObj> read() throws Exception {
-        System.out.print("Estoy en read en service Kata 2  \n");
+        System.out.print("Estoy en read  tipos en service\n");
         return tiposInstrumento.read();
     }
 
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
          if (tiposInstrumento.update(e)){
-             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito");
+             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito!");
          }else{
              //no se si tirar la exepcion aqui o  como ya esta en el worker
          }
@@ -87,7 +90,7 @@ public class Service implements IService {
     @Override
     public void delete(TipoInstrumentoObj e) throws Exception {
         if (tiposInstrumento.delete(e)){
-            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento eliminado con exito!");
         }else {
 
         }
@@ -95,7 +98,7 @@ public class Service implements IService {
     @Override
     public void delete(String e) throws Exception {
         if (tiposInstrumento.delete(e)){
-            JOptionPane.showMessageDialog(null, "Tipo de instrumento elimina con exito");
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento eliminado con exito!");
         }else {
 
         }
@@ -104,7 +107,12 @@ public class Service implements IService {
     //-----------------INSTRUMENTOS-------------------
     @Override
     public void create(Instrumento inst) throws Exception {
-        instrumento.create(inst);
+        if (instrumento.findById(inst.getSerie())== null){
+            instrumento.create(inst);
+            JOptionPane.showMessageDialog(null, "Instrumento agregado con exito!");
+        }else{
+            throw new Exception("ERROR: Este numero de serie ya existe");
+        }
     }
 
     @Override
@@ -115,17 +123,30 @@ public class Service implements IService {
 
     @Override
     public void update(Instrumento inst) throws Exception {
-         instrumento.update(inst);
+        if (instrumento.update(inst)){
+            JOptionPane.showMessageDialog(null, "Instrumento actualizado con exito!");
+        }else{
+            //no se si tirar la exepcion aqui o  como ya esta en el worker
+        }
     }
 
     @Override
     public void delete(Instrumento inst) throws Exception {
-         instrumento.delete(inst);
+
+        if (instrumento.delete(inst)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     @Override
     public void deleteInstrumentoId(String e) throws Exception {
-         instrumento.delete(e);
+        if (instrumento.delete(e)){
+            JOptionPane.showMessageDialog(null, "Instrumento eliminado con exito!");
+        }else {
+
+        }
     }
 
     //-----------------CALIBRACIONES------------------

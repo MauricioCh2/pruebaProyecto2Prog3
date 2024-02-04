@@ -18,11 +18,13 @@ import java.util.List;
 public class Server {
     ServerSocket srv;
     List<Worker> workers;
+    int current_num_worker;
     public Server() {
         try {
             srv = new ServerSocket(Protocol.PORT);
             workers =  Collections.synchronizedList(new ArrayList<Worker>());
             System.out.println("Servidor iniciado..."); //el server se inicio
+            current_num_worker = 0;
         } catch (IOException ex) {
             System.out.println(ex);
         }
@@ -45,8 +47,9 @@ public class Server {
                 out = new ObjectOutputStream(skt.getOutputStream());//limpiamos para que no se llenen de basura o ruido
                 System.out.println("Conexion Establecida...");
                 register(in,out, service);
+                current_num_worker+=1;
 
-                Worker worker = new Worker(this,in,out,workers.size(), service); //crea nuevo worker
+                Worker worker = new Worker(this,in,out,current_num_worker, service); //crea nuevo worker
                 workers.add(worker);             // lo agrego (aun no sirve)
                 worker.start();                  //ahora si ya esta iniciando
 
@@ -82,6 +85,12 @@ public class Server {
         for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
             System.out.println("Cantidad de workers: " + workers.size());
             wk.deliver(message);
+        }
+    }
+
+    public void send_numero_worker(int numeroWorker){ //el server le dice a sus workers entregen el mensaje
+        for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            wk.send_numero_worker( numeroWorker);
         }
     }
 

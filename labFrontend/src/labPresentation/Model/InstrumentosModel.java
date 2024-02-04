@@ -55,9 +55,9 @@ public class InstrumentosModel {
                 ServiceProxy.instance().create(ins);
                 //guardado = createTipoXML(ins);
                 //if (guardado) {
-                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
-                Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
-                modelo.addRow(fila);
+//                DefaultTableModel modelo = (DefaultTableModel) tbl_tiposInst.getModel();
+//                Object[] fila = new Object[]{ins.getSerie(), ins.getDescripcion(), ins.getMinimo(), ins.getMaximo(), ins.getTolerancia()};
+//                modelo.addRow(fila);
                 //}
             } //else this.actualizar(ins);
         }
@@ -147,7 +147,6 @@ public class InstrumentosModel {
         for(Instrumento obj: listaInstrumento) {
             String codigoActual = obj.getSerie().toLowerCase();
             if (codigoActual.equals(noSerie.toLowerCase())) {
-
                 return obj;
             }
         }
