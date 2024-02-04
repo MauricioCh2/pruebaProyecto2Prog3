@@ -166,6 +166,7 @@ public class CalibracionesController implements IController {
         textFecha.setEnabled(true);
         textNumeroB.setText("");
         tableCalibraciones.clearSelection();
+        tableCalibraciones.setEnabled(true);
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
@@ -324,7 +325,7 @@ public class CalibracionesController implements IController {
                             textNumero.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 0)));
                             textFecha.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 1)));
                             textMediciones.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
-
+                            tableCalibraciones.setEnabled(false);
                         }
                     } else {
                         throw new Exception("Seleccione una columna primero");
@@ -342,9 +343,16 @@ public class CalibracionesController implements IController {
                     int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
                     modelo_mediciones.cargar_tablaMediciones(getCurrentC(),instru, med);
                     DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
-                    for (int i = 0; i < tableCalibraciones.getSelectedRow(); i++) {
-                        model.isCellEditable(i, 2);
+                    for (int i = 0; i < tableMediciones.getSelectedRow(); i++) {
                         tableMediciones.getModel().isCellEditable(i,2);
+                        tableMediciones.getColumnModel().getColumn(0).setCellEditor(null);
+                        tableMediciones.getColumnModel().getColumn(1).setCellEditor(null);
+                        tableMediciones.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(new JTextField()));
+                        tableMediciones.getColumnModel().getColumn(0).setResizable(false);
+                        tableMediciones.getColumnModel().getColumn(1).setResizable(false);
+                        tableMediciones.getColumnModel().getColumn(2).setResizable(true);
+
+
                     }
                     calibracionesView.getTextMediciones().setEnabled(false);
                 }
