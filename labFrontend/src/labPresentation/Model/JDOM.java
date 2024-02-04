@@ -26,13 +26,13 @@ public class JDOM {
     }
     private void generarRutaArchivo(int numeroWorker) {
         String idUsuario = String.valueOf(numeroWorker);
-        String dir = "labFrontend\\user_logs\\";
+        String dir = "labFrontend" + File.separator + "user_logs" + File.separator;
         FILENAME = dir + "data_usuario_" + idUsuario + ".xml";
         System.out.println("ruta: " + FILENAME);
     }
 
     private void int_user_logs_folder() {
-        String dir = "labFrontend\\user_logs\\";
+        String dir = "labFrontend" + File.separator + "user_logs" + File.separator;
         File logsFolder = new File(dir);
         if (!logsFolder.exists()) {
             if (logsFolder.mkdirs()) {
@@ -42,7 +42,6 @@ public class JDOM {
             }
         }
     }
-
 
     public void init_xml_file() throws IOException, JDOMException {
         this.sax = new SAXBuilder();
