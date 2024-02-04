@@ -58,15 +58,7 @@ public class ServiceProxy implements IService {
         skt.close();
     }
 
-    public void inicializar_cliente() {
-        try {
-            out.writeInt(Protocol.SEND_LISTA_TIPO_INSTRUMENTOS);
-            out.flush();
 
-        } catch (Exception ex) {
-            System.out.println("Excepcion: " + ex.getMessage());
-        }
-    }
 
     public void solicitar_numero_worker() {
         try {

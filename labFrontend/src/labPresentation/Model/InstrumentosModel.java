@@ -1,7 +1,6 @@
 package labPresentation.Model;
 
 import Protocol.Instrumento;
-import Protocol.TipoInstrumentoObj;
 import labLogic.ServiceProxy;
 import org.xml.sax.SAXException;
 

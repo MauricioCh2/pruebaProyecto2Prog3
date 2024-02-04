@@ -8,9 +8,8 @@ public class TipoInstrumentoObj implements Serializable {
     private String nombre;
     private String unidad;
     private  int unidadId;
-
-
     private List<Instrumento> listaInstrumentos;
+    //--------------------------------METODOS--------------------------------
 
     public TipoInstrumentoObj(String codigo, String nombre, String unidad) {
         this.codigo = codigo;
@@ -25,10 +24,6 @@ public class TipoInstrumentoObj implements Serializable {
     //setters y getters------------------------------------------------------------------------------------------------
     public String getCodigo() {
         return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     public String getNombre() {

@@ -6,7 +6,6 @@ public class Protocol {
 
     public static final int REGISTER = 1;
     //protocolo de listas-------------------------------
-    public static final int RELOAD_ABS = 20;
     public static final int RELOAD_UM = 21;
     public static final int RELOAD_TIP_INS = 22;
     public static final int RELOAD_INSTRUMENTO = 23;
@@ -15,13 +14,7 @@ public class Protocol {
     //Respuestas del server-------------------------------------------------------------------------------------------------
     public static final int ERROR_NO_ERROR = 0;
     public static final int ERROR_LOGIN=1;
-    public static final int ERROR_ERROR = 1;
-    public static final int ERROR_LOGOUT=2;
-    public static final int ERROR_POST=3;
 
-
-    public static final int SYNC = 10;
-    public static final int ASYNC = 11;
     public static final int DELIVER = 12;
     public static final int DISCONNECT = 13;
 
@@ -46,10 +39,8 @@ public class Protocol {
     public static final int UPDATECALIBRACION = 302;
     public static final int DELETECALIBRACION = 303;
 
-    //---------------INICIALIZACION-----------------
-    public static final int SEND_LISTA_TIPO_INSTRUMENTOS = 400;
     public static final int INIT_LISTA_TIPO_INSTRUMENTOS = 401;
-    public static final int SEND_TIPO_INSTRUMENTOS = 402;
+
     //--------------MEDICIONES---------------
     public static final int CREATEMEDICIONES = 500;
     public static final int READMEDICIONES = 501;
