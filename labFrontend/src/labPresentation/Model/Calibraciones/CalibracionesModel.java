@@ -48,25 +48,37 @@ public class CalibracionesModel {
 
     }
     public boolean calibrado(Mediciones mediciones, Instrumento instrumentoCalibrado) {
-        String mensaje;
         try {
-            double valorReferencia = mediciones.getValorReferencia();
-            double valorLectura = mediciones.getValorMarcado();
-            double tolerancia = instrumentoCalibrado.getTolerancia();
-            double limiteInferior = valorReferencia - tolerancia;
-            double limiteSuperior = valorReferencia + tolerancia;
-
-            if (valorLectura < limiteInferior || valorLectura > limiteSuperior) {
-                mensaje =  "<html><div style='text-align: center;'> Según la última calibración, registrada, <br> el instrumento " + instrumentoCalibrado.toString() + " <br>se encuentra fuera del rango de tolerancia <br>, y requiere ser calibrado.</div></html>";
+            if ( mediciones.toleranciaCorrecta((int) instrumentoCalibrado.getTolerancia()) ) {
+                return true;
+            }else {
                 return false;
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        mensaje = "El instrumento: "+ instrumentoCalibrado.toString() +" se encuentra calibrado.";
-        return true;
+        return false;
     }
+    public String getMensaje(Mediciones mediciones, Instrumento instrumentoCalibrado) {
+        String mensaje = "";
+        boolean calibrado = calibrado(mediciones, instrumentoCalibrado);
+        if (calibrado) {
+            mensaje = "El instrumento se encuentra calibrado.";
+        } else {
+            mensaje = "<html><div style='text-align: center;'> Según la última calibración registrada, <br> el instrumento " + InsActual.toString() + " <br>se encuentra fuera del rango de tolerancia <br>, y requiere ser calibrado.</div></html>";
+            int i = 0;
+            for (Mediciones medicion : listM) {
+                if (!medicion.toleranciaCorrecta((int) instrumentoCalibrado.getTolerancia())) {
+                    mensaje += "<br>La medición " + i + " está fuera del rango de tolerancia.";
+                }
+                i++;
+            }
+            JOptionPane.showMessageDialog(null, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+        }
+        return mensaje;
+    }
+
+
     public void cargarDatos( JTable tbl, List<Calibraciones> list, MedicionesModel medicionesModel){
         System.out.println("Cargando datos de lista\n");
         DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();

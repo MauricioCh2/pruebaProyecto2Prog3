@@ -8,6 +8,7 @@ import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
 import labPresentation.Model.PDF;
+import labPresentation.Model.TableModel;
 import labPresentation.View.CalibracionesView;
 import org.xml.sax.SAXException;
 
@@ -25,8 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static java.awt.Color.red;
 
 public class CalibracionesController implements IController {
     private static CalibracionesView calibracionesView;
@@ -54,6 +55,13 @@ public class CalibracionesController implements IController {
         //modelo.cargarDatos(tableCalibraciones, instru.getSerie());
         updateLista(instru.getSerie());
     }
+    public static Calibraciones getCurrentC() {
+        return currentC;
+    }
+
+    public static void setCurrentC(Calibraciones currentC) {
+        CalibracionesController.currentC = currentC;
+    }
 
     public static void updateLista(String id) throws Exception {
         ServiceProxy.instance().readCalibracion(id);
@@ -79,11 +87,13 @@ public class CalibracionesController implements IController {
         modelo = new CalibracionesModel(calibracionesView.getTableCalibraciones(), pdfO);
         modelo_mediciones = new MedicionesModel(calibracionesView.getTableMediciones());
         EDITAR = false;
+        calibracionesView.getMensaje().setEnabled(false);
         //numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount();
 
     }
 
-    public static void guardarCalibraciones(){
+    public static void guardarCalibraciones() {
+        calibracionesView.getMensaje().setEnabled(false);
         int num = 0;
         if (!EDITAR_MEDICIONES) {
             num = 0;
@@ -95,6 +105,7 @@ public class CalibracionesController implements IController {
                 if (textMediciones.getText().isEmpty()) {
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
+                    calibracionesView.getPanelMensaje().setEnabled(false);
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
 
@@ -107,9 +118,15 @@ public class CalibracionesController implements IController {
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
-                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date, numM);
-                            modelo.save(calibraciones);
+                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
+                            if (currentC != null && currentC.getNo_SerieIns().equals(instru)) {
+                                calibraciones.setMedicionesL(currentC.getMedicionesL());
+                                //modelo.update(calibraciones);
+                            } else {
+                                modelo.save(calibraciones);
+                            }
                             currentC = calibraciones;
+                            setCurrentC(currentC);
                             limpiar();
                             calibracionesView.getBorrarButton().setEnabled(false);
                             JOptionPane.showMessageDialog(null, "Calibracion agregada");
@@ -153,6 +170,10 @@ public class CalibracionesController implements IController {
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
         textWriteFecha.setText("");
         textFecha.setText("xx/xx/xxxx");
+        calibracionesView.getPanelMensaje().setEnabled(false);
+        for (Component component : calibracionesView.getPanelMensaje().getComponents()) {
+               calibracionesView.getMensaje().setEnabled(false);
+        }
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
@@ -176,6 +197,7 @@ public class CalibracionesController implements IController {
                     }else{
                         textNumeroB.setText("");
                         EDITAR= true;
+                        calibracionesView.getMensaje().setEnabled(false);
                     }
 
             }
@@ -258,22 +280,19 @@ public class CalibracionesController implements IController {
                     "¿Está seguro de borrar esta calibracion?. Puede tener mediciones asociadas y tambien se perderan.",
                     "Confirmación",
                     JOptionPane.YES_NO_OPTION);
-
             if (respuesta == JOptionPane.YES_OPTION) {
+                calibracionesView.getMensaje().setEnabled(false);
                 int valFil = tableCalibraciones.getSelectedRow();//obtiene el valor de la fila
                 if (valFil >= 0) {
                     Object objCod = tableCalibraciones.getValueAt(valFil, 0); //obtiene el codigo en forma de Object
                     int cod = (int) objCod; // lo convertimos a string
                     modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
-                    //updateLista(instru.getSerie());
                     //reseteamos GUI
                     limpiar();
                     calibracionesView.getBorrarButton().setEnabled(false);
-
                 }
             }
         }
-
     }
 
         public static class TablesCalibraciones implements MouseListener {
@@ -298,25 +317,31 @@ public class CalibracionesController implements IController {
                             textFecha.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 1)));
                             textMediciones.setText(String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
 
+                        }
+                    } else {
+                        throw new Exception("Seleccione una columna primero");
                     }
-                } else {
-                    throw new Exception("Seleccione una columna primero");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-            }catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        }
-        private void cargar_tablaMediciones() {
-            //System.out.println("Valor: " + Integer.valueOf((String) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2)));
-            String m = String.valueOf( tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2));
-            int med = Integer.parseInt(m);
-            
-            modelo_mediciones.cargar_tablaMediciones(instru, med);
-            EDITAR_MEDICIONES = true;// I needed it
-            calibracionesView.getTextMediciones().setEnabled(false);// I needed it
 
+            public void cargar_tablaMediciones() {
+                if (tableCalibraciones.getSelectedRow() == -1) {
+                    JOptionPane.showMessageDialog(null, "Por favor, seleccione una fila en la tabla de calibraciones.");
+                    calibracionesView.getMensaje().setEnabled(false);
+                } else {
+                    int med = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 2);
+                    modelo_mediciones.cargar_tablaMediciones(getCurrentC(),instru, med);
+                    DefaultTableModel model = (DefaultTableModel) calibracionesView.getTableMediciones().getModel();
+                    for (int i = 0; i < tableCalibraciones.getSelectedRow(); i++) {
+                        model.isCellEditable(i, 2);
+                        tableMediciones.getModel().isCellEditable(i,2);
+                    }
+                    calibracionesView.getTextMediciones().setEnabled(false);
+                }
+            }
 
-        }
 
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -327,7 +352,7 @@ public class CalibracionesController implements IController {
         @Override
         public void mouseExited(MouseEvent e) {}
 
-    }
+        }
 
         public static String toStringt() {
             if (instru != null) {
@@ -336,7 +361,7 @@ public class CalibracionesController implements IController {
                 return "No hay instrumento cargado";
             }
 
-}
+        }
 
         public static void update() throws Exception {
             calibracionesView.getTx_instrumento().setText(toStringt());
@@ -345,4 +370,4 @@ public class CalibracionesController implements IController {
         }
 
 
-}
+    }
