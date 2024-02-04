@@ -58,10 +58,6 @@ public class Instrumentos_Controller implements IController {
         }
     }
 
-//    @Override
-//    public void changesMaked() {
-//
-//    }
 
     public void cargarDatos(List<Instrumento> list) throws Exception {
         model.cargarDatos(instrumentView.getTbl_Listado_Instrumentos(),list);
@@ -80,6 +76,7 @@ public class Instrumentos_Controller implements IController {
                     //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
 
                 } else {
+                    verificarTabla();
                     model.actualizar(instrumento);
                     //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
@@ -123,6 +120,7 @@ public class Instrumentos_Controller implements IController {
             if (min>=max) {
                 throw new Exception("El valor maximo debe ser mayor al minimo");
             }
+
 //            if (model.instrumento_existente(serie)){
 //                throw new Exception("Este ID ya existe selecciona uno distinto");
 //            }
@@ -310,6 +308,15 @@ public class Instrumentos_Controller implements IController {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    public static void verificarTabla() throws Exception{
+        if (!model.elementoExistente(instrumentView.getTxF_Serie().getText(), instrumentView.getTbl_Listado_Instrumentos())) {
+            limpiar_pnl_ingreso_txFields();
+            throw new Exception("Este Elemento Ya No Existe");
+        }
+
+    }
+
 
 }
 

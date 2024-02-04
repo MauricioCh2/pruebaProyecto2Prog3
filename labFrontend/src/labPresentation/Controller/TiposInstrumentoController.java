@@ -193,6 +193,7 @@ public class TiposInstrumentoController implements IController {
                 if(tpInst.getTxF_Codigo().getText().length()<=4) {
                     TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
                     if (EDIT) {
+                        verificarTabla();
                         str_forUptade = instrumento.getNombre();
                         if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
                             //JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
@@ -203,6 +204,7 @@ public class TiposInstrumentoController implements IController {
                         }
                     } else {
                         try {
+
                             tInstrumentosModel.save(instrumento);
                             //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
                             //instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
@@ -339,21 +341,13 @@ public class TiposInstrumentoController implements IController {
         this.instrumentos_controller = ctl; //THIS
     }
 
-//    @Override
-//    public void changesMaked(){
-//        try{resetGui();}catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }
-//        /*try {
-//            if (!tInstrumentosModel.busquedaPorCodigo(txF_codigo.getText(), tbl_listadoTipos)) {
-//                System.out.println("SE TIENE QUE LIMPIAR LA INTERFAZ DE LOS USER\n\n\n");
-//                txF_codigo.setEnabled(true);
-//                txF_codigo.setText("");
-//                txF_nombre.setText("");
-//                EDIT = false;
-//            }
-//        }catch (Exception ex){
-//            System.out.println(ex.getMessage());
-//        }*/
-//    }
+    public static void verificarTabla() throws Exception{
+        if (!tInstrumentosModel.elementoExistente(txF_codigo.getText(), tbl_listadoTipos)) {
+            resetGui();
+            throw new Exception("Este Elemento Ya No Existe");
+        }
+
+    }
+
+
 }

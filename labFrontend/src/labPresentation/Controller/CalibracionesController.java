@@ -113,12 +113,12 @@ public class CalibracionesController implements IController {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             //LocalDate date = LocalDate.now();
-                            String date = String.valueOf(textFecha.getText());
+                            String date = convertirFormatoFecha(textFecha.getText());
                             numeroCalibracion = calibracionesView.getTableCalibraciones().getModel().getRowCount(); // needed it
                             numeroCalibracion++;
                             System.out.println("Numero agregar: " + numeroCalibracion );
                             System.out.println("#calib" + numeroCalibracion);
-                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date.toString(), numM);
+                            Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date, numM);
                             if (currentC != null && currentC.getNo_SerieIns().equals(instru)) {
                                 calibraciones.setMedicionesL(currentC.getMedicionesL());
                                 //modelo.update(calibraciones);
@@ -148,13 +148,37 @@ public class CalibracionesController implements IController {
     public static void fecha_valida() throws Exception{
         // Expresión regular para validar fechas en formato YYYY-MM-DD o YYYY/MM/DD
         String regex = "^\\d{4}-\\d{2}-\\d{2}$";
-
+        String date = convertirFormatoFecha(textFecha.getText());
 
         Pattern pattern = Pattern.compile(regex);
-            Matcher matcher = pattern.matcher(textFecha.getText());
-            if (!matcher.matches()) {
-                throw  new Exception("La fecha no es válida.\nUsa El Formato Año - Mes - Día");
-            }
+        Matcher matcher = pattern.matcher(date);
+        if (!matcher.matches()) {
+            throw  new Exception("La fecha no es válida.\nUsa El Formato Año - Mes - Día");
+        }
+        if(Integer.valueOf(date.substring(0,4)) > 2024){
+            throw new Exception("La fecha no es válida.\nAño mayor a Año Actual");
+        }
+        if(Integer.valueOf(date.substring(5,7)) > 12){
+            throw new Exception("La fecha no es válida.\nMes mayor a 12");
+        }
+        if(Integer.valueOf(date.substring(8)) > 31){
+            throw new Exception("La fecha no es válida.\nDia mayor a 31");
+        }
+        //2024/02/02
+
+
+    }
+
+    public static String convertirFormatoFecha(String fechaConBarra) {
+        String regexBarra = "^\\d{4}/\\d{2}/\\d{2}$";
+        String regexGuion = "^\\d{4}-\\d{2}-\\d{2}$";
+
+        if (fechaConBarra.matches(regexBarra)) {
+            return fechaConBarra.replace('/', '-');
+        } else if (fechaConBarra.matches(regexGuion)) {
+            return fechaConBarra;
+        }
+        return "FORMATO NO VALIDO";
     }
 
     public static void limpiar(){
