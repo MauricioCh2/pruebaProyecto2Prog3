@@ -25,8 +25,6 @@ public class CalibracionesView {
     private JButton btn_reporte;
     private JButton buscarButton;
     private JLabel tx_instrumento;
-    private JLabel lbWriteFecha;
-    private JTextField textWriteFecha;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -36,8 +34,8 @@ public class CalibracionesView {
         btn_reporte.setIcon(new ImageIcon(scaledImage));
         textNumero.setText("000");
         textNumero.setEnabled(false);
-        textFecha.setEnabled(false);
-        textFecha.setText("xxxx/xx/xx");
+        textFecha.setEnabled(true);
+        //textFecha.setText("xxxx/xx/xx");
         borrarButton.setEnabled(false);
         medicionesPanel.setVisible(false);
         this.intiPanelMediciones();
@@ -154,7 +152,5 @@ public class CalibracionesView {
         return buscarButton;
     }
 
-    public JLabel getLbWriteFecha() {return lbWriteFecha;}
 
-    public JTextField getTextWriteFecha() {return textWriteFecha;}
 }
