@@ -157,6 +157,25 @@ public class TiposInstrumentosModel {
         return alguno;
     }
 
+    public boolean elementoExistente(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        boolean alguno = false;
+
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        int rowCount = modelo.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            String codigoActual = modelo.getValueAt(i, 0).toString().toLowerCase();
+
+            if (codigoActual.equals(cod.toLowerCase())) {
+                //tbl.setRowSelectionInterval(i, i);  // Seleccionar la fila correspondiente
+                alguno = true;
+                break;  // Salir del bucle tan pronto como se encuentra una coincidencia
+            }
+        }
+
+        return alguno;
+    }
+
 
     //Reporte------------------------------------------
     public void generarReporteGeneral() throws FileNotFoundException {

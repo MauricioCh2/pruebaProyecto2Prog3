@@ -6,5 +6,51 @@
     <action>El cliente num: 1 a creado  una calibracion: 5</action>
     <action>El cliente num: 1 a eliminado  una calibracion: 14</action>
     <action>El cliente num: 1 a creado  una calibracion: 6</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 2 a actualizado un tipo instrumento: Werometros</action>
+    <action>El cliente num: 2 a eliminado  un tipo instrumento: WER</action>
+    <action>El cliente num: 1 a creado  un instrumento: 1234</action>
+    <action>El cliente num: 2 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 1234</action>
+    <action>El cliente num: 2 a eliminado  un instrumento: 1234</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 1 a creado  un instrumento: 4567</action>
+    <action>El cliente num: 1 a creado  una calibracion: 1</action>
+    <action>El cliente num: 2 a eliminado  una calibracion: 13</action>
+    <action>El cliente num: 2 a eliminado  un tipo instrumento: TERC</action>
+    <action>El cliente num: 1 a creado  un instrumento: 7890</action>
+    <action>El cliente num: 1 a creado  una calibracion: 1</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 1 a eliminado  un tipo instrumento: WER</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 1 a eliminado  un instrumento: 4567</action>
+    <action>El cliente num: 1 a creado  una calibracion: 1</action>
+    <action>El cliente num: 1 a creado  una calibracion: 2</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  un instrumento: 6789</action>
+    <action>El cliente num: 2 a eliminado  un instrumento: 6789</action>
+    <action>El cliente num: 1 a actualizado un instrumento: 6789</action>
+    <action>El cliente num: 2 a eliminado  un tipo instrumento: WER</action>
+    <action>El cliente num: 1 a actualizado un tipo instrumento: Werometros</action>
+    <action>El cliente num: 1 a creado  un instrumento: 5678</action>
+    <action>El cliente num: 2 a eliminado  un instrumento: 5678</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Arrometro</action>
+    <action>El cliente num: 2 a eliminado  un tipo instrumento: WER</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 21</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 2 a eliminado  una calibracion: 22</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 23</action>
+    <action>El cliente num: 1 a creado  un tipo instrumento: Werometro</action>
+    <action>El cliente num: 2 a eliminado  un tipo instrumento: WER</action>
+    <action>El cliente num: 1 a creado  un instrumento: 4321</action>
+    <action>El cliente num: 1 a eliminado  un instrumento: 4321</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
   </actions>
 </data>

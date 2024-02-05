@@ -71,10 +71,15 @@ public class Instrumentos_Controller implements IController {
                 //Instrumento(String serie, String descripcion, String tipo, int maximo, int minimo, double tolerancia )
                 Instrumento instrumento = new Instrumento(instrumentView.getTxF_Serie().getText(), instrumentView.getTxF_Descripcion().getText(), String.valueOf(instrumentView.getCmB_Tipo().getSelectedItem().toString()), Integer.parseInt(instrumentView.getTxF_Maximo().getText()),
                         Integer.parseInt(instrumentView.getTxF_Minimo().getText()), Double.parseDouble(instrumentView.getTxF_Tolerancia().getText()));
+
                 if (!EDIT) {
                     model.save(instrumento);
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
+
                 } else {
+                    verificarTabla();
                     model.actualizar(instrumento);
+                    //JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado");
                 }
 
                 limpiar_pnl_ingreso_txFields();
@@ -303,6 +308,15 @@ public class Instrumentos_Controller implements IController {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    public static void verificarTabla() throws Exception{
+        if (!model.elementoExistente(instrumentView.getTxF_Serie().getText(), instrumentView.getTbl_Listado_Instrumentos())) {
+            limpiar_pnl_ingreso_txFields();
+            throw new Exception("Este Elemento Ya No Existe");
+        }
+
+    }
+
 
 }
 

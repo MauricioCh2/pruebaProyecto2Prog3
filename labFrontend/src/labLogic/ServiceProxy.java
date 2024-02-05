@@ -239,6 +239,8 @@ public class ServiceProxy implements IService {
             // se cierran solos cuando termina de pocesar (no esta en un while)
                public void run(){
                    deliver.deliver(message);
+                   //controllerTipo.changesMaked();
+                   //controllerInst.changesMaked();
                }
            }
         );

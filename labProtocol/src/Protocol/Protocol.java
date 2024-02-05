@@ -54,5 +54,6 @@ public class Protocol {
     //-----------------------JDOM-------------------------------
     public static final int SEND_NUMERO_WORKER = 1001;
     public static final int REQUEST_NUMERO_WORKER = 1002;
+    public static final int CHANGE_MADE = 2001;
 
 }

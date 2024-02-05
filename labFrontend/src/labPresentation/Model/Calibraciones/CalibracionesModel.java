@@ -6,11 +6,13 @@ import Protocol.Mediciones;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
 import labPresentation.Model.PDF;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -151,4 +153,23 @@ public class CalibracionesModel {
             System.out.println("Error al guardar calibracion: "+ e.getMessage());
         }
     }
+    public boolean elementoExistente(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        boolean alguno = false;
+
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        int rowCount = modelo.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            String codigoActual = modelo.getValueAt(i, 0).toString().toLowerCase();
+
+            if (codigoActual.equals(cod.toLowerCase())) {
+                //tbl.setRowSelectionInterval(i, i);  // Seleccionar la fila correspondiente
+                alguno = true;
+                break;  // Salir del bucle tan pronto como se encuentra una coincidencia
+            }
+        }
+
+        return alguno;
+    }
+
 }
