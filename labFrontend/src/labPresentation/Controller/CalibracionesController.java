@@ -14,6 +14,7 @@ import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
@@ -355,8 +356,13 @@ public class CalibracionesController implements IController {
                 }
             }
 
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return columnIndex == 2;
+            }
 
-        @Override
+
+
+            @Override
         public void mousePressed(MouseEvent e) {}
         @Override
         public void mouseReleased(MouseEvent e) {}

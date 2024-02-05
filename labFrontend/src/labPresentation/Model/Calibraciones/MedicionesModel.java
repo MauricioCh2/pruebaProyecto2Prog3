@@ -6,6 +6,7 @@ import Protocol.Mediciones;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,26 +22,14 @@ public class MedicionesModel {
 
     }
     public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med) {
-        boolean[] canEdit = new boolean [] {
-                false, false, true
-        };
         DefaultTableModel model = (DefaultTableModel) tablaM.getModel();
-
-        System.out.println(obj.toString() + "    " + med);
-        System.out.println("Cont " + model.getRowCount());
-
-        if (model.getRowCount() > 0) {
-            this.limpiar_tabla(model);
-        }
-
-        if (calibracion != null && !calibracion.getMedicionesL().isEmpty()) {
-            this.limpiar_tabla(model);
-        }
 
         List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (obj.getMaximo() - obj.getMinimo()) / med;
         double valorM = obj.getMinimo();
         for (int i = 1; i <= med; i++) {
+            isCellEditable(i,0);
+            isCellEditable(i,1);
             Mediciones medicion = new Mediciones(i, valorM);
             lis.add(medicion);
             Object[] fila = new Object[]{i, valorM, null};
@@ -54,11 +43,17 @@ public class MedicionesModel {
         if (calibracion != null) {
             calibracion.setMedicionesL(lis);
         }
+
+
+    }
+    public boolean isCellEditable(int row, int column) {
+        if (column == 0 || column == 1) {
+            return false;
+        }
+        return true;
     }
 
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex == 2;
-    }
+
 
     //this.validarToleranciaMedicion(listM, obj);
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
@@ -66,7 +61,7 @@ public class MedicionesModel {
         double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;
         double valorM = instrumentoCalibrado.getMinimo();
         for (int i = 1; i <= cantidadDeMediciones; i++) {
-            lis.add(new Mediciones(i,valorM));
+            lis.add(new Mediciones(i,valorM, (Double) tablaM.getValueAt(i,2)));
             valorM+=valorIntervalo;
         }
         return  lis;
