@@ -52,5 +52,33 @@
     <action>El cliente num: 1 a creado  un instrumento: 4321</action>
     <action>El cliente num: 1 a eliminado  un instrumento: 4321</action>
     <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a creado  un instrumento: 5678</action>
+    <action>El cliente num: 1 a actualizado una calibracion: 1</action>
+    <action>El cliente num: 1 a actualizado una calibracion: 4</action>
+    <action>El cliente num: 1 a creado  una calibracion: 1</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a eliminado  una medicion: ALL</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a eliminado  una medicion: ALL</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a eliminado  una medicion: ALL</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 2 a eliminado  una medicion: ALL</action>
+    <action>El cliente num: 2 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a eliminado  una medicion: ALL</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 1 a actualizado una calibracion: 4</action>
+    <action>El cliente num: 1 a actualizado una calibracion: 2</action>
+    <action>El cliente num: 1 a actualizado una calibracion: 2</action>
+    <action>El cliente num: 1 a creado  una calibracion: 2</action>
+    <action>El cliente num: 2 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una mediciones: VECTOR</action>
+    <action>El cliente num: 2 a creado  una calibracion: 4</action>
+    <action>El cliente num: 1 a creado  una calibracion: 5</action>
+    <action>El cliente num: 2 a creado  una calibracion: 7</action>
+    <action>El cliente num: 1 a creado  una calibracion: 8</action>
   </actions>
 </data>

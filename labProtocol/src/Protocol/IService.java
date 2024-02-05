@@ -46,12 +46,15 @@ public interface IService {
 
     //--------------------MEDICIONES---------------------
     public void create(Mediciones medida) throws Exception;
+    public void create(Mediciones[] medida) throws Exception;
 
     public List<Mediciones> read(Mediciones medida) throws Exception;
 
     public void update(Mediciones medida) throws Exception;
 
     public void delete(Mediciones medida) throws Exception;
+
+    public void deleteAll() throws Exception;
 
 
 

@@ -35,6 +35,12 @@ public class Mediciones implements Serializable {
         valorMarcado = vM;
         idCalibracion = cal;
     }
+    public Mediciones(int nM, double vR, double vM, int cal){
+        numMedicion =nM;
+        valorReferencia = vR;
+        valorMarcado = vM;
+        idCalibracion = cal;
+    }
 
     public Mediciones(Mediciones med){
         this.valorMarcado = med.valorMarcado;

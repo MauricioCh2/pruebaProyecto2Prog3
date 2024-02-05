@@ -172,4 +172,9 @@ public class CalibracionesModel {
         return alguno;
     }
 
+
+
+    public void guardarMediciones(Mediciones med){}
+
+
 }

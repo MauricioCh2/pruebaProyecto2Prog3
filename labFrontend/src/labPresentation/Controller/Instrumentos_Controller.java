@@ -58,6 +58,10 @@ public class Instrumentos_Controller implements IController {
         }
     }
 
+    @Override
+    public void recargarLista() throws Exception {
+
+    }
 
 
     public void cargarDatos(List<Instrumento> list) throws Exception {

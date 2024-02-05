@@ -359,6 +359,17 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+                    case Protocol.CREATEMEDICIONESVECTOR:
+                        try{
+                            System.out.println("Estoy en CREATE MEDICIONES VECTOR de worker");
+                            Mediciones[] med = (Mediciones[]) in.readObject();
+                            service.create(med);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del create  mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
                     case Protocol.READMEDICIONES:
                         try{
                             System.out.println("Estoy en readMediciones de worker");
@@ -407,6 +418,18 @@ public class Worker { // es cada socket
 
                             message = new Message( Message.DELETE, "a medicion", tipoId, numeroWorker);
                             srv.deliver(message);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
+                    case Protocol.DELETEALLMEDICIONES:
+                        try{
+                            System.out.println("Estoy en deleteALLMediciones de worker");
+
+                            service.deleteAll();
+
 
                         }catch(Exception ex){
                             System.out.println("Catch del delete mediciones: "+ ex.getMessage());

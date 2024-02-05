@@ -88,6 +88,11 @@ public class TiposInstrumentoController implements IController {
 
     }
 
+    @Override
+    public void recargarLista() throws Exception {
+
+    }
+
     private void cargarDatosUnidades(List<UnidadMedida> lis) throws Exception {
         tInstrumentosModel.cargarDatosUnidad(lis, cB_unidad);
     }

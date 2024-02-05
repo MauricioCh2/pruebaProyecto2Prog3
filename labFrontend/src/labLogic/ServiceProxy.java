@@ -217,6 +217,9 @@ public class ServiceProxy implements IService {
                         }
                         break;
                     }
+                    case Protocol.CREATEMEDICIONESVECTOR:{
+
+                    }
                 }
                 out.flush();
             } catch (IOException ex) {
@@ -238,6 +241,10 @@ public class ServiceProxy implements IService {
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
             // se cierran solos cuando termina de pocesar (no esta en un while)
                public void run(){
+                   try {
+                       controllerCal.recargarLista();
+                   }catch (Exception ex){
+                       System.out.println(ex.getMessage());}
                    deliver.deliver(message);
                    //controllerTipo.changesMaked();
                    //controllerInst.changesMaked();
@@ -472,6 +479,14 @@ public class ServiceProxy implements IService {
     }
 
     @Override
+    public void create(Mediciones[] medidas) throws Exception {
+        out.writeInt(Protocol.CREATEMEDICIONESVECTOR);
+        out.writeObject(medidas);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear mediciones vector a el server");
+    }
+
+    @Override
     public List<Mediciones> read(Mediciones medida) throws Exception {
         out.writeInt(Protocol.READMEDICIONES);
         out.writeObject(medida);
@@ -491,6 +506,14 @@ public class ServiceProxy implements IService {
     public void delete(Mediciones medida) throws Exception {
         out.writeInt(Protocol.DELETEMEDICIONES);
         out.writeObject(medida);
+        out.flush();
+        System.out.println("Mande el mensaje de delete medicon a el server");
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+        out.writeInt(Protocol.DELETEALLMEDICIONES);
+        //out.writeObject(medida);
         out.flush();
         System.out.println("Mande el mensaje de delete medicon a el server");
     }

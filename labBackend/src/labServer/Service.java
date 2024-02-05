@@ -165,8 +165,13 @@ public class Service implements IService {
     //--------------------MEDICIONES---------------------
     @Override
     public void create(Mediciones medida) throws Exception {
-        System.out.print("Estoy en create de mediciones en service  \n");
+
         mediciones.create(medida);
+    }
+
+    @Override
+    public void create(Mediciones[] medidas) throws Exception {
+        mediciones.create(medidas);
     }
 
     @Override
@@ -179,6 +184,11 @@ public class Service implements IService {
     public void delete(Mediciones medida) throws Exception {
         System.out.print("Estoy en delete de mediciones en service  \n");
         mediciones.delete(medida);
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+        mediciones.deleteAll();
     }
 
     @Override
