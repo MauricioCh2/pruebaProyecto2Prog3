@@ -241,10 +241,10 @@ public class ServiceProxy implements IService {
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
             // se cierran solos cuando termina de pocesar (no esta en un while)
                public void run(){
-                   try {
-                       controllerCal.recargarLista();
-                   }catch (Exception ex){
-                       System.out.println(ex.getMessage());}
+                   //try {
+                      // controllerCal.recargarLista();
+                   //}catch (Exception ex){
+                     //  System.out.println(ex.getMessage());}
                    deliver.deliver(message);
                    //controllerTipo.changesMaked();
                    //controllerInst.changesMaked();

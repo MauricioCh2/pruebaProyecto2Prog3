@@ -296,7 +296,7 @@ public class Worker { // es cada socket
 
                             //message = new Message( Message.READ, "CA", "Lista Calibracion");
                             //srv.deliver(message);
-                            srv.update(lis, Protocol.RELOAD_CALIBRACION);
+                            update(lis, Protocol.RELOAD_CALIBRACION);
 
                         }catch (Exception ex){
                             System.out.println("Catch del read calibracion:"+ ex.getMessage());

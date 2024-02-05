@@ -125,7 +125,7 @@ public class InstrumentosModel {
         boolean alguno = false;
         for(Instrumento obj: listaInstrumento) {
             String codigoActual = obj.getSerie().toLowerCase();
-            if (codigoActual.contains(cod.toLowerCase())) {
+            if (codigoActual.equals(cod.toLowerCase())) {
 
                 Object[] newRow = {obj.getSerie(),obj.getDescripcion(),obj.getMinimo(), obj.getMaximo(), obj.getTolerancia()};
                 DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
