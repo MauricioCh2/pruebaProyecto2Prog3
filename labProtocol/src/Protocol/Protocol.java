@@ -45,14 +45,17 @@ public class Protocol {
 
     //--------------MEDICIONES---------------
     public static final int CREATEMEDICIONES = 500;
+    public static final int CREATEMEDICIONESVECTOR = 5001;
     public static final int READMEDICIONES = 501;
     public static final int UPDATEMEDICIONES = 502;
     public static final int DELETEMEDICIONES = 503;
+    public static final int DELETEALLMEDICIONES = 5003;
     public static final int GETLISTAMEDICIONES = 504;
 
 
     //-----------------------JDOM-------------------------------
     public static final int SEND_NUMERO_WORKER = 1001;
     public static final int REQUEST_NUMERO_WORKER = 1002;
+    public static final int CHANGE_MADE = 2001;
 
 }

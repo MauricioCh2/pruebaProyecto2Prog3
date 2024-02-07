@@ -88,6 +88,11 @@ public class TiposInstrumentoController implements IController {
 
     }
 
+    @Override
+    public void recargarLista() throws Exception {
+
+    }
+
     private void cargarDatosUnidades(List<UnidadMedida> lis) throws Exception {
         tInstrumentosModel.cargarDatosUnidad(lis, cB_unidad);
     }
@@ -186,6 +191,7 @@ public class TiposInstrumentoController implements IController {
                 if(tpInst.getTxF_Codigo().getText().length()<=4) {
                     TipoInstrumentoObj instrumento = new TipoInstrumentoObj(txF_codigo.getText(), txF_nombre.getText(), tInstrumentosModel.getUnidadID((String) cB_unidad.getSelectedItem()));
                     if (EDIT) {
+                        verificarTabla();
                         str_forUptade = instrumento.getNombre();
                         if (tInstrumentosModel.update(instrumento)) { //guarda elemento en la lista y en la tabla
                             //JOptionPane.showMessageDialog(null, "El tipo de instrumento a sido actualizado correctamente");
@@ -196,6 +202,7 @@ public class TiposInstrumentoController implements IController {
                         }
                     } else {
                         try {
+
                             tInstrumentosModel.save(instrumento);
                             //JOptionPane.showMessageDialog(null, "Tipo de instrumento agregado");
                             //instrumentos_controller.agregar_categoriaCB(instrumento);//THIS
@@ -330,6 +337,14 @@ public class TiposInstrumentoController implements IController {
     }
     public void add_visitor(Instrumentos_Controller ctl){
         this.instrumentos_controller = ctl; //THIS
+    }
+
+    public static void verificarTabla() throws Exception{
+        if (!tInstrumentosModel.elementoExistente(txF_codigo.getText(), tbl_listadoTipos)) {
+            resetGui();
+            throw new Exception("Este Elemento Ya No Existe");
+        }
+
     }
 
 

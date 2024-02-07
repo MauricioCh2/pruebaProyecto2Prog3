@@ -61,7 +61,7 @@ public class Worker { // es cada socket
                         } catch (Exception ex) {
                         }
                         break;
-                        //--------------------------------------------------Unidad Medida--------------------------------------------------
+                    //--------------------------------------------------Unidad Medida--------------------------------------------------
                     case Protocol.READUNIDAD:
                         try{
                             System.out.println("Estoy en READunidad de worker");
@@ -72,7 +72,7 @@ public class Worker { // es cada socket
                             System.out.println("Le envio de vuelta la lista al service del ciente ");
                             out.flush();
 
-                           // message = new Message( Message.READ, "UM", "Lista Unidad");
+                            // message = new Message( Message.READ, "UM", "Lista Unidad");
                             //srv.deliver(message);
                             srv.update(lisU2, Protocol.RELOAD_UM);
 
@@ -92,7 +92,7 @@ public class Worker { // es cada socket
                             System.out.println("Le envio de vuelta el elemento encontrado "+service.findById(idUn).getNombre() );
                             out.flush();
 
-                           // message = new Message( Message.FIND, "CA", tipoId);
+                            // message = new Message( Message.FIND, "CA", tipoId);
                             //srv.deliver(message);
 
                         }catch(Exception ex){
@@ -110,7 +110,7 @@ public class Worker { // es cada socket
                             out.flush();
 
 
-                           message = new Message( Message.CREATE, " tipo instrumento", e.getNombre(), numeroWorker);
+                            message = new Message( Message.CREATE, " tipo instrumento", e.getNombre(), numeroWorker);
 
                             srv.deliver(message);
 
@@ -251,7 +251,7 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.DELETEINSTRUMENTO);
                             service.deleteInstrumentoId(tipoId);
-                           // out.writeObject(service.deleteInstrumentoId(tipoId));
+                            // out.writeObject(service.deleteInstrumentoId(tipoId));
                             System.out.println("Ya le mande la vaina a service proxy de vuelta ");
                             out.flush();
 
@@ -296,7 +296,7 @@ public class Worker { // es cada socket
 
                             //message = new Message( Message.READ, "CA", "Lista Calibracion");
                             //srv.deliver(message);
-                            srv.update(lis, Protocol.RELOAD_CALIBRACION);
+                            update(lis, Protocol.RELOAD_CALIBRACION);
 
                         }catch (Exception ex){
                             System.out.println("Catch del read calibracion:"+ ex.getMessage());
@@ -359,6 +359,17 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+                    case Protocol.CREATEMEDICIONESVECTOR:
+                        try{
+                            System.out.println("Estoy en CREATE MEDICIONES VECTOR de worker");
+                            Mediciones[] med = (Mediciones[]) in.readObject();
+                            service.create(med);
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del create  mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
                     case Protocol.READMEDICIONES:
                         try{
                             System.out.println("Estoy en readMediciones de worker");
@@ -413,18 +424,36 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+                    case Protocol.DELETEALLMEDICIONES:
+                        try{
+                            System.out.println("Estoy en deleteALLMediciones de worker");
+
+                            service.deleteAll();
+
+
+                        }catch(Exception ex){
+                            System.out.println("Catch del delete mediciones: "+ ex.getMessage());
+                            continuar = false;
+                        }
+                        break;
 
                     case Protocol.REQUEST_NUMERO_WORKER:
                         try {
                             //srv.send_numero_worker(numeroWorker);
                             this.send_numero_worker(numeroWorker); //ya que es para cada usuario
-                        } catch (Exception ex) {}
+                        } catch (Exception ex) {
+                            System.out.println("Catch del request numero " + ex.getMessage());
+                        }
                         break;
 
                     case Protocol.FORCE_UPDATE:
-                        srv.update(service.read_instrumentos(), Protocol.RELOAD_INSTRUMENTO);
-                        //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
-                        break;
+                        try {
+                            srv.update(service.read_instrumentos(), Protocol.RELOAD_INSTRUMENTO);
+                            //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
+                            break;
+                        }catch (Exception ex){
+                            System.out.println("Catch del force uptade " + ex.getMessage());
+                        }
 
                 }
                 out.flush();
@@ -435,6 +464,7 @@ public class Worker { // es cada socket
 
                 continuar = false;
             } catch (Exception e) {
+                System.out.println("CATCH DE RUNTIME " + e.getMessage());
                 throw new RuntimeException(e);
             }
         }
@@ -448,6 +478,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
+            System.out.println("IOEXPECION");
         }
     }
 
@@ -459,6 +490,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
+            System.out.println("IOEXPECION");
         }
     }
 
@@ -470,6 +502,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
+            System.out.println("IOEXPECION");
         }
     }
 

@@ -122,6 +122,7 @@ public class ServiceProxy implements IService {
                             System.out.println("Mensaje de message en Service Proxy: /Protocol deliver " + message.getMessage());
                             deliver(message);
                         } catch (ClassNotFoundException ex) {
+                            System.out.println("Catch de proxy recibiendo deliver " + ex.getMessage());
                         }
                         break;
                     //Reload/ refresco de listas--------------------------------------------------------------------------------------
@@ -217,30 +218,42 @@ public class ServiceProxy implements IService {
                         }
                         break;
                     }
+                    case Protocol.CREATEMEDICIONESVECTOR:{
+
+                    }
                 }
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
                 System.out.println("Se detuvo en el catch de listen de service proxy: " + ex.getMessage());
             } catch (ClassNotFoundException e) {
+                System.out.println("Catch CLASSNOTFOUNDEXCEPTION " + e.getMessage());
                 throw new RuntimeException(e);
             }
         }
         try {
             disconnect();
         } catch (IOException e) {
+            System.out.println("Catch De Disconnected" + e.getMessage());
         } catch (Exception e) {
+            System.out.println("CATCH RUNTIMEEXCEPTION "+ e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     private void deliver( final Message message ){
         SwingUtilities.invokeLater(new Runnable(){//crea un hilo temporal que se destrulle cuando termina
-            // se cierran solos cuando termina de pocesar (no esta en un while)
-               public void run(){
-                   deliver.deliver(message);
-               }
-           }
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run(){
+                                           //try {
+                                           // controllerCal.recargarLista();
+                                           //}catch (Exception ex){
+                                           //  System.out.println(ex.getMessage());}
+                                           deliver.deliver(message);
+                                           //controllerTipo.changesMaked();
+                                           //controllerInst.changesMaked();
+                                       }
+                                   }
         );
     }
 
@@ -256,32 +269,32 @@ public class ServiceProxy implements IService {
 
     private void update(Object ob, final int pro) {
         SwingUtilities.invokeLater(new Runnable()
-           {//crea un hilo temporal que se destrulle cuando termina
-               // se cierran solos cuando termina de pocesar (no esta en un while)
-               public void run() {
-                   try {
-                       controllerTipo.update(ob, pro);
-                       controllerInst.update(ob, pro);
-                       controllerCal.update(ob, pro);
-                   } catch (Exception e) {
-                       JOptionPane.showMessageDialog(null, e.getMessage());
-                   }
-               }
-           }
+                                   {//crea un hilo temporal que se destrulle cuando termina
+                                       // se cierran solos cuando termina de pocesar (no esta en un while)
+                                       public void run() {
+                                           try {
+                                               controllerTipo.update(ob, pro);
+                                               controllerInst.update(ob, pro);
+                                               controllerCal.update(ob, pro);
+                                           } catch (Exception e) {
+                                               JOptionPane.showMessageDialog(null, e.getMessage());
+                                           }
+                                       }
+                                   }
         );
     }
 
     private void iniciar_lista_tipos_instrumento(final List<TipoInstrumentoObj> list) {
         SwingUtilities.invokeLater(new Runnable()
-           {
-               public void run() {
-                   try {
-                       //controller.cargar_datos(list);
-                   } catch (Exception e) {
-                       throw new RuntimeException(e);
-                   }
-               }
-           }
+                                   {
+                                       public void run() {
+                                           try {
+                                               //controller.cargar_datos(list);
+                                           } catch (Exception e) {
+                                               throw new RuntimeException(e);
+                                           }
+                                       }
+                                   }
         );
     }
 
@@ -470,6 +483,14 @@ public class ServiceProxy implements IService {
     }
 
     @Override
+    public void create(Mediciones[] medidas) throws Exception {
+        out.writeInt(Protocol.CREATEMEDICIONESVECTOR);
+        out.writeObject(medidas);
+        out.flush();
+        System.out.println("Mande el mensaje de Crear mediciones vector a el server");
+    }
+
+    @Override
     public List<Mediciones> read(Mediciones medida) throws Exception {
         out.writeInt(Protocol.READMEDICIONES);
         out.writeObject(medida);
@@ -489,6 +510,14 @@ public class ServiceProxy implements IService {
     public void delete(Mediciones medida) throws Exception {
         out.writeInt(Protocol.DELETEMEDICIONES);
         out.writeObject(medida);
+        out.flush();
+        System.out.println("Mande el mensaje de delete medicon a el server");
+    }
+
+    @Override
+    public void deleteAll() throws Exception {
+        out.writeInt(Protocol.DELETEALLMEDICIONES);
+        //out.writeObject(medida);
         out.flush();
         System.out.println("Mande el mensaje de delete medicon a el server");
     }

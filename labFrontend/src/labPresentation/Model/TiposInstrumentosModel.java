@@ -140,7 +140,7 @@ public class TiposInstrumentosModel {
         boolean alguno = false;
         for(TipoInstrumentoObj obj: listaInstrumentos) {
             String codigoActual = obj.getCodigo().toLowerCase();
-            if (codigoActual.contains(cod.toLowerCase())) {
+            if (codigoActual.equals(cod.toLowerCase())) {
 
                 Object[] newRow = {cod, obj.getCodigo(), obj.getUnidad()};
                 DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
@@ -154,6 +154,25 @@ public class TiposInstrumentosModel {
                 alguno = true;
             }
         }
+        return alguno;
+    }
+
+    public boolean elementoExistente(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        boolean alguno = false;
+
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        int rowCount = modelo.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            String codigoActual = modelo.getValueAt(i, 0).toString().toLowerCase();
+
+            if (codigoActual.equals(cod.toLowerCase())) {
+                //tbl.setRowSelectionInterval(i, i);  // Seleccionar la fila correspondiente
+                alguno = true;
+                break;  // Salir del bucle tan pronto como se encuentra una coincidencia
+            }
+        }
+
         return alguno;
     }
 

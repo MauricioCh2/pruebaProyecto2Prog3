@@ -6,11 +6,13 @@ import Protocol.Mediciones;
 import labLogic.ServiceProxy;
 import labPresentation.Model.InstrumentosModel;
 import labPresentation.Model.PDF;
+import org.xml.sax.SAXException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.List;
 
 import static labPresentation.Controller.CalibracionesController.updateLista;
 
-public class CalibracionesModel {
+public class CalibracionesModel { //
     private InstrumentosModel InsActual;
     private Calibraciones caliActual;
     private List<Calibraciones> listC;
@@ -31,14 +33,16 @@ public class CalibracionesModel {
         reporte = pdf;
     }
     public void save(Calibraciones calA) {
-            try{
-                ServiceProxy.instance().create(calA);
-                DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
-                Object[] fila = new Object[]{calA.getNumeroCalibracion(), calA.getFecha(), calA.getNumeroMediciones()};
-                modelo.addRow(fila);
-            } catch (Exception e) {
-                System.out.println("Error al guardar calibracion: "+ e.getMessage());
-            }
+        try{
+            System.out.println("\t\t\t\t\tCalibracion a agregar " + calA.getNumeroCalibracion() + calA.getStringFecha());
+            ServiceProxy.instance().create(calA);
+            DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
+            Object[] fila = new Object[]{calA.getNumeroCalibracion(), calA.getFecha(), calA.getNumeroMediciones()};
+            modelo.addRow(fila);
+            listC.add(calA);
+        } catch (Exception e) {
+            System.out.println("Error al guardar calibracion: "+ e.getMessage());
+        }
 
     }
     public boolean calibrado(Mediciones mediciones, Instrumento instrumentoCalibrado) {
@@ -90,12 +94,15 @@ public class CalibracionesModel {
     }
 
     public void eliminar(int id, int fila) throws Exception {
+        System.out.println("Tamano de list c" + listC.size());
         for (int i = 0; i < listC.size(); i++) {
+            System.out.println("\t\t\t\t\tRecorriendo For Para Eliminar Calibracion");
             Calibraciones calibracion = listC.get(i);
             if (calibracion.getNumeroCalibracion() == id) {
                 listC.remove(i);
                 DefaultTableModel modelo = (DefaultTableModel) tablaC.getModel();
                 modelo.removeRow(fila);
+                System.out.println("\t\t\tCALIBRACION A ELIMINAR " + calibracion.getNumeroCalibracion() + calibracion.getStringFecha());
                 ServiceProxy.instance().delete(calibracion);
                 break;
             }
@@ -126,7 +133,7 @@ public class CalibracionesModel {
         //caliActual.setNumero(actual.getNumero());
         caliActual.setFecha(actual.getFecha());
         caliActual.setMedicionesL(actual.getMedicionesL());
-       // JTable tabCalibraciones = new JTable(tablacalibraciones);
+        // JTable tabCalibraciones = new JTable(tablacalibraciones);
         //int rowIndex = tabCalibraciones.getSelectedRow();
         //tablacalibraciones.setValueAt(caliActual.getNumero(), rowIndex, TableCalibraciones.NumeroCalibracion);
 
@@ -151,4 +158,28 @@ public class CalibracionesModel {
             System.out.println("Error al guardar calibracion: "+ e.getMessage());
         }
     }
+    public boolean elementoExistente(String cod, JTable tbl) throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
+        boolean alguno = false;
+
+        DefaultTableModel modelo = (DefaultTableModel) tbl.getModel();
+        int rowCount = modelo.getRowCount();
+
+        for (int i = 0; i < rowCount; i++) {
+            String codigoActual = modelo.getValueAt(i, 0).toString().toLowerCase();
+
+            if (codigoActual.equals(cod.toLowerCase())) {
+                //tbl.setRowSelectionInterval(i, i);  // Seleccionar la fila correspondiente
+                alguno = true;
+                break;  // Salir del bucle tan pronto como se encuentra una coincidencia
+            }
+        }
+
+        return alguno;
+    }
+
+
+
+    public void guardarMediciones(Mediciones med){}
+
+
 }
