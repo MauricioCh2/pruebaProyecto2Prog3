@@ -1,5 +1,5 @@
 
-package labServer;
+package labServer; //
 
 import Protocol.*;
 import data.*;
@@ -28,9 +28,9 @@ public class Service implements IService {
     }
 
 
-   public void register(){
-       System.out.println("Me estoy registrando -----");
-   }
+    public void register(){
+        System.out.println("Me estoy registrando -----");
+    }
     //--------------Unidades de medida---------------
     @Override
     public List<UnidadMedida> readUnidadesMedida(List<UnidadMedida> list) throws SQLException {
@@ -67,11 +67,11 @@ public class Service implements IService {
 
     @Override
     public void update(TipoInstrumentoObj e) throws Exception {
-         if (tiposInstrumento.update(e)){
-             JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito!");
-         }else{
-             //no se si tirar la exepcion aqui o  como ya esta en el worker
-         }
+        if (tiposInstrumento.update(e)){
+            JOptionPane.showMessageDialog(null, "Tipo de instrumento actualizado con exito!");
+        }else{
+            //no se si tirar la exepcion aqui o  como ya esta en el worker
+        }
 
     }
     @Override
@@ -140,7 +140,7 @@ public class Service implements IService {
 
     @Override
     public void create(Calibraciones cali) throws Exception {
-         calibraciones.create(cali);
+        calibraciones.create(cali);
 
     }
 
@@ -151,15 +151,15 @@ public class Service implements IService {
 
     @Override
     public void update(Calibraciones cali) throws Exception {
-         calibraciones.update(cali);
+        calibraciones.update(cali);
     }
 
     @Override
     public void delete(Calibraciones cali) throws Exception {
-         calibraciones.delete(cali);
+        calibraciones.delete(cali);
     }
     public void deleteCalibracionId(String e) throws Exception {
-         instrumento.delete(e);
+        instrumento.delete(e);
     }
 
     //--------------------MEDICIONES---------------------

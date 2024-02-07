@@ -80,5 +80,15 @@
     <action>El cliente num: 1 a creado  una calibracion: 5</action>
     <action>El cliente num: 2 a creado  una calibracion: 7</action>
     <action>El cliente num: 1 a creado  una calibracion: 8</action>
+    <action>El cliente num: 1 a creado  una calibracion: 2</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 4</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una calibracion: 4</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 4</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una calibracion: 3</action>
+    <action>El cliente num: 1 a creado  una calibracion: 4</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 3</action>
   </actions>
 </data>

@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicionesModel {
+public class MedicionesModel { //
     private List<Mediciones> listM;
     JTable tablaM;
 
@@ -22,7 +22,7 @@ public class MedicionesModel {
 
     }
     public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med, int nC) throws Exception {
-        ServiceProxy.instance().deleteAll();
+        //ServiceProxy.instance().deleteAll();
         DefaultTableModel model = (DefaultTableModel) tablaM.getModel();
 
         System.out.println(obj.toString() + "    " + med);
@@ -43,24 +43,24 @@ public class MedicionesModel {
             System.out.println("Ejecucion del for en frontEnd----------------------------------------------------------------------------");
             Mediciones medicion = new Mediciones(i, valorM, 0.0, nC); //
             //ServiceProxy.instance().create(medicion);
-            v[i-1] = medicion;
+            v[i-1] = medicion; //-1 ya que el vector empieza en 1
             lis.add(medicion);
             Object[] fila = new Object[]{i, valorM, null};
             model.addRow(fila);
-            Object value = model.getValueAt(i - 1, 2);
+            Object value = model.getValueAt(i - 1, 2); //aca puede hacer texto en blanco por lo que no siempre puede ser null
             if (value != null) {
                 medicion.setValorMarcado(((Double) value).doubleValue());
             }
             valorM += valorIntervalo;
         }
-        ServiceProxy.instance().create(v);
+        //ServiceProxy.instance().create(v); //manda el vector con las mediciones
         if (calibracion != null) {
             calibracion.setMedicionesL(lis);
         }
     }
 
 
-        //this.validarToleranciaMedicion(listM, obj);
+    //this.validarToleranciaMedicion(listM, obj);
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
         List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;
