@@ -174,6 +174,19 @@ public class CalibracionesController implements IController {
         }
     }
 
+    public static void verificarCeros(String date) throws Exception{
+
+        if(Integer.valueOf(date.substring(0,4)) == 0000){
+            throw new Exception("La fecha no es válida.\n Año No Puede Ser 0");
+        }
+        if(Integer.valueOf(date.substring(5,7)) == 00){
+            throw new Exception("La fecha no es válida.\n Mes No Puede Ser 0");
+        }
+        if(Integer.valueOf(date.substring(8)) == 00){
+            throw new Exception("La fecha no es válida.\n Día No Puede Ser 0");
+        }
+    }
+
     public static void fecha_valida() throws Exception{
         // Expresión regular para validar fechas en formato YYYY-MM-DD o YYYY/MM/DD
         String regex = "^\\d{4}-\\d{2}-\\d{2}$";
@@ -193,6 +206,7 @@ public class CalibracionesController implements IController {
         if(Integer.valueOf(date.substring(8)) > 31){
             throw new Exception("La fecha no es válida.\nDia mayor a 31");
         }
+        verificarCeros(date);
         //2024/02/02
 
 
