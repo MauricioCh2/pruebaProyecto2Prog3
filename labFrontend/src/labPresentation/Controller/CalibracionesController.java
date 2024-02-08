@@ -269,8 +269,8 @@ public class CalibracionesController implements IController {
         if(pro == Protocol.RELOAD_CALIBRACION){
             modelo.setListC((java.util.List<Calibraciones>) o);
             modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
-            this.numeroCalibracion = ((List<?>) o).size();
-
+            numeroCalibracion = ((List<?>) o).size();
+            textNumero.setText(String.valueOf(numeroCalibracion)+1);
         }
         if(pro == Protocol.tellRELOAD_CALIBRACION){
             Message mes = (Message) o;
@@ -278,7 +278,7 @@ public class CalibracionesController implements IController {
             if(instru!= null){
                 resetGUI();
                 ServiceProxy.instance().readCalibracion(instru.getSerie());
-
+                //numeroCalibracion = modelo.getListC().size();
             }
         }
     }
@@ -451,6 +451,8 @@ public class CalibracionesController implements IController {
         updateLista(instru.getSerie());
         calibracionesView.getMedicionesPanel().setVisible(false);
         resetGUI();
+        numeroCalibracion = modelo.getListC().size();
+        //textNumero.setText(String.valueOf(numeroCalibracion));
     }
 
 

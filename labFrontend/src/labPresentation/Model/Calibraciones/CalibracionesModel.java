@@ -89,6 +89,7 @@ public class CalibracionesModel { //
             modelo.addRow(newRow);
 
         }
+        listC = list;
         reporte.setListaCalibraciones(list);
         reporte.setListaMediciones(medicionesModel.getListM());
     }
@@ -181,5 +182,7 @@ public class CalibracionesModel { //
 
     public void guardarMediciones(Mediciones med){}
 
-
+    public List<Calibraciones> getListC() {
+        return listC;
+    }
 }
