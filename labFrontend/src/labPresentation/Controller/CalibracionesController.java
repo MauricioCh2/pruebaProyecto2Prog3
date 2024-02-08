@@ -100,18 +100,29 @@ public class CalibracionesController implements IController {
         if (!EDITAR_MEDICIONES) {
             num = 0;
             try {
-                if(textFecha.getText().equals("")){
+                if(textFecha.getText().isEmpty() && textMediciones.getText().isEmpty()){
+                    calibracionesView.getFechaLabel().setText("<html><u><font color='red'>Fecha:</font></u></html>");
                     calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
+                    throw new Exception("Hay espacios incompletos. Por favor, complete los espacios, para poder trabajar con las calibraciones.");
+                }else if(!textFecha.getText().isEmpty() && !textMediciones.getText().isEmpty()){
+                    calibracionesView.getFechaLabel().setText("<html><font color='black'>Fecha:</font></html>");
+                    calibracionesView.getMedicionesLabel().setText("<html><font color='black'>Numero:</font></html>");
+                }
+                if(textFecha.getText().isEmpty()){
+                    calibracionesView.getFechaLabel().setText("<html><u><font color='red'>Fecha:</font></u></html>");
+                    calibracionesView.getMedicionesLabel().setText("<html><font color='black'>Numero:</font></html>");
                     throw new Exception("No se ingreso la fecha, digite la fecha por favor\n");
                 } else fecha_valida();
                 if (textMediciones.getText().isEmpty()) {
+                    calibracionesView.getFechaLabel().setText("<html><font color='black'>Fecha:</font></html>");
+                    calibracionesView.getMedicionesLabel().setText("<html><u><font color='red'>Numero:</font></u></html>");
                     throw new Exception("La cantidad de mediciones, no ha sido completada. Por favor, complete el espacio.");
                 } else {
                     calibracionesView.getPanelMensaje().setEnabled(false);
                     num = Integer.parseInt(textMediciones.getText());
                     System.out.println("Valor de mediciones que se estan agregando " + instru.getMinimo());
 
-                    if (num < (instru.getMaximo() + 1)) {
+                    if (num <= Math.abs((instru.getMaximo()-instru.getMinimo()) + 1)) {
                         if (num >= 2) {
                             int numM = Integer.parseInt(textMediciones.getText());
                             //LocalDate date = LocalDate.now();
@@ -222,13 +233,14 @@ public class CalibracionesController implements IController {
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        calibracionesView.getFechaLabel().setText("<html><font color='black'>Fecha:</font></html>");
+        calibracionesView.getMedicionesLabel().setText("<html><font color='black'>Numero:</font></html>");
         //modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
 
         calibracionesView.getPanelMensaje().setEnabled(false);
         for (Component component : calibracionesView.getPanelMensaje().getComponents()) {
             calibracionesView.getMensaje().setEnabled(false);
         }
-        //textFecha.setText("xxxx/xx/xx");
         textFecha.setText("");
         if (EDITAR) {
             textNumero.setText(numeroActual);

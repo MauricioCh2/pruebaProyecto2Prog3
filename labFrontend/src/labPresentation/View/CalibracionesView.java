@@ -31,6 +31,7 @@ public class CalibracionesView extends JFrame{
     private JTextField textWriteFecha;
     private JLabel mensaje;
     private JPanel panelMensaje;
+    private JLabel FechaLabel;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -179,5 +180,12 @@ public class CalibracionesView extends JFrame{
 
     public JLabel getMensaje() {
         return mensaje;
+    }
+    public JLabel getFechaLabel() {
+        return FechaLabel;
+    }
+
+    public void setFechaLabel(JLabel fechaLabel) {
+        FechaLabel = fechaLabel;
     }
 }

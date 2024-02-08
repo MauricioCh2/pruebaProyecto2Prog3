@@ -7,8 +7,8 @@ import java.sql.SQLException;
 public class DataBaseConn {
 
     String userName = "root";
-    String password = "tomatina";
-    String DBName = "silab";
+    String password = "AngeolicaM$55";
+    String DBName = "correcion";
 
     public Connection connection() throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DBName, userName, password);
