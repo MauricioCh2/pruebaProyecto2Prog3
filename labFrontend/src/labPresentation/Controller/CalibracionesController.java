@@ -131,6 +131,7 @@ public class CalibracionesController implements IController {
                                     System.out.println();
                                     //JOptionPane.showMessageDialog(null, "Cayendo a agregar calibracion");
                                     modelo.save(calibraciones);
+                                    EDITAR = false;
 
                                 }
                             }
@@ -229,6 +230,7 @@ public class CalibracionesController implements IController {
         if (EDITAR) {
             textNumero.setText(numeroActual);
         }
+        EDITAR = false;//--------------------------------------------------------------------------------cambio mau
     }
     private static void resetGUI() throws Exception {
 
@@ -269,7 +271,9 @@ public class CalibracionesController implements IController {
 
     @Override
     public void recargarLista() throws Exception {
-        updateLista(instru.getSerie());
+        if(instru!= null){
+            updateLista(instru.getSerie());
+        }
     }
 
     public void setPDF(PDF pdf) {

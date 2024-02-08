@@ -53,7 +53,7 @@ public class Aplication extends JFrame{
 
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setMinimumSize(new Dimension(1050, 450));
+        this.setMinimumSize(new Dimension(725, 450));
         setLocationRelativeTo(null);//lo pone en medio
 
         //Seteos de cada tabbed Pane-

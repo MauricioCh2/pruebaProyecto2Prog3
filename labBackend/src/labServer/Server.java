@@ -6,6 +6,7 @@ import Protocol.IService;
 import Protocol.Message;
 import Protocol.Protocol;
 import Protocol.TipoInstrumentoObj;
+import Protocol.Color;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +28,7 @@ public class Server {
             System.out.println("Servidor iniciado..."); //el server se inicio
             current_num_worker = 0;
         } catch (IOException ex) {
-            System.out.println(ex);
+            System.out.println(Color.RED+ "Error en server: "+ ex +Color.RESET);
         }
     }
     public void run(){
@@ -62,7 +63,7 @@ public class Server {
                     out.flush(); //limpiamos memoria
                     skt.close();//cerramos soket
                 } catch (IOException ex1) {}
-                System.out.println("Conexion cerrada...");// por si algo pasa
+                System.out.println(Color.YELLOW+"Conexion cerrada..."+Color.RESET);// por si algo pasa
             }
         }
     }

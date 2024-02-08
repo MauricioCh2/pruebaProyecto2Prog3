@@ -122,7 +122,7 @@ public class ServiceProxy implements IService {
                             System.out.println("Mensaje de message en Service Proxy: /Protocol deliver " + message.getMessage());
                             deliver(message);
                         } catch (ClassNotFoundException ex) {
-                            System.out.println("Catch de proxy recibiendo deliver " + ex.getMessage());
+                            System.out.println(Color.RED+"Catch de proxy recibiendo deliver " + ex.getMessage()+Color.RESET);
                         }
                         break;
                     //Reload/ refresco de listas--------------------------------------------------------------------------------------
@@ -204,7 +204,7 @@ public class ServiceProxy implements IService {
                             List<TipoInstrumentoObj> list = (List<TipoInstrumentoObj>) in.readObject();
                             iniciar_lista_tipos_instrumento(list);
                         } catch (Exception ex) {
-                            System.out.println("Excepcion: " + ex.getMessage());
+                            System.out.println(Color.RED+"Excepcion: " + ex.getMessage()+Color.RESET);
                         }
                         break;
                     }
@@ -214,7 +214,7 @@ public class ServiceProxy implements IService {
                             int numeroWorker = (int) in.readInt();
                             set_numero_worker(numeroWorker);
                         } catch (Exception ex) {
-                            System.out.println("Excepcion: " + ex.getMessage());
+                            System.out.println(Color.RED+"Excepcion: " + ex.getMessage()+Color.RESET);
                         }
                         break;
                     }
@@ -225,18 +225,18 @@ public class ServiceProxy implements IService {
                 out.flush();
             } catch (IOException ex) {
                 continuar = false;
-                System.out.println("Se detuvo en el catch de listen de service proxy: " + ex.getMessage());
+                System.out.println(Color.RED+"Se detuvo en el catch de listen de service proxy: " + ex.getMessage()+Color.RESET);
             } catch (ClassNotFoundException e) {
-                System.out.println("Catch CLASSNOTFOUNDEXCEPTION " + e.getMessage());
+                System.out.println(Color.RED+"Catch CLASSNOTFOUNDEXCEPTION " + e.getMessage()+Color.RESET);
                 throw new RuntimeException(e);
             }
         }
         try {
             disconnect();
         } catch (IOException e) {
-            System.out.println("Catch De Disconnected" + e.getMessage());
+            System.out.println(Color.RED+"Catch De Disconnected" + e.getMessage()+Color.RESET);
         } catch (Exception e) {
-            System.out.println("CATCH RUNTIMEEXCEPTION "+ e.getMessage());
+            System.out.println(Color.RED+"CATCH RUNTIMEEXCEPTION "+ e.getMessage()+Color.RESET);
             throw new RuntimeException(e);
         }
     }
@@ -278,6 +278,7 @@ public class ServiceProxy implements IService {
                                                controllerCal.update(ob, pro);
                                            } catch (Exception e) {
                                                JOptionPane.showMessageDialog(null, e.getMessage());
+                                               System.out.println(Color.RED+"Error en update Service"+e.getMessage()+Color.RESET);
                                            }
                                        }
                                    }

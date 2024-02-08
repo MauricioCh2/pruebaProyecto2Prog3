@@ -77,8 +77,7 @@ public class Worker { // es cada socket
                             srv.update(lisU2, Protocol.RELOAD_UM);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del read unidad: "+ ex.getMessage());
-                            System.out.println(ex);
+                            System.out.println(Color.RED+"Catch del read unidad: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -96,7 +95,7 @@ public class Worker { // es cada socket
                             //srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del find unidad: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del find unidad: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -115,7 +114,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create tipos:" + ex.getMessage());
+                            System.out.println(Color.RED+"Catch del create tipos:" + ex.getMessage()+Color.RESET);
 
                             JOptionPane.showMessageDialog(null, ex.getMessage());
 
@@ -139,7 +138,7 @@ public class Worker { // es cada socket
 //                            srv.deliver(message);
                             srv.update(lisT2, Protocol.RELOAD_TIP_INS);
                         }catch (Exception ex){
-                            System.out.println("Catch del read tipo: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del read tipo: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -160,7 +159,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update tipo: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del update tipo: "+ ex.getMessage()+Color.RESET);
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                             continuar = false;
                         }
@@ -180,7 +179,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete tipo"+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del delete tipo"+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -200,7 +199,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del create instrumentos: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del create instrumentos: "+ ex.getMessage()+Color.RESET);
                             JOptionPane.showMessageDialog(null, ex.getMessage());
                             if(!ex.getMessage().contains("Este numero de serie ya existe")){
                                 continuar = false;
@@ -219,7 +218,7 @@ public class Worker { // es cada socket
 
                             srv.update(lis, Protocol.RELOAD_INSTRUMENTO);
                         }catch (Exception ex){
-                            System.out.println("Catch del read instrumentos:"+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del read instrumentos:"+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -240,7 +239,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update instrumentos: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del update instrumentos: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -259,7 +258,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete instrumentos: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del delete instrumentos: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -278,7 +277,7 @@ public class Worker { // es cada socket
                             message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
                             srv.deliver(message);
                         }catch(Exception ex){
-                            System.out.println("Catch del create  calibraciones: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del create  calibraciones: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -299,7 +298,7 @@ public class Worker { // es cada socket
                             update(lis, Protocol.RELOAD_CALIBRACION);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del read calibracion:"+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del read calibracion:"+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -319,7 +318,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update calibracion"+ex.getMessage());
+                            System.out.println(Color.RED+"Catch del update calibracion"+ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -337,7 +336,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete calibracion: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del delete calibracion: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -355,7 +354,7 @@ public class Worker { // es cada socket
                             message = new Message( Message.CREATE, "a mediciones", String.valueOf(med.getNumMedicion()),numeroWorker);
                             srv.deliver(message);
                         }catch(Exception ex){
-                            System.out.println("Catch del create  mediciones: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del create  mediciones: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -366,7 +365,7 @@ public class Worker { // es cada socket
                             service.create(med);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del create  mediciones: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del create  mediciones: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -384,7 +383,7 @@ public class Worker { // es cada socket
                             srv.update(lis, Protocol.READMEDICIONES);
 
                         }catch (Exception ex){
-                            System.out.println("Catch del read mediciones:"+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del read mediciones:"+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -403,7 +402,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del update mediciones"+ex.getMessage());
+                            System.out.println(Color.RED+"Catch del update mediciones"+ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -420,7 +419,7 @@ public class Worker { // es cada socket
                             srv.deliver(message);
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete mediciones: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del delete mediciones: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -432,7 +431,7 @@ public class Worker { // es cada socket
 
 
                         }catch(Exception ex){
-                            System.out.println("Catch del delete mediciones: "+ ex.getMessage());
+                            System.out.println(Color.RED+"Catch del delete mediciones: "+ ex.getMessage()+Color.RESET);
                             continuar = false;
                         }
                         break;
@@ -442,7 +441,7 @@ public class Worker { // es cada socket
                             //srv.send_numero_worker(numeroWorker);
                             this.send_numero_worker(numeroWorker); //ya que es para cada usuario
                         } catch (Exception ex) {
-                            System.out.println("Catch del request numero " + ex.getMessage());
+                            System.out.println(Color.RED+"Catch del request numero " + ex.getMessage()+Color.RESET);
                         }
                         break;
 
@@ -452,7 +451,7 @@ public class Worker { // es cada socket
                             //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
                             break;
                         }catch (Exception ex){
-                            System.out.println("Catch del force uptade " + ex.getMessage());
+                            System.out.println(Color.RED+"Catch del force uptade " + ex.getMessage()+Color.RESET);
                         }
 
                 }
@@ -464,7 +463,7 @@ public class Worker { // es cada socket
 
                 continuar = false;
             } catch (Exception e) {
-                System.out.println("CATCH DE RUNTIME " + e.getMessage());
+                System.out.println(Color.RED+"CATCH DE RUNTIME " + e.getMessage()+Color.RESET);
                 throw new RuntimeException(e);
             }
         }
@@ -478,7 +477,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
-            System.out.println("IOEXPECION");
+            System.out.println(Color.RED+"Catch deliver worker IOEXPECION: "+ex.getMessage()+Color.RESET);
         }
     }
 
@@ -490,7 +489,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
-            System.out.println("IOEXPECION");
+            System.out.println(Color.RED+"catch send numero worker IOEXPECION: "+ex.getMessage()+Color.RESET);
         }
     }
 
@@ -502,7 +501,7 @@ public class Worker { // es cada socket
             out.flush();
             //aqui entrega solo a su propio cliente sin tener que propagar a todos
         } catch (IOException ex) {
-            System.out.println("IOEXPECION");
+            System.out.println(Color.RED+"catch update worker IOEXPECION: "+Color.RESET);
         }
     }
 
@@ -513,7 +512,7 @@ public class Worker { // es cada socket
             out.writeObject(list);
             out.flush();
         }catch (Exception ex){
-            System.out.println("Excepcion: " + ex.getMessage());
+            System.out.println(Color.RED+"Excepcion: " + ex.getMessage()+Color.RESET);
         }
     }
 
