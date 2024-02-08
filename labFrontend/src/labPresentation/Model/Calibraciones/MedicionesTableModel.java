@@ -3,9 +3,10 @@ package labPresentation.Model.Calibraciones;
 import Protocol.Mediciones;
 import labPresentation.Model.TableModel;
 
+import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
-public class MedicionesTableModel extends TableModel {
+public class MedicionesTableModel extends DefaultTableModel {
     List<Mediciones> mediciones;
     final String [] nombreColumnas = {
       "Número",

@@ -211,6 +211,8 @@ public class CalibracionesController implements IController {
     }
 
     public static void limpiar(){
+        calibracionesView.setTx_numero("Nuevo numero: ");
+        calibracionesView.getCalibracion().setBorder(BorderFactory.createTitledBorder("Nueva calibración: "));
         calibracionesView.getMedicionesPanel().setVisible(false);
         textNumero.setEnabled(false);
         calibracionesView.getTextMediciones().setEnabled(true);
@@ -270,7 +272,7 @@ public class CalibracionesController implements IController {
             modelo.setListC((java.util.List<Calibraciones>) o);
             modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
             numeroCalibracion = ((List<?>) o).size();
-            textNumero.setText(String.valueOf(numeroCalibracion)+1);
+            textNumero.setText(String.valueOf(numeroCalibracion+1));
         }
         if(pro == Protocol.tellRELOAD_CALIBRACION){
             Message mes = (Message) o;
@@ -424,6 +426,8 @@ public class CalibracionesController implements IController {
             calibracionesView.getMedicionesPanel().setVisible(true);
             cargar_tablaMediciones();
             calibracionesView.getTextFecha().setEnabled(false);
+            calibracionesView.getCalibracion().setBorder(BorderFactory.createTitledBorder("Calibración: "));
+            calibracionesView.setTx_numero("Numero: ");
         }
         @Override
         public void mousePressed(MouseEvent e) {}
