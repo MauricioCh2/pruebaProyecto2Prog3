@@ -209,6 +209,7 @@ public class CalibracionesController implements IController {
     }
 
     public static void limpiar(){
+        calibracionesView.getMedicionesPanel().setVisible(false);
         textNumero.setEnabled(false);
         calibracionesView.getTextMediciones().setEnabled(true);
         String numeroActual = textNumero.getText();

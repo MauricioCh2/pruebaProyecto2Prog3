@@ -28,6 +28,15 @@ public class Message implements Serializable {
         createMessage(tipo,entidad,texto,num);
         //message = "Tipo: " + tipo +", Entidad:  " + entidad + " Texto: "+ texto;
     }
+
+    public Message(int tipo, String entidad, String texto,int num, String noSerieIns) {
+        this.tipo = tipo;
+        this.entidad = entidad;
+        this.texto = texto;
+        this.numwork = num;
+        createMessage(tipo,entidad,texto,num, noSerieIns);
+    }
+
     private void createMessage(int tipo, String entidad, String texto, int num){
         switch (tipo){
             case CREATE :
@@ -43,7 +52,21 @@ public class Message implements Serializable {
                 break;
         }
     }
+    private void createMessage(int tipo, String entidad, String texto, int num, String noSerie){
+        switch (tipo){
+            case CREATE :
+                message = "El cliente num: "+ num + " a creado  un"+ entidad+ ": "+ texto+ " del instrumento: "+ noSerie;
+                break;
+            case DELETE:
+                message = "El cliente num: "+ num + " a eliminado  un"+ entidad+ ": "+ texto+ " del instrumento: "+ noSerie;
 
+                break;
+            case UPDATE:
+                message = "El cliente num: "+ num + " a actualizado un"+ entidad+ ": "+ texto+ " del instrumento: "+ noSerie;
+
+                break;
+        }
+    }
     public String getMessage() {
         return message;
     }

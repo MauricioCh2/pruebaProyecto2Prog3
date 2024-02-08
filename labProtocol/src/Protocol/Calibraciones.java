@@ -8,6 +8,7 @@ public class Calibraciones implements Serializable {
     private List<Mediciones> medicionesL;
 
     private int numeroCalibracion;
+    private int idCalibracion;
     private String fecha;
     private static int contador = 0;
     private int numeroMediciones;
@@ -109,5 +110,9 @@ public class Calibraciones implements Serializable {
     }
     public String getTipo(){
         return instrumento.getTipo();
+    }
+
+    public void setIdCalibracion(int idCalibracion) {
+        this.idCalibracion = idCalibracion;
     }
 }

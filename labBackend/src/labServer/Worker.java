@@ -274,7 +274,7 @@ public class Worker { // es cada socket
 
                             out.flush();
 
-                            message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker);
+                            message = new Message( Message.CREATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker, cal.getNo_SerieIns());
                             srv.deliver(message);
                         }catch(Exception ex){
                             System.out.println(Color.RED+"Catch del create  calibraciones: "+ ex.getMessage()+Color.RESET);
@@ -306,7 +306,7 @@ public class Worker { // es cada socket
                         try{
                             System.out.println("Estoy en updateCalibracion de worker");
 
-                            Calibraciones e = (Calibraciones) in.readObject();
+                            Calibraciones cal = (Calibraciones) in.readObject();
 
 
                             out.writeInt(Protocol.UPDATECALIBRACION);
@@ -314,7 +314,8 @@ public class Worker { // es cada socket
                             System.out.println("Le mando de vuelta al proxy calibracion ");
                             out.flush();
 
-                            message = new Message( Message.UPDATE, "a calibracion", String.valueOf(e.getNumeroCalibracion()), numeroWorker);
+                            message = new Message( Message.UPDATE, "a calibracion", String.valueOf(cal.getNumeroCalibracion()),numeroWorker, cal.getNo_SerieIns());
+
                             srv.deliver(message);
 
                         }catch(Exception ex){
@@ -332,7 +333,7 @@ public class Worker { // es cada socket
                             System.out.println("Le envio de vuelta el id eliminado ");
                             out.flush();
 
-                            message = new Message( Message.DELETE, "a calibracion",String.valueOf(calibraciones.getNumeroCalibracion()), numeroWorker);
+                            message = new Message( Message.DELETE, "a calibracion", String.valueOf(calibraciones.getNumeroCalibracion()),numeroWorker, calibraciones.getNo_SerieIns());
                             srv.deliver(message);
 
                         }catch(Exception ex){
@@ -340,6 +341,7 @@ public class Worker { // es cada socket
                             continuar = false;
                         }
                         break;
+                    //--------------------------------------------------MEDICIONES--------------------------------------------------
                     case Protocol.CREATEMEDICIONES:
                         try{
                             System.out.println("Estoy en CREATE MEDICIONES de worker");

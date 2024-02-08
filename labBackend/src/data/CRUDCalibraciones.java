@@ -3,10 +3,7 @@ package data;
 import Protocol.Calibraciones;
 import Protocol.Instrumento;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,33 +14,47 @@ public class CRUDCalibraciones {
 
     public boolean create(Calibraciones cali) throws Exception {
         Connection connection = new DataBaseConn().connection();
-        String sql = "INSERT INTO calibraciones VALUES (?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
 
 
-        statement.setInt(1, cali.getNumeroCalibracion());
-        statement.setString(2, cali.getFecha());
-        statement.setInt(3, cali.getNumeroMediciones());
-        statement.setInt(4, Integer.parseInt(cali.getNo_SerieIns()));
+        String sql = "INSERT INTO calibraciones (fecha, mediciones, id_instrumento, num_calibracion) VALUES (?, ?, ?, ?)";
 
-        statement.executeUpdate();
-        System.out.println("Crea calibracion.. " + cali.getNumeroCalibracion() + " de instrumento: " + cali.getNo_SerieIns() + "\n");
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+        statement.setString(1, cali.getFecha());
+        statement.setInt(2, cali.getNumeroMediciones());
+        statement.setInt(3, Integer.parseInt(cali.getNo_SerieIns()));
+        statement.setInt(4, cali.getNumeroCalibracion());
+
+        int affectedRows = statement.executeUpdate();
+
+        if(affectedRows > 0) {
+
+            ResultSet rs = statement.getGeneratedKeys();
+            if(rs.next()){
+                int idCalibracion = rs.getInt(1);
+                cali.setIdCalibracion(idCalibracion);
+            }
+        }
+
         return true;
     }
 
     public List<Calibraciones> read(String idInstrumento) throws Exception {
         ArrayList<Calibraciones> lista = new ArrayList<>();
         Connection connection = new DataBaseConn().connection();
-        String sql = "SELECT c.id_calibraciones, c.fecha, c.mediciones, i.id_instrumentos, i.id_tipo_instrumento, i.descripcion, i.min, i.max, i.tolerancia " +
-                "FROM calibraciones c " +
-                "INNER JOIN instrumentos i ON c.id_instrumento = i.id_instrumentos " +
+        String sql = "SELECT c.id_calibraciones, c.fecha, c.mediciones, c.num_calibracion, \n" +
+                "i.id_instrumentos, i.id_tipo_instrumento, \n" +
+                "i.descripcion, i.min, i.max, i.tolerancia\n" +
+                "FROM calibraciones c \n" +
+                "INNER JOIN instrumentos i ON c.id_instrumento = i.id_instrumentos\n" +
                 "WHERE c.id_instrumento = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setInt(1, Integer.parseInt(idInstrumento));
         ResultSet result = statement.executeQuery();
         while (result.next()) {
             // Obtener los datos de la calibración
-            int numCalibracion = result.getInt("id_calibraciones");
+            int numCalibracion = result.getInt("num_calibracion");
+            int idCalibracion = result.getInt("id_calibraciones");
             String fecha= result.getString("fecha");
             int mediciones = result.getInt("mediciones");
 
@@ -60,7 +71,7 @@ public class CRUDCalibraciones {
 
             // Crear el objeto Calibraciones y asociarlo con el objeto Instrumento
             Calibraciones calibracion = new Calibraciones(numCalibracion, fecha, mediciones, instrumento);
-
+            calibracion.setIdCalibracion(idCalibracion);
             // Agregar la calibración a la lista
             lista.add(calibracion);
         }
