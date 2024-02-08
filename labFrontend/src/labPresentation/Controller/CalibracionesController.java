@@ -222,7 +222,7 @@ public class CalibracionesController implements IController {
     }
 
     public static void limpiar(){
-        calibracionesView.setTx_numero("Nuevo numero: ");
+        //calibracionesView.setTx_numero("Nuevo numero: ");
         calibracionesView.getCalibracion().setBorder(BorderFactory.createTitledBorder("Nueva calibración: "));
         calibracionesView.getMedicionesPanel().setVisible(false);
         textNumero.setEnabled(false);
@@ -441,7 +441,7 @@ public class CalibracionesController implements IController {
             cargar_tablaMediciones();
             calibracionesView.getTextFecha().setEnabled(false);
             calibracionesView.getCalibracion().setBorder(BorderFactory.createTitledBorder("Calibración: "));
-            calibracionesView.setTx_numero("Numero: ");
+         //   calibracionesView.setTx_numero("Numero: ");
         }
         @Override
         public void mousePressed(MouseEvent e) {}
