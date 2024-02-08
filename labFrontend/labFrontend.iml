@@ -7,9 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="labProtocol" />
-    <orderEntry type="library" name="itextpdf-5.5.13.3 (2)" level="project" />
     <orderEntry type="library" name="itextpdf-5.5.13.3" level="project" />
+    <orderEntry type="module" module-name="labProtocol" />
     <orderEntry type="library" name="jdom.jdom2" level="project" />
+    <orderEntry type="library" name="jdom.jdom2" level="project" />
+    <orderEntry type="library" name="jdom.jdom21" level="project" />
   </component>
 </module>
