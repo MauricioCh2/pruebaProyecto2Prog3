@@ -219,7 +219,7 @@ public class CalibracionesController implements IController {
             return fechaConBarra;
         }
         return "FORMATO NO VALIDO";
-    }
+    }//z
 
     public static void limpiar(){
         calibracionesView.setTx_numero("Nuevo numero: ");
