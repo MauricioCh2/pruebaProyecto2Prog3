@@ -438,10 +438,12 @@ public class CalibracionesController implements IController {
             rellenartextfields(e);
             calibracionesView.getBorrarButton().setEnabled(true);
             calibracionesView.getMedicionesPanel().setVisible(true);
+            currentC = modelo.getCurrentC(tableCalibraciones);
             cargar_tablaMediciones();
             calibracionesView.getTextFecha().setEnabled(false);
             calibracionesView.getCalibracion().setBorder(BorderFactory.createTitledBorder("Calibración: "));
             calibracionesView.setTx_numero("Numero: ");
+
         }
         @Override
         public void mousePressed(MouseEvent e) {}

@@ -194,4 +194,15 @@ public class CalibracionesModel { //
         }
         return  null;
     }
+
+    public Calibraciones getCurrentC(JTable tableCalibraciones) {
+        DefaultTableModel modelo = (DefaultTableModel) tableCalibraciones.getModel();
+        int numeroCal = (int) tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), modelo.findColumn("Número"));
+        for(Calibraciones cal: listC){
+            if(cal.getNumeroCalibracion()== numeroCal){
+                return cal;
+            }
+        }
+        return null;
+    }
 }
