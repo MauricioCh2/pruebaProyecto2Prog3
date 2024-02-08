@@ -89,6 +89,7 @@ public class MedicionesModel { //
     }
 
     public void actualizarMediciones(JTable tab, Instrumento obj) throws Exception {
+        JOptionPane.showMessageDialog(null, "LLEGE A ACTUALIZAR MEDICIONES", "Información", JOptionPane.INFORMATION_MESSAGE);
         DefaultTableModel model = (DefaultTableModel) tab.getModel();
         int rows = model.getRowCount();
         for(int i = 0;i < rows;i++){

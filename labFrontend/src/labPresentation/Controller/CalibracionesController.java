@@ -126,7 +126,8 @@ public class CalibracionesController implements IController {
 
                             } else {
                                 if(EDITAR){
-                                    //JOptionPane.showMessageDialog(null, "Cayendo a actualizar calibracion");
+                                    //aca no cae
+                                    JOptionPane.showMessageDialog(null, "Cayendo a actualizar calibracion 1.0");
                                     modelo.edit(calibraciones);
                                 }else{
                                     System.out.println();
@@ -154,11 +155,28 @@ public class CalibracionesController implements IController {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else {
-            actualizarMediciones(instru);
+        } else { //tengo que hacer la actualizacion aca ya que como estoy en modo editar mediciones caigo aca y no puedo usar el if de EDITAR
+            //actualizarMediciones(instru);
+            actualizarCalibracion(); //esto debe ir despues
             limpiar();//actualizar mediciones
         }
         //limpiar();//actualizar mediciones
+    }
+
+    public static void actualizarCalibracion(){
+        try {
+            String numMeTXT = textMediciones.getText();
+            int numM = Integer.parseInt(numMeTXT);
+            fecha_valida();
+            String date = convertirFormatoFecha(textFecha.getText());
+            String numCabTXT = String.valueOf(tableCalibraciones.getValueAt(tableCalibraciones.getSelectedRow(), 0));
+            int numCab = Integer.parseInt(numCabTXT);
+            //JOptionPane.showMessageDialog(null, "Numero De Cab "+numCab+" Date "+date+" numM "+numM, "mensaje", JOptionPane.INFORMATION_MESSAGE);
+            Calibraciones calibraciones = new Calibraciones(numCab, instru, date, numM);
+            modelo.edit(calibraciones);
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Informaciónes", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     public static void actualizarMediciones(Instrumento ins){
@@ -170,7 +188,7 @@ public class CalibracionesController implements IController {
             JOptionPane.showMessageDialog(null, "INSTRUMENTO CALIBRADO", "Información", JOptionPane.INFORMATION_MESSAGE);
 
         }catch (Exception ex){
-            JOptionPane.showMessageDialog(null, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Informaciónes-----", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -437,7 +455,7 @@ public class CalibracionesController implements IController {
             calibracionesView.getBorrarButton().setEnabled(true);
             calibracionesView.getMedicionesPanel().setVisible(true);
             cargar_tablaMediciones();
-            calibracionesView.getTextFecha().setEnabled(false);
+            //calibracionesView.getTextFecha().setEnabled(false);
         }
         @Override
         public void mousePressed(MouseEvent e) {}

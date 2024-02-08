@@ -206,6 +206,10 @@ public class ServiceProxy implements IService {
                         System.out.println("La calibracion se creo con existo ");
                         Calibraciones cal = (Calibraciones) in.readObject();
                         break;
+                    case Protocol.UPDATECALIBRACION:
+                        System.out.println("La calibracion se actualizo con existo ");
+
+                        break;
                     //--------------------------------------------------INICIALIZACION---------------------------------------------------
                     case Protocol.INIT_LISTA_TIPO_INSTRUMENTOS: {
                         System.out.println("Setenado lista a mi lista propia");
