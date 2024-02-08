@@ -211,4 +211,8 @@ public class CalibracionesView extends JFrame{
     public void setFechaLabel(JLabel fechaLabel) {
         FechaLabel = fechaLabel;
     }
+
+    public void setTx_numero(String s) {
+        tx_numero.setText(s);
+    }
 }
