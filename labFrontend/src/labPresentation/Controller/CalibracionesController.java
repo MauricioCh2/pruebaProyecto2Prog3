@@ -9,7 +9,6 @@ import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
 import labPresentation.Model.PDF;
-import labPresentation.Model.TableModel;
 import labPresentation.View.CalibracionesView;
 import org.xml.sax.SAXException;
 
@@ -131,6 +130,7 @@ public class CalibracionesController implements IController {
                                 }else{
                                     System.out.println();
                                     //JOptionPane.showMessageDialog(null, "Cayendo a agregar calibracion");
+                                    //textNumero.setText(String.valueOf(numeroCalibracion+1));
                                     modelo.save(calibraciones);
                                     EDITAR = false;
                                     ServiceProxy.instance().forceUpdate();
@@ -217,7 +217,7 @@ public class CalibracionesController implements IController {
         textNumero.setEnabled(false);
         calibracionesView.getTextMediciones().setEnabled(true);
         String numeroActual = textNumero.getText();
-        textNumero.setText(String.valueOf(numeroCalibracion));
+        textNumero.setText(String.valueOf(0));
         textMediciones.setText("");
         textFecha.setEnabled(true);
         textNumeroB.setText("");
@@ -238,6 +238,7 @@ public class CalibracionesController implements IController {
         EDITAR = false;//--------------------------------------------------------------------------------cambio mau
     }
     private static void resetGUI() throws Exception {
+        textNumero.setText(String.valueOf(0));
 
         limpiar();
 
@@ -271,8 +272,9 @@ public class CalibracionesController implements IController {
         if(pro == Protocol.RELOAD_CALIBRACION){
             modelo.setListC((java.util.List<Calibraciones>) o);
             modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
-            numeroCalibracion = ((List<?>) o).size();
-            textNumero.setText(String.valueOf(numeroCalibracion+1));
+            List<Calibraciones> lisCa = (List<Calibraciones>) o;
+            //numeroCalibracion = lisCa.get(lisCa.size());
+            //textNumero.setText(String.valueOf(numeroCalibracion+1));
         }
         if(pro == Protocol.tellRELOAD_CALIBRACION){
             Message mes = (Message) o;
@@ -455,8 +457,8 @@ public class CalibracionesController implements IController {
         updateLista(instru.getSerie());
         calibracionesView.getMedicionesPanel().setVisible(false);
         resetGUI();
-        numeroCalibracion = modelo.getListC().size();
-        //textNumero.setText(String.valueOf(numeroCalibracion));
+        //numeroCalibracion = modelo.getListC().size();
+        textNumero.setText(String.valueOf(0));
     }
 
 
