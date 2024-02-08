@@ -7,6 +7,7 @@ import labLogic.ServiceProxy;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class MedicionesModel { //
     public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med, int nC) throws Exception {
         //ServiceProxy.instance().deleteAll();
         DefaultTableModel model = (DefaultTableModel) tablaM.getModel();
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
         System.out.println(obj.toString() + "    " + med);
         System.out.println("Cont " + model.getRowCount());
@@ -40,11 +42,11 @@ public class MedicionesModel { //
         double valorM = obj.getMinimo();
         for (int i = 1; i <= med; i++) {
             System.out.println("Ejecucion del for en frontEnd----------------------------------------------------------------------------");
-            Mediciones medicion = new Mediciones(i, valorM, 0.0, nC); //
+            Mediciones medicion = new Mediciones(i, valorM, 0.0, nC);
             //ServiceProxy.instance().create(medicion);
             v[i-1] = medicion; //-1 ya que el vector empieza en 1
             listM.add(medicion);
-            Object[] fila = new Object[]{i, valorM, null};
+            Object[] fila = new Object[]{i, decimalFormat.format(valorM), null};
             model.addRow(fila);
             Object value = model.getValueAt(i - 1, 2); //aca puede hacer texto en blanco por lo que no siempre puede ser null
             if (value != null) {
