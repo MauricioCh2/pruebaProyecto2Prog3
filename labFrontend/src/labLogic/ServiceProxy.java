@@ -153,6 +153,12 @@ public class ServiceProxy implements IService {
                         System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
                         update(objectC, Protocol.RELOAD_CALIBRACION);
                         break;
+                    case Protocol.tellRELOAD_CALIBRACION:
+                        //System.out.println("Se entro al deliver en service proxy");
+                        Message mes = (Message) in.readObject();
+                        //System.out.println("RELOAD LIST en Service Proxy: /Protocol deliver ");
+                        update(mes, Protocol.tellRELOAD_CALIBRACION);
+                        break;
                     case Protocol.ERROR_NO_ERROR:
                         System.out.println("Error_no_error");
                         break;

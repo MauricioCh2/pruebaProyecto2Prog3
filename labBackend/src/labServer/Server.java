@@ -108,4 +108,12 @@ public class Server {
             wk.update(abs, protocol);
         }
     }
+    public void updateElseUs(Object abs, int protocol, Worker us) {
+        for(Worker wk:workers){//NO TOCAR ESTO ESTO ES 100 POR CIEN NECESARIO, es oomo un brodcast
+            if(wk != us ){
+                wk.update(abs, protocol);
+
+            }
+        }
+    }
 }

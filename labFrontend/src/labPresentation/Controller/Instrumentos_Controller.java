@@ -53,6 +53,7 @@ public class Instrumentos_Controller implements IController {
     public void update(Object o, int pro) throws Exception {
         System.out.println("\n llegue al update ");
         if(pro == Protocol.RELOAD_INSTRUMENTO){
+            limpiar();
             model.setListaInstrumento((List<Instrumento>) o);
             cargarDatos((List<Instrumento>) o);
         }
@@ -159,6 +160,17 @@ public class Instrumentos_Controller implements IController {
         instrumentView.getCmB_Tipo().setSelectedIndex(0);
         MainController.deselect();
         model.updateLista();
+    }
+    public void limpiar(){
+        EDIT = false;
+        instrumentView.getTxF_Serie().setEnabled(true);
+        instrumentView.getBtn_borrar().setEnabled(false);
+        instrumentView.getTxF_Serie().setText("");
+        instrumentView.getTxF_Descripcion().setText("");
+        instrumentView.getTxF_Minimo().setText("");
+        instrumentView.getTxF_Maximo().setText("");
+        instrumentView.getTxF_Tolerancia().setText("");
+        MainController.deselect();
     }
 
     public static void rellenar_textfields(MouseEvent e){

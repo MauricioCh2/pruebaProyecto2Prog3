@@ -13,6 +13,8 @@ public class Protocol {
     public static final int RELOAD_INSTRUMENTO = 23;
     public static final int RELOAD_CALIBRACION = 24;
     public static final int  RELOAD_MEDICIONES = 25;
+    public static final int tellRELOAD_CALIBRACION = 244;
+
     //Respuestas del server-------------------------------------------------------------------------------------------------
     public static final int ERROR_NO_ERROR = 0;
     public static final int ERROR_LOGIN=1;

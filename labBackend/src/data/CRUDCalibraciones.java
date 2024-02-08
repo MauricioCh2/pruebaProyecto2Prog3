@@ -80,7 +80,7 @@ public class CRUDCalibraciones {
 
     public boolean update(Calibraciones cali) throws Exception {
         Connection connection = new DataBaseConn().connection();
-        String sql = "UPDATE calibraciones SET fecha = ?, mediciones = ?, id_instrumento = ? WHERE id_calibraciones = ?";
+        String sql = "UPDATE calibraciones SET fecha = ?, mediciones = ?, id_instrumento = ? WHERE num_calibracion = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
 
         // Establecer los nuevos valores para los campos de la calibración
@@ -97,9 +97,11 @@ public class CRUDCalibraciones {
 
     public boolean delete(Calibraciones cali) throws Exception {
         Connection connection =  new DataBaseConn().connection();
-        String sql = "delete from   calibraciones  where id_calibraciones = ?";
+
+        String sql = "DELETE FROM calibraciones WHERE id_calibraciones = ? AND num_calibracion = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setInt(1,cali.getNumeroCalibracion());
+        statement.setInt(1,cali.getIdCalibraciones());
+        statement.setInt(2,cali.getNumeroCalibracion());
         statement.executeUpdate();
 
 

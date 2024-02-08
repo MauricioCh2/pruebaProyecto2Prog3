@@ -450,7 +450,8 @@ public class Worker { // es cada socket
                     case Protocol.FORCE_UPDATE:
                         try {
                             srv.update(service.read_instrumentos(), Protocol.RELOAD_INSTRUMENTO);
-                            //srv.update(service.readCalibracion(), Protocol.RELOAD_INSTRUMENTO);
+                            Message mes = new Message ("Se a cambiado un elemento en cascada, algunos instrumentos o calibraciones se pudieron ver afectados");
+                            srv.updateElseUs(mes, Protocol.tellRELOAD_CALIBRACION, this);
                             break;
                         }catch (Exception ex){
                             System.out.println(Color.RED+"Catch del force uptade " + ex.getMessage()+Color.RESET);

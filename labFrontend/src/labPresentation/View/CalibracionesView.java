@@ -9,7 +9,7 @@ import javax.swing.text.AbstractDocument;
 import java.awt.*;
 
 
-public class CalibracionesView {
+public class CalibracionesView extends JFrame{
     private JPanel pnl_calibraciones;
     private JButton guardarButton;
     private JButton limpiarButton;

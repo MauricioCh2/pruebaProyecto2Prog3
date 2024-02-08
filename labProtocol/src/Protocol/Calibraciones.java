@@ -105,6 +105,9 @@ public class Calibraciones implements Serializable {
     public int getNumeroMediciones() {
         return numeroMediciones;
     }
+    public int getIdCalibraciones() {
+        return idCalibracion;
+    }
     public String getNo_SerieIns() {
         return instrumento.getSerie();
     }

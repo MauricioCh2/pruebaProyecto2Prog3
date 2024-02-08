@@ -4,6 +4,7 @@ import Protocol.Calibraciones;
 import Protocol.IController;
 import Protocol.Instrumento;
 import Protocol.Protocol;
+import Protocol.Message;
 import labLogic.ServiceProxy;
 import labPresentation.Model.Calibraciones.CalibracionesModel;
 import labPresentation.Model.Calibraciones.MedicionesModel;
@@ -122,7 +123,7 @@ public class CalibracionesController implements IController {
                             Calibraciones calibraciones = new Calibraciones(numeroCalibracion, instru, date, numM);
                             if (currentC != null && currentC.getNo_SerieIns().equals(instru)) {
                                 calibraciones.setMedicionesL(currentC.getMedicionesL());
-                                //modelo.update(calibraciones);
+
                             } else {
                                 if(EDITAR){
                                     //JOptionPane.showMessageDialog(null, "Cayendo a actualizar calibracion");
@@ -132,6 +133,7 @@ public class CalibracionesController implements IController {
                                     //JOptionPane.showMessageDialog(null, "Cayendo a agregar calibracion");
                                     modelo.save(calibraciones);
                                     EDITAR = false;
+                                    ServiceProxy.instance().forceUpdate();
 
                                 }
                             }
@@ -213,7 +215,7 @@ public class CalibracionesController implements IController {
         textNumero.setEnabled(false);
         calibracionesView.getTextMediciones().setEnabled(true);
         String numeroActual = textNumero.getText();
-        textNumero.setText("000");
+        textNumero.setText(String.valueOf(numeroCalibracion));
         textMediciones.setText("");
         textFecha.setEnabled(true);
         textNumeroB.setText("");
@@ -267,6 +269,17 @@ public class CalibracionesController implements IController {
         if(pro == Protocol.RELOAD_CALIBRACION){
             modelo.setListC((java.util.List<Calibraciones>) o);
             modelo.cargarDatos(tableCalibraciones,(List<Calibraciones>) o, modelo_mediciones);
+            this.numeroCalibracion = ((List<?>) o).size();
+
+        }
+        if(pro == Protocol.tellRELOAD_CALIBRACION){
+            Message mes = (Message) o;
+            JOptionPane.showMessageDialog(calibracionesView, mes.getMessage());
+            if(instru!= null){
+                resetGUI();
+                ServiceProxy.instance().readCalibracion(instru.getSerie());
+
+            }
         }
     }
 
@@ -343,9 +356,12 @@ public class CalibracionesController implements IController {
                     int cod = (int) objCod; // lo convertimos a string
                     modelo.eliminar(cod, valFil); //elimina de la lista y de la tabla
                     System.out.println("\t\t\tCODIGO A ELIMINAR " + cod + " \n\n\n\n\n\n\n\n\n\n\t");
+                    ServiceProxy.instance().forceUpdate();
+
                     //reseteamos GUI
                     resetGUI();
                     calibracionesView.getBorrarButton().setEnabled(false);
+                    numeroCalibracion--;
                 }
             }
             EDITAR = false; //-------------------------------EN ANY CASE----------------------------------------------
