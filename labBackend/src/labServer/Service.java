@@ -152,14 +152,21 @@ public class Service implements IService {
     @Override
     public void update(Calibraciones cali) throws Exception {
         calibraciones.update(cali);
+        JOptionPane.showMessageDialog(null, "Calibracion actualizada  con exito!");
+
     }
 
     @Override
     public void delete(Calibraciones cali) throws Exception {
         calibraciones.delete(cali);
+        JOptionPane.showMessageDialog(null, "Calibracion eliminada  con exito!");
+
     }
     public void deleteCalibracionId(String e) throws Exception {
         instrumento.delete(e);
+        JOptionPane.showMessageDialog(null, "Calibracion eliminada  con exito!");
+
+
     }
 
     //--------------------MEDICIONES---------------------

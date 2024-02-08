@@ -80,14 +80,15 @@ public class CRUDCalibraciones {
 
     public boolean update(Calibraciones cali) throws Exception {
         Connection connection = new DataBaseConn().connection();
-        String sql = "UPDATE calibraciones SET fecha = ?, mediciones = ?, id_instrumento = ? WHERE num_calibracion = ?";
+        String sql = "UPDATE calibraciones SET fecha = ?, mediciones = ?, id_instrumento = ? WHERE id_calibraciones = ? AND num_calibracion = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
 
         // Establecer los nuevos valores para los campos de la calibración
         statement.setString(1, cali.getFecha());
         statement.setInt(2, cali.getNumeroMediciones());
         statement.setInt(3, Integer.parseInt(cali.getNo_SerieIns()));
-        statement.setInt(4, cali.getNumeroCalibracion()); // Suponiendo que tienes un método para obtener el ID de calibraciones
+        statement.setInt(4, cali.getIdCalibraciones());
+        statement.setInt(5, cali.getNumeroCalibracion()); // Suponiendo que tienes un método para obtener el ID de calibraciones
 
         statement.executeUpdate();
 

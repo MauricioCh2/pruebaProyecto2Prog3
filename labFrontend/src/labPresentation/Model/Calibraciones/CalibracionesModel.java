@@ -185,4 +185,13 @@ public class CalibracionesModel { //
     public List<Calibraciones> getListC() {
         return listC;
     }
+
+    public Calibraciones getCalibracionNum(int numeroCalibracion) {
+        for (Calibraciones calibracion : listC) {
+            if (calibracion.getNumeroCalibracion() == numeroCalibracion) {
+                return  calibracion;
+            }
+        }
+        return  null;
+    }
 }
