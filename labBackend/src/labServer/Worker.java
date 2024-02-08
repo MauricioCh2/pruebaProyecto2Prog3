@@ -311,6 +311,7 @@ public class Worker { // es cada socket
 
                             out.writeInt(Protocol.UPDATECALIBRACION);
                             //out.writeObject(service.update(e));
+                            service.update(cal);
                             System.out.println("Le mando de vuelta al proxy calibracion ");
                             out.flush();
 

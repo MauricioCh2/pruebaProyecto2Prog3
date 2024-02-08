@@ -49,6 +49,13 @@ public class Calibraciones implements Serializable {
         this.medicionesL = new ArrayList<>(numMediciones);
         this.numeroMediciones = numMediciones;
     }
+    public Calibraciones(int numCal, String fecha, int numMediciones, String ins) {
+        this.numeroCalibracion = numCal;
+        this.instrumentoId = Integer.parseInt(ins);
+        this.fecha = fecha;
+        this.medicionesL = new ArrayList<>(numMediciones);
+        this.numeroMediciones = numMediciones;
+    }
     public List<Mediciones> getMedicionesL() {
         return medicionesL;
     }
@@ -115,7 +122,15 @@ public class Calibraciones implements Serializable {
         return instrumento.getTipo();
     }
 
+    public void setInstrumento(Instrumento instrumento) {
+        this.instrumento = instrumento;
+    }
+
     public void setIdCalibracion(int idCalibracion) {
         this.idCalibracion = idCalibracion;
+    }
+
+    public void setNumeroCalibracion(int numeroCalibracion) {
+        this.numeroCalibracion = numeroCalibracion;
     }
 }

@@ -32,6 +32,8 @@ public class CalibracionesView extends JFrame{
     private JLabel mensaje;
     private JPanel panelMensaje;
     private JLabel FechaLabel;
+    private JLabel tx_numero;
+    private JScrollPane JS_medicion;
     private CalibracionesController controlCalibraciones;
 
     public CalibracionesView(){
@@ -80,6 +82,27 @@ public class CalibracionesView extends JFrame{
         tableMediciones.setVisible(true);
         //CalibracionesController.TablesCalibraciones tC = new CalibracionesController.TablesCalibraciones();
         //tableCalibraciones.addMouseListener(tC);
+        tableMediciones.setModel(new javax.swing.table.DefaultTableModel(
+                new Object [][] {
+
+                },
+                new String [] {//nombre de las columnas
+                        "Medida",
+                        "Referencia",
+                        "Lectura"
+                }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                    false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        JS_medicion.setViewportView(tableMediciones);
+        tableMediciones.setVisible(true);
+
     }
 
 
