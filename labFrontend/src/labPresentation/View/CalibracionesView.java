@@ -215,4 +215,8 @@ public class CalibracionesView extends JFrame{
     public void setTx_numero(String s) {
         tx_numero.setText(s);
     }
+
+    public void setTx_numero(String s) {
+       // tx_numero = s;
+    }
 }
