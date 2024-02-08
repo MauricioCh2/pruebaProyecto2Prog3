@@ -1,6 +1,7 @@
 package labLogic;
 
 import Protocol.*;
+import labPresentation.Controller.MainController;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -26,6 +27,7 @@ public class ServiceProxy implements IService {
     IController controllerInst;
     IController controllerCal;
     IController controllerMed;
+    MainController controller;
 
 
     public void register() throws Exception {
@@ -84,6 +86,7 @@ public class ServiceProxy implements IService {
     public void setControllerCal(IController c) {
         controllerCal = c;
     }
+    public  void setController(MainController c){controller = c;}
 
     //Listening funtions----------------------------------------------
     boolean continuar = true;
@@ -226,6 +229,10 @@ public class ServiceProxy implements IService {
             } catch (IOException ex) {
                 continuar = false;
                 System.out.println(Color.RED+"Se detuvo en el catch de listen de service proxy: " + ex.getMessage()+Color.RESET);
+                if(ex.getMessage() == null){
+                    controller.showMessage("El servidor se a cerrado");
+                    System.exit(0);
+                }
             } catch (ClassNotFoundException e) {
                 System.out.println(Color.RED+"Catch CLASSNOTFOUNDEXCEPTION " + e.getMessage()+Color.RESET);
                 throw new RuntimeException(e);

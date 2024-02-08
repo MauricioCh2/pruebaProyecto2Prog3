@@ -5,6 +5,8 @@ import Protocol.Instrumento;
 import labLogic.ServiceProxy;
 import labPresentation.Model.PDF;
 import labPresentation.View.Aplication;
+
+import javax.swing.*;
 //import labLogic.ServiceProxy;
 
 public class MainController {
@@ -16,6 +18,7 @@ public class MainController {
     static PDF pdf;
     public MainController() throws Exception {
         ServiceProxy.instance().register();
+        ServiceProxy.instance().setController(this);
         messageController = new MessageController();
         pdf = new PDF();
         tiposInstrumentoController = new TiposInstrumentoController();
@@ -51,10 +54,17 @@ public class MainController {
         CalibracionesController.setInstru(ins);
         CalibracionesController.update();
 
+
     }
     public static void deselect(){
         app.deselectCalib();
     }
 
+    public void showMessage(String mes){
+        JOptionPane.showMessageDialog(app,mes);
+    }
+    public void showErrorMessage(String mes){
+        JOptionPane.showMessageDialog(app,mes, "Error",JOptionPane.ERROR_MESSAGE);
+    }
 
 }

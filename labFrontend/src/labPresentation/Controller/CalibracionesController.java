@@ -219,7 +219,7 @@ public class CalibracionesController implements IController {
         tableCalibraciones.clearSelection();
         EDITAR_MEDICIONES = false;
         modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
-        modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
+        //modelo_mediciones.limpiar_tabla((DefaultTableModel) tableMediciones.getModel());
 
         calibracionesView.getPanelMensaje().setEnabled(false);
         for (Component component : calibracionesView.getPanelMensaje().getComponents()) {
@@ -432,6 +432,8 @@ public class CalibracionesController implements IController {
         calibracionesView.getTx_instrumento().setText(toStringt());
         calibracionesView.getTx_instrumento().setForeground(Color.RED);
         updateLista(instru.getSerie());
+        calibracionesView.getMedicionesPanel().setVisible(false);
+        resetGUI();
     }
 
 
