@@ -19,7 +19,8 @@ public class MedicionesModel { //
         listM = new ArrayList<>();
     }
     public MedicionesModel(){
-
+        this.tablaM = new JTable();
+        listM = new ArrayList<>();
     }
     public void cargar_tablaMediciones(Calibraciones calibracion, Instrumento obj, int med, int nC) throws Exception {
         //ServiceProxy.instance().deleteAll();
@@ -35,8 +36,6 @@ public class MedicionesModel { //
         if (calibracion != null && !calibracion.getMedicionesL().isEmpty()) {
             this.limpiar_tabla(model);
         }
-
-        List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (obj.getMaximo() - obj.getMinimo()) / med;
         double valorM = obj.getMinimo();
         for (int i = 1; i <= med; i++) {
@@ -44,7 +43,7 @@ public class MedicionesModel { //
             Mediciones medicion = new Mediciones(i, valorM, 0.0, nC); //
             //ServiceProxy.instance().create(medicion);
             v[i-1] = medicion; //-1 ya que el vector empieza en 1
-            lis.add(medicion);
+            listM.add(medicion);
             Object[] fila = new Object[]{i, valorM, null};
             model.addRow(fila);
             Object value = model.getValueAt(i - 1, 2); //aca puede hacer texto en blanco por lo que no siempre puede ser null
@@ -55,21 +54,17 @@ public class MedicionesModel { //
         }
         //ServiceProxy.instance().create(v); //manda el vector con las mediciones
         if (calibracion != null) {
-            calibracion.setMedicionesL(lis);
+            calibracion.setMedicionesL(listM);
         }
     }
-
-
-    //this.validarToleranciaMedicion(listM, obj);
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
-        List<Mediciones> lis = new ArrayList<>();
         double valorIntervalo = (double) (instrumentoCalibrado.getMaximo() - instrumentoCalibrado.getMinimo()) / cantidadDeMediciones;
         double valorM = instrumentoCalibrado.getMinimo();
         for (int i = 1; i <= cantidadDeMediciones; i++) {
-            lis.add(new Mediciones(i,valorM));
+            listM.add(new Mediciones(i,valorM));
             valorM+=valorIntervalo;
         }
-        return  lis;
+        return  listM;
     }
 
     public void limpiar_tabla(DefaultTableModel model){
@@ -105,11 +100,6 @@ public class MedicionesModel { //
     }
 
     public void toleranciaCorrecta(int tol, double valorReferencia, double valorMarcado) throws Exception {
-        /*if(valorReferencia-tol <= valorMarcado && valorReferencia + tol >= valorMarcado){
-            throw new Exception("Valor Incorrecto\nInstrumento No Calibrado\n");
-        }else{
-
-        }*/
         double limiteI = valorReferencia - tol;
         double limiteS = valorReferencia + tol;
         if(valorMarcado < limiteI || valorMarcado>limiteS){

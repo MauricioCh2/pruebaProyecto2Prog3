@@ -94,5 +94,6 @@
     <action>El cliente num: 1 a creado  una calibracion: 2 del instrumento: 2</action>
     <action>El cliente num: 1 a eliminado  una calibracion: 2 del instrumento: 2</action>
     <action>El cliente num: 1 a creado  una calibracion: 2 del instrumento: 4</action>
+    <action>El cliente num: 1 a eliminado  una calibracion: 2 del instrumento: 1</action>
   </actions>
 </data>
