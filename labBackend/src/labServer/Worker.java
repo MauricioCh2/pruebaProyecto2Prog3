@@ -346,7 +346,7 @@ public class Worker { // es cada socket
                     case Protocol.CREATEMEDICIONES:
                         try{
                             System.out.println("Estoy en CREATE MEDICIONES de worker");
-                            Mediciones med = (Mediciones) in.readObject();
+                            List<Mediciones> med = (List<Mediciones>) in.readObject();
                             service.create(med);
 
                             out.writeInt(Protocol.CREATEMEDICIONES);
@@ -354,7 +354,7 @@ public class Worker { // es cada socket
 
                             out.flush();
 
-                            message = new Message( Message.CREATE, "a mediciones", String.valueOf(med.getNumMedicion()),numeroWorker);
+                            message = new Message( Message.CREATE, "a mediciones", "Lista de mediciones",numeroWorker);
                             srv.deliver(message);
                         }catch(Exception ex){
                             System.out.println(Color.RED+"Catch del create  mediciones: "+ ex.getMessage()+Color.RESET);

@@ -171,7 +171,7 @@ public class Service implements IService {
 
     //--------------------MEDICIONES---------------------
     @Override
-    public void create(Mediciones medida) throws Exception {
+    public void create(List<Mediciones> medida) throws Exception {
         System.out.print("Estoy en create de mediciones en service  \n");
         mediciones.create(medida);
     }

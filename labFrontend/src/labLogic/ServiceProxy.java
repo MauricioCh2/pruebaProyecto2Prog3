@@ -489,7 +489,7 @@ public class ServiceProxy implements IService {
 
     //-------------------------------------------------Mediciones-------------------------------------------------
     @Override
-    public void create(Mediciones medida) throws Exception {
+    public void create(List<Mediciones> medida) throws Exception {
         out.writeInt(Protocol.CREATEMEDICIONES);
         out.writeObject(medida);
         out.flush();

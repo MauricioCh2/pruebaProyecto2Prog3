@@ -45,7 +45,7 @@ public interface IService {
 
 
     //--------------------MEDICIONES---------------------
-    public void create(Mediciones medida) throws Exception;
+    public void create(List<Mediciones> medida) throws Exception;
     public void create(Mediciones[] medida) throws Exception;
 
     public List<Mediciones> read(Mediciones medida) throws Exception;
