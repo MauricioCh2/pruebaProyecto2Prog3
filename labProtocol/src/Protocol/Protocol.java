@@ -2,7 +2,7 @@ package Protocol;
 
 public class Protocol {
     public static final String SERVER = "localhost";
-    public static final int PORT = 1234;
+    public static final int PORT = 1235;
 
     public static final int REGISTER = 1;
 

@@ -65,6 +65,9 @@ public class Mediciones implements Serializable {
     public int getIdCalibracion() {
         return idCalibracion;
     }
+    public void setIdCalibracion(int id){
+        idCalibracion = id;
+    }
 
     @Override
     public String toString() {

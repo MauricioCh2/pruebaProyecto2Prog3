@@ -9,20 +9,19 @@ import java.util.List;
 public class CRUDMediciones {
     //Database db;
     public void create(List<Mediciones> lisM) throws Exception {
-        Connection connection =  new DataBaseConn().connection();
-        String sql = "INSERT INTO mediciones(`idMediciones`,`referencia`,`lectura`,`id_calibracion`) VALUES (?,?,?,?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        //statement.setInt(1,med.getNumMedicion());
-        for(Mediciones med: lisM){
-            statement.setInt(1,med.getNumMedicion());
-            statement.setDouble(2,med.getValorReferencia());
-            statement.setDouble(3,med.getValorMarcado());
-            statement.setInt(4,med.getIdCalibracion());
+        Connection connection = new DataBaseConn().connection();
+        PreparedStatement ps = connection.prepareStatement("INSERT INTO mediciones (referencia, lectura, id_calibracion, numMedicion) VALUES (?,?,?,?)");
+
+        for(Mediciones med : lisM) {
+            ps.setDouble(1, med.getValorReferencia());
+            ps.setDouble(2, med.getValorMarcado());
+            ps.setInt(3, med.getIdCalibracion());
+            ps.setInt(4, med.getNumMedicion());
+
+            ps.addBatch();
         }
 
-
-        statement.executeUpdate();
-
+        ps.executeBatch();
         //System.out.println("Crea medicion.. "+med.getNumMedicion()+"\n");
     }
 

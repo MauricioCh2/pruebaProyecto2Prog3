@@ -349,12 +349,12 @@ public class Worker { // es cada socket
                             List<Mediciones> med = (List<Mediciones>) in.readObject();
                             service.create(med);
 
-                            out.writeInt(Protocol.CREATEMEDICIONES);
-                            out.writeObject(med);
+                            //out.writeInt(Protocol.CREATEMEDICIONES);
+                            //out.writeObject(med);
 
-                            out.flush();
+                          // out.flush();
 
-                            message = new Message( Message.CREATE, "a mediciones", "Lista de mediciones",numeroWorker);
+                            message = new Message( Message.CREATE, " lista de", "mediciones",numeroWorker);
                             srv.deliver(message);
                         }catch(Exception ex){
                             System.out.println(Color.RED+"Catch del create  mediciones: "+ ex.getMessage()+Color.RESET);

@@ -42,7 +42,7 @@ public class MedicionesModel { //
         double valorM = obj.getMinimo();
         for (int i = 1; i <= med; i++) {
             System.out.println("Ejecucion del for en frontEnd----------------------------------------------------------------------------");
-            Mediciones medicion = new Mediciones(i, valorM, 0.0, nC);
+            Mediciones medicion = new Mediciones(i, valorM, 0.0, calibracion.getIdCalibraciones());
             //ServiceProxy.instance().create(medicion);
             v[i-1] = medicion; //-1 ya que el vector empieza en 1
             listM.add(medicion);
@@ -57,6 +57,7 @@ public class MedicionesModel { //
         //ServiceProxy.instance().create(v); //manda el vector con las mediciones
         if (calibracion != null) {
             calibracion.setMedicionesL(listM);
+            ServiceProxy.instance().create(listM);
         }
     }
     public List<Mediciones>  obtenerLisMediciones (Instrumento instrumentoCalibrado, int cantidadDeMediciones) {
